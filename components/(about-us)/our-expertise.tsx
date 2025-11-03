@@ -2,27 +2,27 @@ const expertise = [
   {
     title: "English Proficiency",
     desc: "Enhance your English skills for academic and professional success.",
-    img: "/images/expertise/english.jpg",
+    img: "/learning.jpg",
   },
   {
     title: "Accent Training",
     desc: "Master clear and confident communication with our accent training programs.",
-    img: "/images/expertise/accent.jpg",
+    img: "/training.jpg",
   },
   {
     title: "BPO Roles",
     desc: "Prepare for successful careers in the BPO industry with specialized training.",
-    img: "/images/expertise/bpo.jpg",
+    img: "/teacher.jpg",
   },
   {
     title: "Study Abroad Preparation",
     desc: "Get ready for global opportunities with our tailored preparation solutions.",
-    img: "/images/expertise/abroad.jpg",
+    img: "/learn.gif",
   },
   {
     title: "Bespoke Tests",
     desc: "Custom tests designed for organizations to enhance communication skills.",
-    img: "/images/expertise/tests.jpg",
+    img: "bespoke.jpeg",
   },
 ]
 

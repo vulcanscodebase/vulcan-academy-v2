@@ -22,7 +22,7 @@ export function OurPurpose() {
           {/* Right side - image */}
           <div className="lg:w-1/2 flex justify-center lg:justify-end mt-6 lg:mt-0">
             <img
-              src="/images/mission.jpg" // replace with your mission image
+              src="/avatar-of-a-happy-user.jpg"
               alt="Our Mission"
               className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg rounded-xl shadow-lg object-cover"
             />
@@ -34,7 +34,7 @@ export function OurPurpose() {
           {/* Left side - image */}
           <div className="lg:w-1/2 flex justify-center lg:justify-start mb-6 lg:mb-0">
             <img
-              src="/images/vision.jpg" // replace with your vision image
+              src="/learning.jpg"
               alt="Our Vision"
               className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg rounded-xl shadow-lg object-cover"
             />

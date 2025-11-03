@@ -6,10 +6,10 @@ import { cn } from "@/lib/utils"
 export function GetInTouch() {
   return (
     <section className="w-full py-20 md:py-32 lg:py-40 bg-background dark:bg-background">
-      <div className="px-4 sm:px-6 md:px-12 lg:px-16 flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
+      <div className="px-4 sm:px-6 md:px-12 lg:px-16 flex flex-col gap-12 lg:gap-16 items-start">
 
         {/* Left Side - Contact Info */}
-        <div className="w-full lg:w-1/2 space-y-8">
+        <div className="w-full space-y-8">
           <div>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-foreground mb-4">
               Contact Us
@@ -41,7 +41,7 @@ export function GetInTouch() {
         </div>
 
         {/* Right Side - Contact Form */}
-        <div className="w-full lg:w-1/2 bg-background p-6 sm:p-8 space-y-6 border rounded-3xl">
+        {/* <div className="w-full lg:w-1/2 bg-background p-6 sm:p-8 space-y-6 border rounded-3xl">
           <div>
             <h3 className="text-2xl md:text-3xl lg:text-4xl text-foreground mb-2">Get in Touch</h3>
           </div>
@@ -64,7 +64,7 @@ export function GetInTouch() {
               Send Message
             </Button>
           </form>
-        </div>
+        </div> */}
 
       </div>
     </section>

@@ -105,7 +105,7 @@ export function Navbar() {
           {/* Auth Buttons / User Icons */}
           {!token ? (
             <div className="hidden md:flex items-center space-x-3">
-              <Link href="/signin" prefetch={false}>
+              {/* <Link href="/signin" prefetch={false}>
                 <Button
                   variant="outline"
                   className="border dark:border-vulcan-accent-blue text-vulcan-accent-blue hover:bg-vulcan-accent-blue hover:text-vulcan-white"
@@ -117,7 +117,7 @@ export function Navbar() {
                 <Button className="bg-vulcan-accent-blue text-vulcan-white hover:bg-vulcan-accent-blue/90">
                   Sign Up
                 </Button>
-              </Link>
+              </Link> */}
             </div>
           ) : (
             <div className="hidden md:flex items-center space-x-3">
@@ -183,7 +183,7 @@ export function Navbar() {
 
             {!token ? (
               <div className="flex flex-col space-y-3 mt-4 w-full max-w-xs">
-                <Link 
+                {/* <Link 
                 href="/signup" 
                 prefetch={false}>
                   <Button className="bg-vulcan-accent-blue text-vulcan-white hover:bg-vulcan-accent-blue/90 w-full">
@@ -199,7 +199,7 @@ export function Navbar() {
                   >
                     Sign In
                   </Button>
-                </Link>
+                </Link> */}
               </div>
             ) : (
               <div className="flex justify-center space-x-6 mt-4">

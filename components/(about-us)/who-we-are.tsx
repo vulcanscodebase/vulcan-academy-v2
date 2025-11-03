@@ -24,7 +24,7 @@ export function WhoWeAre() {
         {/* Right side - image */}
         <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
           <img
-            // src={aboutImage}
+            src="/about.jpg"
             alt="About Vulcan Academy"
             className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg rounded-xl shadow-lg object-cover"
           />
