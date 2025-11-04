@@ -15,11 +15,20 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Verify next.config.mjs exists and has standalone output
+RUN cat next.config.mjs | grep -q "standalone" || (echo "ERROR: next.config.mjs missing standalone output config" && exit 1)
+
 # Set environment variables for build
 ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV production
 
-# Build the application
-RUN npm run build
+# Build the application with verbose output
+RUN npm run build || (echo "Build command failed" && exit 1)
+
+# Verify that the standalone output was created
+RUN ls -la /app/.next/ || (echo "ERROR: .next directory not found after build" && exit 1)
+RUN test -d /app/.next/standalone || (echo "ERROR: standalone directory not found. Listing .next contents:" && ls -la /app/.next/ && echo "Checking for build errors above..." && exit 1)
+RUN echo "Build verification: standalone directory exists" && ls -la /app/.next/standalone/ | head -20
 
 # Stage 3: Runner
 FROM node:20-alpine AS runner
