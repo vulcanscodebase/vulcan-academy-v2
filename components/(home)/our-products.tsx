@@ -84,42 +84,54 @@
 // }
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import Image from "next/image"
+import { ScrollReveal } from "@/components/ui/scroll-reveal"
+import { SectionExpand } from "@/components/ui/section-expand"
 
 export function OurProducts() {
   const item = {
-    title: "Interview Master",
+    title: "Vulcan Interview Master",
     description:
-      "Ace your next interview with expert-guided practice sessions, mock interviews, and real-time feedback.",
+      "Master interviews with ease. Ace your next interview with expert-guided practice sessions, mock interviews, and real-time feedback.",
     image: "/learning.jpg", // replace with your actual image path
     buttonText: "Know more",
   }
 
   return (
-    <section className="w-full py-20 md:py-32 lg:py-48 bg-background">
-      <div className="px-4 md:px-12">
+    <SectionExpand className="bg-background">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8 w-full">
+        <div className="max-w-7xl mx-auto">
         {/* Main Heading */}
+          <ScrollReveal>
         <h2 className="mb-12 text-4xl md:text-6xl lg:text-7xl font-light tracking-tight text-foreground text-balance">
           Our Product
         </h2>
+          </ScrollReveal>
 
         {/* Single Card */}
-        <div className="relative flex h-[60vh] flex-col justify-between overflow-hidden rounded-3xl bg-card p-6 shadow-md">
+          <ScrollReveal delay={0.2}>
+            <div className="relative flex h-[60vh] min-h-[400px] flex-col justify-between overflow-hidden rounded-3xl bg-card p-6 md:p-8 lg:p-10 shadow-lg border border-border/50">
           {/* Background Image */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <img
+            <div className="absolute inset-0">
+              <Image
               src={item.image}
               alt={item.title}
-              className="absolute inset-0 z-10 h-full w-full object-cover transition duration-300"
+                fill
+                className="object-cover object-center transition duration-300"
+                sizes="100vw"
+                priority
             />
+              {/* Overlay for better text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/50 to-transparent" />
           </div>
 
           {/* Content */}
           <div className="relative z-10 flex h-full flex-col justify-between">
             <div>
-              <h3 className="mb-2 text-2xl md:text-3xl font-light tracking-tight text-foreground">
+                <h3 className="mb-2 text-2xl md:text-3xl lg:text-4xl font-light tracking-tight text-foreground">
                 {item.title}
               </h3>
-              <p className="mb-4 text-base text-foreground/80">
+                <p className="mb-4 text-base md:text-lg text-foreground/80 max-w-2xl">
                 {item.description}
               </p>
             </div>
@@ -136,8 +148,10 @@ export function OurProducts() {
               </Button>
             </div>
           </div>
+          </div>
+          </ScrollReveal>
         </div>
       </div>
-    </section>
+    </SectionExpand>
   )
 }

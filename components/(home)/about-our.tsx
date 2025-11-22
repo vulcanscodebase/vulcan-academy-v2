@@ -1,19 +1,22 @@
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import vulacan from "../public/about.jpg"
 import Link from "next/link";
+import Image from "next/image";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { SectionExpand } from "@/components/ui/section-expand";
 
 export function AboutOurSection() {
   return (
-    <section className="w-full py-16 md:py-28 lg:py-40 bg-background">
-      <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12 px-4 md:px-12">
+    <SectionExpand className="bg-background">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8 w-full">
+        <div className="flex flex-col lg:flex-row items-center lg:items-center gap-8 lg:gap-12 max-w-7xl mx-auto">
         
         {/* Left side - heading and text */}
-        <div className="w-full lg:w-1/2 text-left">
-          <h2 className="mb-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-foreground text-balance">
+          <ScrollReveal direction="right" className="w-full lg:w-1/2 text-left space-y-6">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-foreground text-balance">
             About Our <br /> Vulcan Academy
           </h2>
-          <p className="mb-8 text-base sm:text-lg md:text-xl text-foreground/80 leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-foreground/80 leading-relaxed">
             Vulcans Academy is dedicated to empowering individuals with skills and
             knowledge through innovative and accessible solutions.
           </p>
@@ -30,21 +33,23 @@ export function AboutOurSection() {
             Learn More
           </Button>
           </Link>
-        </div>
+          </ScrollReveal>
 
    {/* Right side - image */}
-<div className="w-full lg:w-1/2 flex justify-center lg:justify-end px-1 sm:px-2 md:px-0">
-  <img
-    src="/about.jpg"
+          <ScrollReveal direction="left" delay={0.2} className="w-full lg:w-1/2 flex items-center justify-center lg:justify-end">
+            <div className="relative w-full max-w-md lg:max-w-lg aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
+              <Image
+    src="/hero-section.png"
     alt="About Vulcan Academy"
-    className="w-full max-w-xl sm:max-w-2xl md:max-w-lg lg:max-w-lg xl:max-w-xl rounded-xl shadow-lg object-cover"
+                fill
+                className="object-cover object-center"
+                sizes="(max-width: 1024px) 100vw, 50vw"
   />
 </div>
+          </ScrollReveal>
 
-
-
-
+        </div>
       </div>
-    </section>
+    </SectionExpand>
   )
 }

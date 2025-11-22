@@ -55,7 +55,7 @@ export function Navbar() {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Interview Master", href:"/interview"},
+    { name: "Vulcan Interview", href:"/interview"},
     { name: "About Us", href: "/about" },
     { name: "Contact Us", href: "/contact" },
   ];
@@ -91,7 +91,7 @@ export function Navbar() {
         {/* Right */}
         <div className="flex items-center space-x-4">
           {/* Theme Toggle */}
-          {isMounted && (
+          {/* {isMounted && (
             <Button
               variant="ghost"
               size="icon"
@@ -100,7 +100,7 @@ export function Navbar() {
             >
               {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
-          )}
+          )} */}
 
           {/* Auth Buttons / User Icons */}
           {!token ? (

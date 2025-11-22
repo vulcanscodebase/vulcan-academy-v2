@@ -1,47 +1,32 @@
 import { cn } from "@/lib/utils"
 import { Marquee } from "@/components/ui/marquee"
+import { ScrollReveal } from "@/components/ui/scroll-reveal"
+import { SectionExpand } from "@/components/ui/section-expand"
 
 const reviews = [
   {
-    name: "Jack",
-    username: "JACK MAN",
-    body: "I've never seen anything like this before. It's amazing. I love it.",
-    img: "/images/clients/jack.jpg", // replace with real image
+    name: "Vedanth",
+    username: "VEDANTH",
+    body: "Vulcan Interview Master has transformed my interview preparation. The realistic mock interviews and detailed feedback helped me land my dream job!",
+    img: "/avatar-of-a-happy-user.jpg", // replace with real image
   },
   {
-    name: "Jill",
-    username: "JILLY GUY",
-    body: "I don't know what to say. I'm speechless. This is amazing.",
-    img: "/images/clients/jill.jpg",
+    name: "Sumanth",
+    username: "SUMANTH",
+    body: "The platform is incredibly intuitive and the practice sessions are so realistic. I felt completely prepared and confident going into my interviews.",
+    img: "/avatar-of-a-happy-user.jpg", // replace with real image
   },
   {
-    name: "John",
-    username: "JOHN MINDRAA",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "/images/clients/john.jpg",
-  },
-  {
-    name: "Jane",
-    username: "JANE PINKMAN",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "/images/clients/jane.jpg",
-  },
-  {
-    name: "Jenny",
-    username: "JENNY WALL",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "/images/clients/jenny.jpg",
-  },
-  {
-    name: "James",
-    username: "JAMES CORN",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "/images/clients/james.jpg",
+    name: "Bhavana",
+    username: "BHAVANA",
+    body: "The expert-guided sessions and real-time feedback were game-changers. I improved my interview skills significantly and got multiple job offers!",
+    img: "/avatar-of-a-happy-user.jpg", // replace with real image
   },
 ]
 
-const firstRow = reviews.slice(0, reviews.length / 2)
-const secondRow = reviews.slice(reviews.length / 2)
+// Display all 3 reviews in a single row or adjust layout as needed
+const firstRow = reviews
+const secondRow = [] // Empty since we only have 3 reviews
 
 const ReviewCard = ({
   img,
@@ -57,69 +42,83 @@ const ReviewCard = ({
   return (
     <figure
       className={cn(
-        "relative h-52 w-80 cursor-pointer overflow-hidden rounded-2xl border p-6 shadow-sm transition-colors",
-        // light mode
-        "border-foreground/10 bg-background hover:bg-foreground/5",
-        // dark mode
-        "dark:border-foreground/20 dark:bg-background dark:hover:bg-foreground/10"
+        "relative h-64 w-80 cursor-pointer overflow-hidden rounded-3xl border p-6 md:p-7 shadow-xl transition-all duration-300",
+        "border-vulcan-accent-blue/20 bg-gradient-to-br from-white to-vulcan-accent-blue/5",
+        "hover:shadow-2xl hover:scale-[1.02] hover:border-vulcan-accent-blue/30",
+        "backdrop-blur-sm"
       )}
     >
+      {/* Decorative gradient overlay */}
+      <div className="absolute top-0 right-0 w-32 h-32 bg-vulcan-accent-blue/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+      
       {/* Top Section */}
-      <div className="flex items-center gap-3">
-        <img
-          className="rounded-full border border-foreground/20"
-          width="40"
-          height="40"
-          alt={name}
-          src={img}
-        />
+      <div className="relative flex items-center gap-4 mb-4">
+        <div className="relative">
+          <img
+            className="rounded-full border-2 border-vulcan-accent-blue/30 shadow-md"
+            width="48"
+            height="48"
+            alt={name}
+            src={img}
+          />
+          <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-vulcan-accent-blue rounded-full border-2 border-white"></div>
+        </div>
         <div className="flex flex-col">
-          <figcaption className="text-base font-medium text-foreground">
+          <figcaption className="text-base md:text-lg font-semibold text-foreground">
             {name}
           </figcaption>
-          <p className="text-sm font-normal text-foreground/60">{username}</p>
+          <p className="text-xs md:text-sm font-normal text-vulcan-accent-blue/70">{username}</p>
         </div>
       </div>
 
       {/* Review Text */}
-      <blockquote className="mt-4 text-sm md:text-base leading-relaxed text-foreground/90">
+      <blockquote className="relative text-sm md:text-base leading-relaxed text-foreground/90 font-light">
         {body}
       </blockquote>
+      
+      {/* Quote icon decoration */}
+      <div className="absolute bottom-4 right-4 text-vulcan-accent-blue/20">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.996 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.984zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+        </svg>
+      </div>
     </figure>
   )
 }
 
 export function ClientSays() {
   return (
-    <section className="relative flex w-full flex-col overflow-hidden bg-background py-20 md:py-32 lg:py-40">
-      
-      {/* Heading */}
-      {/* <div className="mb-16"> */}
-        <h2 className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight text-foreground mb-16 md:mx-24">
-          What Our Clients Say
-        </h2>
-        {/* <p className="mt-4 text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto">
-          Trusted by professionals and businesses worldwide, here’s what they have to say about working with us.
-        </p>
-      </div> */}
+    <SectionExpand className="relative flex w-full flex-col overflow-hidden bg-background">
+      <div className="w-full">
+        {/* Heading */}
+        <ScrollReveal>
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight text-foreground mb-12 md:mb-16 md:mx-24">
+            What Our Users Say
+          </h2>
+        </ScrollReveal>
 
       {/* Marquee Rows */}
-      <div className="w-full">
-        <Marquee pauseOnHover className="[--duration:25s] gap-6">
+      <ScrollReveal delay={0.2}>
+        <div className="w-full">
+        <Marquee pauseOnHover className="[--duration:60s] gap-8">
           {firstRow.map((review) => (
             <ReviewCard key={review.username} {...review} />
           ))}
         </Marquee>
-        <Marquee reverse pauseOnHover className="[--duration:25s] gap-6 -mt-6">
-          {secondRow.map((review) => (
-            <ReviewCard key={review.username} {...review} />
-          ))}
-        </Marquee>
-      </div>
+        {secondRow.length > 0 && (
+          <Marquee reverse pauseOnHover className="[--duration:60s] gap-8 -mt-6">
+            {secondRow.map((review) => (
+              <ReviewCard key={review.username} {...review} />
+            ))}
+          </Marquee>
+        )}
+        </div>
+      </ScrollReveal>
 
-      {/* Gradient Fades on Edges */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background"></div>
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background"></div>
-    </section>
+        {/* Gradient Fades on Edges */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background"></div>
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background"></div>
+      </div>
+    </SectionExpand>
   )
 }

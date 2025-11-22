@@ -88,7 +88,7 @@ export function CourseSection() {
       {/* Header */}
       <header className="">
         <h1 className="mb-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-foreground text-balance">
-         Interview Master
+         Vulcan Interview
         </h1>
       </header>
 
