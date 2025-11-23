@@ -1,1 +1,0 @@
-# vulcan-academy-v2

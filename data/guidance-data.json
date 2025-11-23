@@ -1,0 +1,171 @@
+{
+    "startingPoint":{
+        "question":"what describes you the best?",
+        "options": [
+            {"text" : " Student", "nextStep" : "studentOptions" },
+            {"text" : "Job Seeker", "nextStep": "jobSeekerOptions" },
+            {"text" : "Aspirant for studying abroad or work abroad", "nextstep":"aspirantOptions"},
+            {"text": "Professional", "nextStep":"professionalOptions"}
+        ]
+    },
+    "studentOptions":{
+        "question":"What describes your education level?",
+        "options": [
+            { "text":"High school", "nextStep":"improvementOptions"},
+            { "text": "11 - 12th", "nextStep": "improvementOptions" },
+            { "text": "Any Degree", "nextStep": "improvementOptions" },
+            { "text": "Professional (IT or Diploma)", "nextStep": "improvementOptions" },
+            { "text": "None of the above", "answer": "Contact us for more details", "link": "/contact" }
+        ]
+    },
+    "improvementOptions": {
+    "question": "What would you like to improve?",
+    "options": [
+      { "text": "English", "nextStep": "englishProficiency" },
+      { "text": "Communication", "nextStep": "communicationProficiency" },
+      { "text": "Interview Preparation", "nextStep": "interviewPreparation" },
+      { "text": "Preparation for competitive exams", "nextStep": "competitiveExamsOptions" },
+      { "text": "None of the above", "answer": "Contact us for personalized guidance", "link": "/contact" }
+    ]
+  },
+  "englishProficiency": {
+    "question": "What do you think is your proficiency level?",
+    "options": [
+      { "text": "I do not know", "answer": "VEMA", "link": "/tests" },
+      { "text": "Below Average", "answers": ["VEMA","Vulcan English 360","Vulcan English 360 Pro"], "links": ["/tests","/courses","/courses"] },
+      { "text": "Average", "answers": ["VEMA","Vulcan English 360","Vulcan English 360 Pro"], "links": ["/tests","/courses","/courses"] },
+      { "text": "Above Average", "answers": ["VEMA Pro","Vulcan English 360 Pro"], "links": ["/tests","/courses"] }
+    ]
+  },
+  "communicationProficienct":{
+    "question":"What do you think is your proficiency level?",
+    "option":[
+        {"text":"Below Average", "answer":["VEMA", "Vulcan Communication 360"], "links":["/tests","/courses"] },
+        {"text":"Average", "answers": ["VEMA","Vulcan Communication 360"],"links": ["/tests", "/courses"]},
+        { "text": "Above Average","answers": ["VEMA Pro","Vulcan Communication 360"],"links": ["/tests","/courses"]}
+    ]
+  },
+  "interviewPreparation": {
+    "question": "Recommended programs for Interview Preparation",
+    "options": [
+      { "text": "Vulcan Interview Prep", "answer": "Vulcan Interview Prep", "link": "/tests" },
+      { "text": "Vulcan Communication 360", "answer": "Vulcan Communication 360", "link": "/courses" }
+    ]
+  },
+  
+  "competitiveExamsOptions": {
+    "question": "What type of exam are you preparing for?",
+    "options": [
+      {"text": "Aptitude Focused", "nextStep": "aptitudeOptions"},
+      {"text": "Descriptive and Analytical Writing", "answers": ["VEMA", "Vulcan Communication 360"], "links": ["/tests", "/courses"]},
+      {"text": "None of the above", "answer": "Contact us for competitive exam guidance", "link": "/contactus"}
+    ]
+  },
+  "aptitudeOptions": {
+    "question": "Which area do you want to focus on?",
+    "options": [
+      {"text": "Verbal", "answers": ["Vulcan Verbal Aptitude Practice Test Set", "Vulcan Verbal Aptitude Full Test"], "links": ["/tests", "/tests"]},
+      {"text": "Quantitative", "answers": ["Vulcan Quantitative Aptitude Practice Test Set", "Vulcan Quantitative Aptitude Full Test"], "links": ["/tests", "/tests"]},
+      {"text": "Both", "answers": ["Vulcan Verbal Aptitude Practice Test Set", "Vulcan Quantitative Aptitude Practice Test Set", "Vulcan Aptitude Full Test"], "links": ["/tests", "/tests", "/tests"]}
+    ]
+  },
+
+  "jobSeekerOptions": {
+    "question": "What does the selection process involve?",
+    "options": [
+      {"text": "Aptitude Test", "nextStep": "aptitudeTestOptions"},
+      {"text": "Both Written and Interview", "nextStep": "writtenAndInterviewOptions"},
+      {"text": "Interview", "answers": ["VEMA", "Vulcan Communication 360", "Vulcan Job Secure"], "links": ["/tests", "/courses", "/tests"]},
+      {"text": "None of the above", "answer": "Contact us for job seeker guidance", "link": "/contactus"}
+    ]
+  },
+  "aptitudeTestOptions": {
+    "question": "Which area do you want to focus on?",
+    "options": [
+      {"text": "Verbal", "answers": ["Vulcan Verbal Aptitude Practice Test Set", "Vulcan Verbal Aptitude Full Test"], "links": ["/tests", "/tests"]},
+      {"text": "Quantitative", "answers": ["Vulcan Quantitative Aptitude Practice Test Set", "Vulcan Quantitative Aptitude Full Test"], "links": ["/tests", "/tests"]},
+      {"text": "Both", "answers": ["Vulcan Verbal Aptitude Practice Test Set", "Vulcan Quantitative Aptitude Practice Test Set", "Vulcan Aptitude Full Test"], "links": ["/tests", "/tests", "/tests"]}
+    ]
+  },
+  "writtenAndInterviewOptions": {
+    "question": "Does the selection process include aptitude?",
+    "options": [
+      {"text": "Yes", "answers": ["Vulcan Aptitude Full Test", "VEMA", "Vulcan Communication 360"], "links": ["/tests", "/tests", "/courses"]},
+      {"text": "No", "answers": ["VEMA", "Vulcan Communication 360", "Vulcan Job Secure"], "links": ["/tests", "/courses", "/tests"]},
+      {"text": "None of the above", "answer": "Contact us for selection process guidance", "link": "/contactus"}
+    ]
+  },
+  "aspirantOptions": {
+    "question": "What are you aspiring for?",
+    "options": [
+      {"text": "Study Abroad", "nextStep": "studyAbroadOptions"},
+      {"text": "Work Abroad", "nextStep": "workAbroadOptions"},
+      {"text": "None of the above", "answer": "Contact us for guidance on your aspirations", "link": "/contactus"}
+    ]
+  },
+  "studyAbroadOptions": {
+    "question": "Do you know the process of application and selection?",
+    "options": [
+      {"text": "Yes, very well", "nextStep": "studyAbroadHelpOptions"},
+      {"text": "Partly", "question": "Would you like a free consultation?", "options": [
+        {"text": "Yes", "answer": "Redirect to consultation form", "link": "/contactus"},
+        {"text": "No", "nextStep": "studyAbroadHelpOptions"}
+      ]},
+      {"text": "No, I would like to learn", "question": "Would you like a free consultation?", "options": [
+        {"text": "Yes", "answer": "Redirect to consultation form", "link": "/contactus"},
+        {"text": "No", "nextStep": "studyAbroadHelpOptions"}
+      ]}
+    ]
+  },
+  "studyAbroadHelpOptions": {
+    "question": "What would you like to get help with?",
+    "options": [
+      {"text": "IELTS", "answers": ["Vulcan IELTS Practice Test"], "links": ["/tests"]},
+      {"text": "Communication", "answers": ["Vulcan IELTS Practice Test", "Vulcan Communication 360"], "links": ["/tests", "/courses"]},
+      {"text": "English", "answers": ["Vulcan IELTS Practice Test", "Vulcan Communication 360", "Vulcan English 360 Pro"], "links": ["/tests", "/courses", "/courses"]}
+    ]
+  },
+  "workAbroadOptions": {
+    "question": "What would you like to get help with?",
+    "options": [
+      {"text": "IELTS", "answers": ["Vulcan IELTS Practice Test"], "links": ["/tests"]},
+      {"text": "Communication", "answers": ["Vulcan IELTS Practice Test", "Vulcan Communication 360"], "links": ["/tests", "/courses"]},
+      {"text": "English", "answers": ["Vulcan IELTS Practice Test", "Vulcan Communication 360", "Vulcan English 360 Pro"], "links": ["/tests", "/courses", "/courses"]},
+      {"text": "None of the above", "answer": "Contact us for guidance on working abroad", "link": "/contactus"}
+    ]
+  },
+  "professionalOptions": {
+    "question": "What would you like to improve?",
+    "options": [
+      {"text": "English", "nextStep": "professionalEnglishProficiency"},
+      {"text": "Communication", "nextStep": "professionalCommunicationProficiency"},
+      {"text": "Interview Preparation", "nextStep": "professionalInterviewPreparation"},
+      {"text": "None of the above", "answer": "Contact us for personalized professional guidance", "link": "/contactus"}
+    ]
+  },
+  "professionalEnglishProficiency": {
+    "question": "What do you think is your proficiency level?",
+    "options": [
+      {"text": "I do not know", "answers": ["VEMA"], "links": ["/tests"]},
+      {"text": "Below Average", "answers": ["VEMA", "Vulcan English 360", "Vulcan English 360 Pro", "Vulcan Communication 360"], "links": ["/tests", "/courses", "/courses", "/courses"]},
+      {"text": "Average", "answers": ["VEMA", "Vulcan English 360", "Vulcan English 360 Pro", "Vulcan Communication 360"], "links": ["/tests", "/courses", "/courses", "/courses"]},
+      {"text": "Above Average", "answers": ["VEMA Pro", "Vulcan English 360 Pro", "Vulcan Communication 360"], "links": ["/tests", "/courses", "/courses"]}
+    ]
+  },
+  "professionalCommunicationProficiency": {
+    "question": "What do you think is your proficiency level?",
+    "options": [
+      {"text": "Below Average", "answers": ["VEMA", "Vulcan Communication 360"], "links": ["/tests", "/courses"]},
+      {"text": "Average", "answers": ["VEMA", "Vulcan Communication 360"], "links": ["/tests", "/courses"]},
+      {"text": "Above Average", "answers": ["VEMA Pro", "Vulcan Communication 360"], "links": ["/tests", "/courses"]}
+    ]
+  },
+  "professionalInterviewPreparation": {
+    "question": "Recommended programs for Interview Preparation",
+    "options": [
+      {"text": "Vulcans Interview Prep", "answer": "Vulcans Interview Prep", "link": "/tests"},
+      {"text": "Vulcans Communication 360", "answer": "Vulcans Communication 360", "link": "/courses"}
+    ]
+  }
+}
+

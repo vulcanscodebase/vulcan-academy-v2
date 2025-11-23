@@ -1,0 +1,78 @@
+{
+  "Frontend Developer": [
+    "What things in your graduation prepared you for this job?",
+    "Why would you like to work in this field?",
+    "Tell me about a time you faced a difficult challenge. What did you do about it?",
+    "Tell me about the toughest front-end bug or integration challenge you solved recently—how did you diagnose it, and what was the outcome?",
+    "Describe the concrete steps you take to make an interface accessible (e.g., ARIA roles, keyboard flows, colour-contrast). Why is this important?"
+  ],
+  "Backend Developer": [
+    "Can you explain the concept of status codes in HTTP?",
+    "If you are building a simple backend for a todo-list app, how would you design the backend workflow (database, API endpoints, request flow)?",
+    "Explain primary key, foreign key, and indexes in a relational database.",
+    "How is authentication different from authorization?",
+    "Can you explain the difference between process and thread?"
+  ],
+  "UX Designer": [
+    "Can you explain the design thinking process?",
+    "What are the key principles of good UX design?",
+    "How would you conduct a user research study for a new product?",
+    "What is a user persona and why is it important in design?",
+    "How do you collaborate with developers to ensure your designs are implemented correctly?"
+  ],
+  "Marketing": [
+    "What is the difference between inbound marketing and outbound marketing?",
+    "How would you define the marketing funnel (Awareness, Consideration, Conversion, Retention)?",
+    "What are some important Key Performance Indicators you would track in a marketing campaign?",
+    "How would you decide what type of content to create for a new product launch?",
+    "Imagine your company is launching a new online course. How would you plan the marketing strategy for the first 3 months?"
+  ],
+  "Sales Executive": [
+    "Can you explain the sales funnel or sales cycle?",
+    "What is the difference between lead generation and prospecting?",
+    "How would you approach a cold call with a potential client?",
+    "What steps would you take to handle a customer’s objection?",
+    "How do you build rapport with a new customer?",
+    "Imagine you have to sell a product to someone who says, “I’m not interested.” What would you do?"
+  ],
+  "Business Analyst": [
+    "How would you explain the difference between functional requirements and non-functional requirements?",
+    "Which tools have you heard of or used for BA work?",
+    "What is a use case? Can you give a simple example?",
+    "How do you handle a situation where stakeholders give conflicting requirements?",
+    "How would you explain data-driven decision making?"
+  ],
+  "Digital Marketing": [
+    "What is the difference between SEO (Search Engine Optimization) and SEM (Search Engine Marketing)?",
+    "How would you measure if a content marketing campaign is successful?",
+    "Can you explain the concept of a marketing funnel (Awareness, Consideration, Conversion, Retention)?",
+    "What are some important KPIs (Key Performance Indicators) you would monitor in a digital marketing campaign?",
+    "How do you present return on investment for digital marketing to a client?"
+  ],
+  "Customer Service": [
+    "What do you understand by good customer service?",
+    "What steps would you take to handle an angry or dissatisfied customer?",
+    "How would you explain a technical issue to a customer who has no technical background?",
+    "If you don’t know the answer to a customer’s question, what would you do?",
+    "Imagine a customer has been waiting too long for a solution. How would you reassure and retain their trust?"
+  ],
+  "Accountant": [
+    "What are the three main types of financial statements and what do they show?",
+    "What is double-entry bookkeeping? Can you give a simple example?",
+    "Can you explain the difference between capital expenditure and revenue expenditure?",
+    "Can you explain what trial balance is and why it must tally?",
+    "Imagine you find a small error in the balance sheet at the last stage of reporting—what steps would you take to correct it?"
+  ],
+  "Teacher": [
+    "Explain a topic of your choice in 2 minutes. (Compulsory)",
+    "How do you motivate students who are underperforming?",
+    "Describe a time when you had to adapt your teaching style to a difficult class.",
+    "What technological tools do you integrate with your class?",
+    "How do you assess students’ understanding during a class?"
+  ],
+  "General": [
+    "Tell me about yourself",
+    "What things in your graduation have you found to be useful.",
+    "Can you describe a time you worked in a team?"
+  ]
+}
