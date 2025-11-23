@@ -6,7 +6,7 @@ import Image from "next/image";
 import axios from "axios";
 import { toast, Toaster } from "sonner";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5001";
+const API_BASE_URL = process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcans.co.in/api";
 
 function SetupPasswordForm() {
   const [password, setPassword] = useState("");
