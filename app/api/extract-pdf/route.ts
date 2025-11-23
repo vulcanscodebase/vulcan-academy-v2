@@ -1,12 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import pdfParse from "pdf-parse"
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}
-
 // POST handler
 export async function POST(req: NextRequest) {
   try {
