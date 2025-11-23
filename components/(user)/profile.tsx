@@ -65,6 +65,7 @@ export function ProfileSetup() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [apiErrorMsg, setApiErrorMsg] = useState("");
+  const [remainingInterviews, setRemainingInterviews] = useState<number>(0);
 
   const initialFormData = useRef<FormDataType>({ ...formData });
 
@@ -84,6 +85,9 @@ export function ProfileSetup() {
       };
       setFormData(updatedForm);
       initialFormData.current = updatedForm;
+      
+      // Get remaining interviews (licenses) count
+      setRemainingInterviews((user as any).licenses || 0);
     }
   }, [user]);
 
@@ -205,6 +209,58 @@ export function ProfileSetup() {
             <CardTitle className="mt-4 text-2xl font-semibold text-vulcan-dark">
               {formData.name}
             </CardTitle>
+
+            {/* Interview Stats Section */}
+            <div className="mt-6 w-full max-w-md">
+              <div className="grid grid-cols-2 gap-4">
+                {/* Remaining Interviews Badge */}
+                <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-3 rounded-xl shadow-lg">
+                  <div className="flex items-center space-x-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                      <path
+                        fillRule="evenodd"
+                        d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <div className="text-left">
+                      <div className="text-xs font-medium opacity-90">Available</div>
+                      <div className="text-2xl font-bold">{remainingInterviews}</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* View Past Interviews Button */}
+                <button
+                  onClick={() => router.push("/user-profile/interviews")}
+                  className="bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-50 px-4 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
+                >
+                  <div className="flex flex-col items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 mb-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                    <div className="text-xs font-semibold">My Interviews</div>
+                  </div>
+                </button>
+              </div>
+            </div>
 
             {!isEditMode && (
               <Button
