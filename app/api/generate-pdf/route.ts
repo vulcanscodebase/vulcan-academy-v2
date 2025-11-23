@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Document, Page, Text, View, StyleSheet, pdf } from "@react-pdf/renderer";
 import React from "react";
 
-// Inline PDF Document Component
+// Inline PDF Document Component using React.createElement (no JSX)
 const InterviewReportPDF = ({ reportDate, reportId, allQuestionData, feedback, resumeAnalysis }: any) => {
   const styles = StyleSheet.create({
     page: { padding: 30, fontSize: 12, fontFamily: 'Helvetica' },
@@ -15,41 +15,42 @@ const InterviewReportPDF = ({ reportDate, reportId, allQuestionData, feedback, r
     bold: { fontWeight: 'bold' },
   });
 
-  return (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <Text style={styles.title}>Interview Feedback Report</Text>
-        
-        <View style={styles.section}>
-          <Text style={styles.text}>Report ID: {reportId}</Text>
-          <Text style={styles.text}>Date: {reportDate}</Text>
-        </View>
+  const questionsSection = allQuestionData && allQuestionData.length > 0 
+    ? React.createElement(View, { style: styles.section },
+        React.createElement(Text, { style: styles.heading }, 'Questions & Answers'),
+        ...allQuestionData.map((q: any, i: number) => 
+          React.createElement(View, { key: i, style: { marginBottom: 10 } },
+            React.createElement(Text, { style: styles.bold }, `Q${i + 1}: ${q.question}`),
+            React.createElement(Text, { style: styles.text }, `A: ${q.answer}`)
+          )
+        )
+      )
+    : null;
 
-        <View style={styles.section}>
-          <Text style={styles.heading}>Overall Feedback</Text>
-          <Text style={styles.text}>{feedback || 'No feedback available'}</Text>
-        </View>
+  const resumeSection = resumeAnalysis
+    ? React.createElement(View, { style: styles.section },
+        React.createElement(Text, { style: styles.heading }, 'Resume Analysis'),
+        React.createElement(Text, { style: styles.text }, resumeAnalysis)
+      )
+    : null;
 
-        {allQuestionData && allQuestionData.length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.heading}>Questions & Answers</Text>
-            {allQuestionData.map((q: any, i: number) => (
-              <View key={i} style={{ marginBottom: 10 }}>
-                <Text style={styles.bold}>Q{i + 1}: {q.question}</Text>
-                <Text style={styles.text}>A: {q.answer}</Text>
-              </View>
-            ))}
-          </View>
-        )}
+  return React.createElement(Document, {},
+    React.createElement(Page, { size: 'A4', style: styles.page },
+      React.createElement(Text, { style: styles.title }, 'Interview Feedback Report'),
+      
+      React.createElement(View, { style: styles.section },
+        React.createElement(Text, { style: styles.text }, `Report ID: ${reportId}`),
+        React.createElement(Text, { style: styles.text }, `Date: ${reportDate}`)
+      ),
 
-        {resumeAnalysis && (
-          <View style={styles.section}>
-            <Text style={styles.heading}>Resume Analysis</Text>
-            <Text style={styles.text}>{resumeAnalysis}</Text>
-          </View>
-        )}
-      </Page>
-    </Document>
+      React.createElement(View, { style: styles.section },
+        React.createElement(Text, { style: styles.heading }, 'Overall Feedback'),
+        React.createElement(Text, { style: styles.text }, feedback || 'No feedback available')
+      ),
+
+      questionsSection,
+      resumeSection
+    )
   );
 };
 
