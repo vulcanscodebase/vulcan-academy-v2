@@ -46,7 +46,7 @@ export default function MyInterviews() {
 
   useEffect(() => {
     const checkAuthAndFetchInterviews = async () => {
-      const token = localStorage.getItem("accessToken");
+      const token = localStorage.getItem("token");
       if (!token) {
         router.push("/signin");
         return;

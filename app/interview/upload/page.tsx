@@ -37,7 +37,7 @@ export default function ResumeUpload() {
   useEffect(() => {
     const checkAuth = () => {
       // Check if user is authenticated (customize based on your auth system)
-      const token = localStorage.getItem("accessToken");
+      const token = localStorage.getItem("token");
       if (!token) {
         router.push("/signin");
         return;

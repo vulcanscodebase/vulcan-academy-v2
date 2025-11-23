@@ -14,7 +14,7 @@ export default function InterviewInstructions() {
 
   useEffect(() => {
     // Check authentication
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem("token");
     if (!token) {
       router.push("/signin");
       return;

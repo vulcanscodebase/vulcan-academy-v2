@@ -14,7 +14,7 @@ export default function InterviewPage(){
     const [isChecking, setIsChecking] = useState(true);
 
     useEffect(() => {
-      const token = localStorage.getItem("accessToken");
+      const token = localStorage.getItem("token");
       setIsAuthenticated(!!token);
       setIsChecking(false);
       
