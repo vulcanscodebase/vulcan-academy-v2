@@ -6,7 +6,7 @@ import Image from "next/image";
 import axios from "axios";
 import { toast, Toaster } from "sonner";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcans.co.in";
+const API_BASE_URL = process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcans.co.in/api";
 
 function SetupPasswordForm() {
   const [password, setPassword] = useState("");
@@ -44,7 +44,7 @@ function SetupPasswordForm() {
     setIsLoading(true);
 
     try {
-      await axios.post(`${API_BASE_URL}/api/auth/setup-password`, {
+      await axios.post(`${API_BASE_URL}/auth/setup-password`, {
         token,
         password,
       });

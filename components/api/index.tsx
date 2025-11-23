@@ -2,8 +2,7 @@ import axios from "axios";
 
 // Create Axios instance
 export const apiClient = axios.create({
-  baseURL:
-  process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcans.co.in/api",
+  baseURL: process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcans.co.in/api",
   withCredentials: true,
   timeout: 120000,
 });
