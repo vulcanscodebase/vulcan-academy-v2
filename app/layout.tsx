@@ -32,7 +32,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${inter.variable}`}>
         <Suspense fallback={<div>Loading...</div>}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light" disableTransitionOnChange>
             {/*Navbar will visible on all pages*/}
             <AuthProvider >
               <CartProvider>
