@@ -26,20 +26,24 @@ FROM base AS builder
 
 WORKDIR /app
 
-# Reuse node_modules from deps
 COPY --from=deps /app/node_modules ./node_modules
-
-# Copy all app source
 COPY . .
 
-# 🔹 Build-time public API URL for Next.js (used in npm run build)
+# ---- BUILD-TIME ARGS (PUBLIC + SECRET) ----
 ARG NEXT_PUBLIC_SERVER_URI
-ENV NEXT_PUBLIC_SERVER_URI=$NEXT_PUBLIC_SERVER_URI
+ARG ASSEMBLYAI_API_KEY
+ARG OPENROUTER_API_KEY
+ARG GOOGLE_GENERATIVE_AI_API_KEY
 
-# Disable telemetry during build
+# Make env available to Next.js during build
+ENV NEXT_PUBLIC_SERVER_URI=$NEXT_PUBLIC_SERVER_URI
+ENV ASSEMBLYAI_API_KEY=$ASSEMBLYAI_API_KEY
+ENV OPENROUTER_API_KEY=$OPENROUTER_API_KEY
+ENV GOOGLE_GENERATIVE_AI_API_KEY=$GOOGLE_GENERATIVE_AI_API_KEY
+
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Build the Next.js app (standalone output)
+# Build Next.js standalone output
 RUN npm run build
 
 #######################
@@ -52,31 +56,32 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# 🔹 Expose same env at runtime (useful for debugging / SSR)
+# (Optional) expose env at runtime for debugging
 ARG NEXT_PUBLIC_SERVER_URI
+ARG ASSEMBLYAI_API_KEY
+ARG OPENROUTER_API_KEY
+ARG GOOGLE_GENERATIVE_AI_API_KEY
+
 ENV NEXT_PUBLIC_SERVER_URI=$NEXT_PUBLIC_SERVER_URI
+ENV ASSEMBLYAI_API_KEY=$ASSEMBLYAI_API_KEY
+ENV OPENROUTER_API_KEY=$OPENROUTER_API_KEY
+ENV GOOGLE_GENERATIVE_AI_API_KEY=$GOOGLE_GENERATIVE_AI_API_KEY
 
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs \
   && adduser --system --uid 1001 nextjs
 
-# Copy public assets
 COPY --from=builder /app/public ./public
 
-# Prepare .next directory (for static files)
 RUN mkdir .next && chown nextjs:nodejs .next
 
-# Copy standalone build output
-# Next.js standalone output includes server.js and required files
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-# App listens on 3000 inside the container
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Start the Next.js standalone server
 CMD ["node", "server.js"]
