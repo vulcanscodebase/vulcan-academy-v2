@@ -514,7 +514,7 @@ export default function InterviewAI() {
 
       const backendUrl =
         process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000";
-      const response = await fetch(`${backendUrl}interviews/start`, {
+      const response = await fetch(`${backendUrl}/interviews/start`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
