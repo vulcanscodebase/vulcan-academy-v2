@@ -26,45 +26,6 @@ export default function InterviewInstructions() {
     setExpandedSteps((prev) => (prev.includes(stepId) ? prev.filter((id) => id !== stepId) : [...prev, stepId]))
   }
 
-  const instructionSteps = [
-    {
-      id: 1,
-      icon: <Award className="w-4 h-4 sm:w-5 sm:h-5" />,
-      title: "Resume Analysis",
-      summary: "Your resume has been analyzed and optimized for the interview process.",
-      details:
-        "Our AI has reviewed your experience, skills, and achievements to create personalized questions that highlight your strengths and identify areas for improvement.",
-      color: "from-blue-500 to-cyan-500",
-    },
-    {
-      id: 2,
-      icon: <Users className="w-4 h-4 sm:w-5 sm:h-5" />,
-      title: "AI Interviewer Setup",
-      summary: "Meet your AI interviewer who will conduct a natural, adaptive conversation.",
-      details:
-        "The AI interviewer uses advanced natural language processing to create realistic interview scenarios, adapting questions based on your responses and industry standards.",
-      color: "from-purple-500 to-pink-500",
-    },
-    {
-      id: 3,
-      icon: <Target className="w-4 h-4 sm:w-5 sm:h-5" />,
-      title: "Interview Process",
-      summary: "Engage in a structured interview with real-time performance tracking.",
-      details:
-        "Answer questions naturally while our system evaluates your confidence, communication skills, technical knowledge, and overall presentation in real-time.",
-      color: "from-green-500 to-emerald-500",
-    },
-    {
-      id: 4,
-      icon: <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5" />,
-      title: "Performance Evaluation",
-      summary: "Receive comprehensive feedback and actionable insights.",
-      details:
-        "Get detailed analysis of your performance including confidence levels, body language assessment, technical accuracy, and personalized recommendations for improvement.",
-      color: "from-orange-500 to-red-500",
-    },
-  ]
-
   const preparationTips = [
     "Ensure you're in a quiet, well-lit environment",
     "Test your camera and microphone beforehand",
@@ -118,57 +79,6 @@ export default function InterviewInstructions() {
               transition={{ delay: 0.2, duration: 0.6 }}
               className="space-y-3 sm:space-y-4"
             >
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2 sm:gap-3">
-                {instructionSteps.map((step, index) => (
-                  <motion.div
-                    key={step.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 + index * 0.1 }}
-                    className="bg-white/80 backdrop-blur-xl rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-lg border border-gray-200/20 hover:shadow-xl transition-all duration-300 group"
-                  >
-                    <div className="flex items-start space-x-2 sm:space-x-3 mb-2">
-                      <div
-                        className={`w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-gradient-to-br ${step.color} flex items-center justify-center text-white shadow-lg`}
-                      >
-                        {step.icon}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-xs sm:text-sm font-semibold text-gray-900 mb-1 leading-tight">
-                          {step.id}. {step.title}
-                        </h3>
-                      </div>
-                    </div>
-
-                    <p className="text-xs text-gray-600 mb-2 leading-relaxed">{step.summary}</p>
-
-                    <AnimatePresence>
-                      {expandedSteps.includes(step.id) && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mb-2"
-                        >
-                          <div className="text-xs text-gray-500 leading-relaxed p-2 bg-gray-50/50 rounded-lg sm:rounded-xl">
-                            {step.details}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    <button
-                      onClick={() => toggleExpand(step.id)}
-                      className="flex items-center text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors group-hover:translate-x-1 duration-300"
-                    >
-                      {expandedSteps.includes(step.id) ? "Show less" : "Learn more"}
-                      <ChevronDown
-                        className={`ml-1 w-3 h-3 transition-transform ${expandedSteps.includes(step.id) ? "rotate-180" : ""}`}
-                      />
-                    </button>
-                  </motion.div>
-                ))}
-              </div>
 
               <motion.div
                 initial={{ opacity: 0, x: -30 }}

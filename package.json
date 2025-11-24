@@ -38,9 +38,9 @@
     "@radix-ui/react-toggle": "1.1.1",
     "@radix-ui/react-toggle-group": "1.1.1",
     "@radix-ui/react-tooltip": "1.1.6",
+    "@react-pdf/renderer": "^4.3.0",
     "@studio-freight/lenis": "^1.0.42",
     "@tabler/icons-react": "^3.35.0",
-    "@react-pdf/renderer": "^4.3.0",
     "@vercel/analytics": "latest",
     "ai": "^4.3.17",
     "autoprefixer": "^10.4.20",
@@ -77,6 +77,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.9",
     "@types/node": "^22",
+    "@types/pdf-parse": "^1.1.5",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "postcss": "^8.5",

@@ -14,6 +14,8 @@ import {
   Shield,
   Award,
   Clock,
+  GraduationCap,
+  Info,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,6 +33,9 @@ export default function ResumeUpload() {
   const [filteredRoles, setFilteredRoles] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [mode, setMode] = useState<"basic" | "advanced">("basic");
+  const [qualification, setQualification] = useState<string>("")
+  const [selectedDegreeKey, setSelectedDegreeKey] = useState<string | null>(null)
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   // Check authentication on component mount
@@ -60,7 +65,62 @@ export default function ResumeUpload() {
     "Accountant",
     "Teacher",
     "General",
+    "Project Management",
+    "Civil Engineering",
+    "Mechanical Engineering",
+    "Electrical Engineering",
+    "Electronics and Communication (Embedded Systems and IoT)",
+    "Assistant Professor Accounting",
+    "Assistant Professor Marketing",
+    "Assistant Professor HR", 
   ];
+
+  const degreeOptions: Array<{ key: string; label: string }> = [
+    { key: "BE_BTECH_ME_MTECH", label: "BE / BTech / ME / MTech" },
+    { key: "BBA_MBA", label: "BBA / MBA" },
+    { key: "BCOM_MCOM", label: "BCom / MCom" },
+    { key: "BA_MA", label: "BA / MA" },
+    { key: "BSC_MSC", label: "BSc / MSc" },
+    { key: "OTHERS", label: "Others (Any Graduate)" },
+  ]
+
+  const BBA_MBA_AND_BCOM_MCOM_ROLES = [
+    "Marketing",
+    "Sales Executive",
+    "Business Analyst",
+    "Digital Marketing",
+    "Accountant",
+    "Customer Service",
+    "Assistant Professor Accounting",
+    "Assistant Professor Marketing",
+    "Assistant Professor HR",
+  ]
+
+  const DEGREE_ROLE_MAP: Record<string, string[]> = {
+    BE_BTECH_ME_MTECH: ["Frontend Developer", "Backend Developer", "UX Designer", "Civil Engineering",
+      "Mechanical Engineering", "Electrical Engineering", "Electronics and Communication (Embedded Systems and IoT)"],
+    BBA_MBA: BBA_MBA_AND_BCOM_MCOM_ROLES,
+    BCOM_MCOM: BBA_MBA_AND_BCOM_MCOM_ROLES,
+    BA_MA: ["Teacher", "Marketing", "Customer Service"],
+    BSC_MSC: ["Business Analyst", "Accountant"],
+    OTHERS: ["Customer Service", "Sales Executive", "Marketing", "Project Management"],
+  }
+
+  const unique = (arr: string[]) => Array.from(new Set(arr))
+
+
+  function getPrioritizedRoles(searchTerm = ""): string[] {
+    const term = searchTerm.trim().toLowerCase()
+    const relevant = selectedDegreeKey ? DEGREE_ROLE_MAP[selectedDegreeKey] || [] : []
+
+    const baseOrder = unique([...relevant, "General", "Teacher"]).filter((role) => allJobRoles.includes(role as typeof allJobRoles[number]))
+    const rest = allJobRoles.filter((role) => !baseOrder.includes(role))
+    const ordered = [...baseOrder, ...rest]
+    const filtered = term ? ordered.filter((r) => r.toLowerCase().includes(term)) : ordered
+
+    return filtered
+  }
+
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -93,6 +153,22 @@ export default function ResumeUpload() {
     setJobTitle(role);
     setShowDropdown(false);
   };
+
+
+  const handleSelectDegree = (key: string) => {
+    const nextKey = selectedDegreeKey === key ? null : key
+    setSelectedDegreeKey(nextKey)
+    const matches = getPrioritizedRoles(jobTitle)
+    setFilteredRoles(matches)
+    setShowDropdown(false) 
+  }
+
+
+  const handleFocusRoles = () => {
+    const ordered = getPrioritizedRoles(jobTitle)
+    setFilteredRoles(ordered)
+    setShowDropdown(true)
+  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -152,6 +228,7 @@ export default function ResumeUpload() {
 
     try {
       localStorage.setItem("jobTitle", jobTitle);
+      localStorage.setItem("mode", mode);
 
       const formData = new FormData();
       formData.append("file", selectedFile);
@@ -324,6 +401,41 @@ export default function ResumeUpload() {
           >
             <div className="mb-6 sm:mb-8">
               <label className="block text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center">
+                <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mr-2" />
+                Select your graduation degree
+              </label>
+
+              <div className="relative">
+                <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2">
+                  {degreeOptions.map((deg) => {
+                    const selected = selectedDegreeKey === deg.key
+                    return (
+                      <button
+                        type="button"
+                        key={deg.key}
+                        onClick={() => handleSelectDegree(deg.key)}
+                        className={`whitespace-nowrap px-3 sm:px-4 py-2 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-medium transition-all duration-200 border ${
+                          selected
+                            ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white border-transparent shadow"
+                            : "bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200"
+                        }`}
+                        title={deg.label}
+                      >
+                        {deg.label}
+                      </button>
+                    )
+                  })}
+                </div>
+                <p className="mt-2 text-xs sm:text-sm text-gray-500 flex items-center">
+                  <Info className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                  Relevant roles will be shown first based on your selection.
+                </p>
+              </div>
+            </div>
+
+            {/* Job Title Input */}
+            <div className="mb-6 sm:mb-8">
+              <label className="block text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center">
                 <Award className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mr-2" />
                 What role are you interviewing for?
                 <span className="text-red-500 ml-1">*</span>
@@ -333,19 +445,24 @@ export default function ResumeUpload() {
                   <Briefcase className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
                   <Input
                     type="text"
-                    placeholder="e.g., Frontend Developer, Product Manager..."
+                    placeholder={
+                      qualification ? "e.g., Frontend Developer, Product Manager..." : "Select qualification first"
+                    }
                     value={jobTitle}
                     onChange={handleInputChange}
-                    onFocus={() => {
-                      setFilteredRoles(allJobRoles);
-                      setShowDropdown(true);
-                    }}
+                    onFocus={handleFocusRoles}
                     className="pl-10 sm:pl-12 h-12 sm:h-14 text-sm sm:text-lg rounded-xl sm:rounded-2xl border-2 border-gray-200 focus:border-blue-500 transition-all duration-300 bg-white/50 backdrop-blur-sm"
                   />
                 </div>
 
+                {!selectedDegreeKey && (
+                  <p className="mt-2 text-xs sm:text-sm text-gray-500">
+                    Please select your qualification to see relevant roles.
+                  </p>
+                )}
+
                 <AnimatePresence>
-                  {showDropdown && (
+                  {showDropdown && selectedDegreeKey && (
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -354,21 +471,67 @@ export default function ResumeUpload() {
                     >
                       {filteredRoles.map((role, index) => (
                         <motion.div
-                          key={index}
+                          key={`${role}-${index}`}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
-                          transition={{ delay: index * 0.05 }}
+                          transition={{ delay: index * 0.02 }}
                           onClick={() => handleSelectRole(role)}
                           className="px-3 sm:px-4 py-2 sm:py-3 hover:bg-blue-50 cursor-pointer transition-colors text-sm sm:text-base text-gray-700 border-b border-gray-100 last:border-b-0 first:rounded-t-xl sm:first:rounded-t-2xl last:rounded-b-xl sm:last:rounded-b-2xl"
                         >
                           {role}
                         </motion.div>
                       ))}
+                      {filteredRoles.length === 0 && (
+                        <div className="px-3 sm:px-4 py-3 text-sm text-gray-500">No roles match your search.</div>
+                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
             </div>
+
+            <div className="mt-6">
+            <label className="block text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center">
+              Select the mode of interview preparation
+          </label>
+
+          <div className="flex items-center space-x-4">
+
+            <Button
+              type="button"
+              variant="default"
+              onClick={() => setMode("basic")}
+              className={
+              mode === "basic"
+              ? "px-4 py-2 text-sm sm:text-base bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md hover:opacity-90"
+              : "px-4 py-2 text-sm sm:text-base border border-gray-300 text-gray-700 bg-white hover:bg-gray-100"
+            }
+            >
+            Basic
+           </Button>
+
+          <Button
+            type="button"
+            variant="default"
+            onClick={() => setMode("advanced")}
+            className={
+            mode === "advanced"
+            ? "px-4 py-2 text-sm sm:text-base bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md hover:opacity-90"
+            : "px-4 py-2 text-sm sm:text-base border border-gray-300 text-gray-700 bg-white hover:bg-gray-100"
+            }
+          >
+          Advanced
+          </Button>
+
+            </div>
+
+              <p className="mt-2 text-xs sm:text-sm text-gray-500">
+              {mode === "basic"
+              ? "Basic mode gives a simple interview preparation flow."
+              : "Advanced mode has tougher questions to test your skills."}
+              </p>
+            </div>
+
 
             <div className="mb-6 sm:mb-8">
               <label className="block text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center">
