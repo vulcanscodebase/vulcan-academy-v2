@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Navbar } from "@/components/(layout-wrapper)/navbar";
 
 export default function ResumeUpload() {
   const router = useRouter();
@@ -241,6 +242,28 @@ export default function ResumeUpload() {
         localStorage.removeItem("technicalQuestions");
       }
 
+      // ✅ Start interview and deduct license when user proceeds after resume upload
+      const backendUrl = process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000";
+      const startInterviewRes = await fetch(`${backendUrl}/api/interviews/start`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          jobRole: jobTitle,
+          resumeText: result.text,
+          resumeFileName: selectedFile.name,
+          resumeEvaluation: evaluation,
+        }),
+      });
+
+      if (!startInterviewRes.ok) {
+        const errorData = await startInterviewRes.json();
+        throw new Error(errorData.message || "Failed to start interview. License may be insufficient.");
+      }
+
+      const startInterviewData = await startInterviewRes.json();
+      localStorage.setItem("interviewId", startInterviewData.interview._id);
+
       setTimeout(() => {
         router.push("/interview/ai/instructions");
       }, 500);
@@ -267,32 +290,7 @@ export default function ResumeUpload() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
-      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/80 border-b border-gray-200/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-2 sm:space-x-3">
-              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                <Sparkles className="w-3 h-3 sm:w-5 sm:h-5 text-white" />
-              </div>
-              <span className="text-base sm:text-xl font-semibold tracking-tight">
-                Vulcan Interview Master
-              </span>
-            </Link>
-
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <div className="flex items-center space-x-2 text-xs sm:text-sm text-green-600">
-                <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span>Authenticated</span>
-              </div>
-              <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-600">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span className="hidden sm:inline">Step 2 of 5</span>
-                <span className="sm:hidden">2/5</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       <div className="pt-16 sm:pt-24 pb-8 sm:pb-12 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">

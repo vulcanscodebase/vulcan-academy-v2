@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import BotInterviewer from "@/components/(interview-master)/bot";
+import { Navbar } from "@/components/(layout-wrapper)/navbar";
 
 export default function InterviewAI() {
   const router = useRouter();
@@ -739,41 +740,7 @@ export default function InterviewAI() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 flex flex-col">
-      <nav className="backdrop-blur-xl bg-white/80 border-b border-gray-200/20 px-4 sm:px-6 py-3 flex-shrink-0">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-2 sm:space-x-3">
-            <div className="w-6 h-6 sm:w-7 sm:h-7 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-              <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
-            </div>
-            <span className="text-base sm:text-lg font-semibold tracking-tight">
-              Vulcan Interview Master
-            </span>
-          </div>
-
-          <div className="flex items-center space-x-2 sm:space-x-4">
-            <button
-              onClick={handleHelp}
-              className="flex items-center space-x-1 sm:space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
-            >
-              <HelpCircle className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span className="text-xs sm:text-sm font-medium hidden sm:inline">
-                Help
-              </span>
-            </button>
-            <button
-              onClick={handleExitInterview}
-              className="bg-red-500 hover:bg-red-600 text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-colors"
-            >
-              Exit
-            </button>
-            <div className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-gray-600">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span className="hidden sm:inline">Step 4 of 5</span>
-              <span className="sm:hidden">4/5</span>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

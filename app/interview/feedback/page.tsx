@@ -22,6 +22,7 @@ import {
   Upload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Navbar } from "@/components/(layout-wrapper)/navbar";
 
 interface InterviewMetrics {
   confidence: number;
@@ -293,7 +294,7 @@ export default function FeedbackPage() {
       };
 
       const backendUrl =
-        process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
+        process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000";
       const response = await fetch(
         `${backendUrl}/api/interviews/${interviewId}/feedback`,
         {
@@ -314,7 +315,7 @@ export default function FeedbackPage() {
       const result = await response.json();
       console.log("Feedback updated successfully:", result);
       setFeedbackSubmitted(true);
-      alert("Interview feedback saved successfully!");
+      // Don't show alert, save silently
 
       return result;
     } catch (error) {
@@ -326,9 +327,10 @@ export default function FeedbackPage() {
     }
   }, [interviewId, feedback, allQuestionData]);
 
-  // Auto-submit feedback after it's loaded
+  // Auto-submit feedback and report to backend after it's loaded
   useEffect(() => {
     if (feedback.strengths.length > 0 && interviewId && !feedbackSubmitted) {
+      // Save report to backend automatically
       submitFeedbackUpdate();
     }
   }, [feedback, interviewId, feedbackSubmitted, submitFeedbackUpdate]);
@@ -503,28 +505,7 @@ export default function FeedbackPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/80 border-b border-gray-200/20">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-semibold tracking-tight">
-                Vulcan Interview Master
-              </span>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 text-sm text-green-600">
-                <CheckCircle className="w-4 h-4" />
-                <span>Complete</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       <div className="pt-24 pb-12 px-6">
         <div className="max-w-6xl mx-auto">
@@ -1029,7 +1010,7 @@ export default function FeedbackPage() {
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-2xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
             >
               <Home className="mr-2 w-5 h-5" />
-              Return to Home
+              Go to Home
             </Button>
 
             <Button
@@ -1040,31 +1021,7 @@ export default function FeedbackPage() {
               className="px-8 py-4 rounded-2xl text-lg font-semibold border-2 hover:bg-gray-50 transition-all duration-300 bg-transparent"
             >
               <Download className="mr-2 w-5 h-5" />
-              {isGeneratingPDF ? "Generating PDF..." : "Download Report"}
-            </Button>
-
-            <Button
-              onClick={submitFeedbackUpdate}
-              disabled={isSubmittingFeedback || feedbackSubmitted}
-              size="lg"
-              className="px-8 py-4 rounded-2xl text-lg font-semibold bg-green-600 hover:bg-green-700 text-white transition-all duration-300"
-            >
-              {isSubmittingFeedback ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-                  Saving Feedback...
-                </>
-              ) : feedbackSubmitted ? (
-                <>
-                  <CheckCircle className="mr-2 w-5 h-5" />
-                  Feedback Saved
-                </>
-              ) : (
-                <>
-                  <Upload className="mr-2 w-5 h-5" />
-                  Save Feedback to Backend
-                </>
-              )}
+              {isGeneratingPDF ? "Generating PDF..." : "Download Report as PDF"}
             </Button>
           </motion.div>
 

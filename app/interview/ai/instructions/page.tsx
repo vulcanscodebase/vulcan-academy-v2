@@ -6,6 +6,7 @@ import { ChevronRight, ChevronDown, Play, Sparkles, Award, Users, Target, BarCha
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { Navbar } from "@/components/(layout-wrapper)/navbar"
 
 export default function InterviewInstructions() {
   const [expandedSteps, setExpandedSteps] = useState<number[]>([])
@@ -75,28 +76,9 @@ export default function InterviewInstructions() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 flex flex-col">
-      <nav className="backdrop-blur-xl bg-white/80 border-b border-gray-200/20 flex-shrink-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-2 sm:space-x-3">
-              <div className="w-6 h-6 sm:w-7 sm:h-7 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
-              </div>
-              <span className="text-base sm:text-lg font-semibold tracking-tight">Vulcan Interview Master</span>
-            </Link>
+      <Navbar />
 
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-600">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span className="hidden sm:inline">Step 3 of 5</span>
-                <span className="sm:hidden">3/5</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <div className="flex-1 px-4 sm:px-6 py-4 overflow-y-auto">
+      <div className="flex-1 px-4 sm:px-6 py-4 overflow-y-auto pt-16">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
