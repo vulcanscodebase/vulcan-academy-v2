@@ -57,14 +57,14 @@ export default function InterviewPage(){
                 </div>
                 
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                  AI Interview
+                  Vulcan Interview
                   <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent ml-3">
                     Master
                   </span>
                 </h1>
                 
                 <p className="text-xl text-gray-600 mb-8">
-                  Please sign in to access the AI Interview Master and start your practice interviews.
+                  Please sign in to access the Vulcan Interview Master and start your practice interviews.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
