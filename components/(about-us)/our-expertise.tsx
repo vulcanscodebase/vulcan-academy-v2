@@ -2,29 +2,29 @@ const expertise = [
   {
     title: "English Proficiency",
     desc: "Enhance your English skills for academic and professional success.",
-    img: "/images/expertise/english.jpg",
+    img: "/learning.jpg",
   },
   {
     title: "Accent Training",
     desc: "Master clear and confident communication with our accent training programs.",
-    img: "/images/expertise/accent.jpg",
+    img: "/training.jpg",
   },
   {
     title: "BPO Roles",
     desc: "Prepare for successful careers in the BPO industry with specialized training.",
-    img: "/images/expertise/bpo.jpg",
+    img: "/teacher.jpg",
   },
   {
     title: "Study Abroad Preparation",
     desc: "Get ready for global opportunities with our tailored preparation solutions.",
-    img: "/images/expertise/abroad.jpg",
+    img: "/learn.gif",
   },
   {
     title: "Bespoke Tests",
     desc: "Custom tests designed for organizations to enhance communication skills.",
-    img: "/images/expertise/tests.jpg",
+    img: "bespoke.jpeg",
   },
-]
+];
 
 export function OurExpertise() {
   return (
@@ -46,12 +46,18 @@ export function OurExpertise() {
             >
               {/* Image */}
               <div className="h-36 w-full">
-                <img src={item.img || "/placeholder.svg"} alt={item.title} className="h-full w-full object-cover" />
+                <img
+                  src={item.img || "/placeholder.svg"}
+                  alt={item.title}
+                  className="h-full w-full object-cover"
+                />
               </div>
 
               {/* Text */}
               <div className="p-4 flex flex-col flex-grow justify-end">
-                <h3 className="text-2xl md:text-3xl font-light tracking-tight text-foreground mb-2">{item.title}</h3>
+                <h3 className="text-2xl md:text-3xl font-light tracking-tight text-foreground mb-2">
+                  {item.title}
+                </h3>
                 <p className="text-base text-muted-foreground">{item.desc}</p>
               </div>
             </div>
@@ -59,5 +65,5 @@ export function OurExpertise() {
         </div>
       </div>
     </section>
-  )
+  );
 }

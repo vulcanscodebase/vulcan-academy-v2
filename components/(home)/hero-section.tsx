@@ -1,6 +1,7 @@
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import background from "@/public/hero-section.png"
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import background from "@/public/hero-section.png";
+import Link from "next/link";
 
 export function HeroSection() {
   return (
@@ -21,20 +22,22 @@ export function HeroSection() {
             Easy to use tools designed to unlock your potential.
           </p>
           <div className="mt-8">
-            <Button
-              variant="default"
-              className={cn(
-                "bg-vulcan-accent-blue text-vulcan-white hover:bg-vulcan-accent-blue/90",
-                "rounded-md px-8 py-5 text-sm font-medium transition-colors",
-                "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
-                "disabled:pointer-events-none disabled:opacity-50"
-              )}
-            >
-              Explore Now
-            </Button>
+            <Link href="/interview">
+              <Button
+                variant="default"
+                className={cn(
+                  "bg-vulcan-accent-blue text-vulcan-white hover:bg-vulcan-accent-blue/90",
+                  "rounded-md px-8 py-5 text-sm font-medium transition-colors",
+                  "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+                  "disabled:pointer-events-none disabled:opacity-50"
+                )}
+              >
+                Explore Now
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
