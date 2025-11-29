@@ -321,7 +321,7 @@ export default function ResumeUpload() {
 
       // ✅ Start interview and deduct license when user proceeds after resume upload
       const backendUrl = process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000";
-      const startInterviewRes = await fetch(`${backendUrl}/api/interviews/start`, {
+      const startInterviewRes = await fetch(`${backendUrl}/interviews/start`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
