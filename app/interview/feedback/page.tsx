@@ -296,7 +296,7 @@ export default function FeedbackPage() {
       const backendUrl =
         process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000";
       const response = await fetch(
-        `${backendUrl}/api/interviews/${interviewId}/feedback`,
+        `${backendUrl}/interviews/${interviewId}/feedback`,
         {
           method: "PUT",
           headers: {

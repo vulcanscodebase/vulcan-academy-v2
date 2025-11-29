@@ -77,7 +77,7 @@ export default function MyInterviews() {
     try {
       const backendUrl =
         process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000";
-      const response = await fetch(`${backendUrl}/api/interviews/user/${uid}`, {
+      const response = await fetch(`${backendUrl}/interviews/user/${uid}`, {
         credentials: "include",
       });
 
