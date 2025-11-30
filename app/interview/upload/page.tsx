@@ -354,7 +354,7 @@ export default function ResumeUpload() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen pt-20 bg-gradient-to-br from-gray-50 via-white to-blue-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-6 h-6 sm:w-8 sm:h-8 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-sm sm:text-base text-gray-600">
@@ -366,7 +366,7 @@ export default function ResumeUpload() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
+    <div className="min-h-screen pt-20 bg-gradient-to-br from-gray-50 via-white to-blue-50">
       <Navbar />
 
       <div className="pt-16 sm:pt-24 pb-8 sm:pb-12 px-4 sm:px-6">

@@ -72,6 +72,7 @@ export default function InterviewDetails() {
   const [interview, setInterview] = useState<Interview | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   useEffect(() => {
     const checkAuthAndFetchInterview = async () => {
@@ -152,6 +153,82 @@ export default function InterviewDetails() {
     return Math.round((total / 25) * 100);
   };
 
+  const handleGeneratePDF = async () => {
+    if (isGeneratingPDF || !interview || !interview.report) return;
+
+    setIsGeneratingPDF(true);
+    try {
+      const reportId = `RPT-${new Date().getFullYear()}-${String(
+        new Date().getMonth() + 1
+      ).padStart(2, "0")}-${String(Math.floor(Math.random() * 1000)).padStart(
+        3,
+        "0"
+      )}`;
+
+      // Prepare feedback text
+      const feedbackText = [
+        interview.report.strengths && interview.report.strengths.length > 0 
+          ? `Strengths:\n${interview.report.strengths.map((s, i) => `${i + 1}. ${s}`).join('\n')}` 
+          : '',
+        interview.report.improvements && interview.report.improvements.length > 0 
+          ? `Areas for Improvement:\n${interview.report.improvements.map((s, i) => `${i + 1}. ${s}`).join('\n')}` 
+          : '',
+        interview.report.tips && interview.report.tips.length > 0 
+          ? `Tips:\n${interview.report.tips.map((s, i) => `${i + 1}. ${s}`).join('\n')}` 
+          : '',
+        interview.report.overallFeedback ? `\nOverall Feedback:\n${interview.report.overallFeedback}` : '',
+      ].filter(Boolean).join('\n\n') || 'No feedback available';
+
+      // Prepare question data
+      const questionData = (interview.questionsData || []).map((q) => ({
+        question: q.question || 'No question',
+        answer: q.transcript || 'No answer provided',
+      }));
+
+      // Prepare resume analysis
+      const resumeAnalysisText = interview.resume?.evaluation 
+        ? JSON.stringify(interview.resume.evaluation, null, 2)
+        : 'No resume analysis available';
+
+      const pdfData = {
+        reportDate: new Date().toLocaleDateString(),
+        reportId,
+        allQuestionData: questionData,
+        feedback: feedbackText,
+        resumeAnalysis: resumeAnalysisText,
+      };
+
+      const response = await fetch("/api/generate-pdf", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(pdfData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to generate PDF");
+      }
+
+      // Create blob and download
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `Interview_Report_${interview.jobRole.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error: any) {
+      console.error("Error generating PDF:", error);
+      alert(error?.message || "Failed to generate PDF. Please try again.");
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
+
   function StarRating({ value }: { value: number }) {
     return (
       <div className="flex space-x-1">
@@ -203,7 +280,7 @@ export default function InterviewDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 pt-20">
       {/* Header */}
       <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
@@ -234,10 +311,16 @@ export default function InterviewDetails() {
               </div>
             </div>
 
-            <Button variant="outline">
-              <Download className="w-4 h-4 mr-2" />
-              Download Report
-            </Button>
+            {interview.report && interview.report.metrics && (
+              <Button 
+                variant="outline"
+                onClick={handleGeneratePDF}
+                disabled={isGeneratingPDF}
+              >
+                <Download className="w-4 h-4 mr-2" />
+                {isGeneratingPDF ? "Generating..." : "Download Report"}
+              </Button>
+            )}
           </div>
         </div>
       </div>

@@ -36,7 +36,7 @@ export default function InterviewPage(){
     // Show loading while checking auth
     if (isChecking) {
       return (
-        <div className="min-h-screen flex items-center justify-center">
+        <div className="min-h-screen pt-20 flex items-center justify-center">
           <div className="text-center">
             <div className="w-8 h-8 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
             <p className="text-gray-600">Loading...</p>
@@ -49,7 +49,7 @@ export default function InterviewPage(){
     if (!isAuthenticated) {
       return (
         <>
-          <section className="relative w-full py-16 md:py-24 lg:py-32 bg-gradient-to-br from-gray-50 via-white to-blue-50 min-h-screen flex items-center">
+          <section className="relative w-full pt-28 pb-16 md:pt-32 md:pb-24 lg:pt-36 lg:pb-32 bg-gradient-to-br from-gray-50 via-white to-blue-50 min-h-screen flex items-center">
             <div className="container mx-auto px-4 md:px-6 lg:px-8">
               <div className="max-w-4xl mx-auto text-center">
                 <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-8">

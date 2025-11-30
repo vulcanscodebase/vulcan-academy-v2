@@ -765,7 +765,7 @@ export default function InterviewAI() {
   const isLastQuestion = currentQuestion === questions.length - 1;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 flex flex-col pt-20">
       <Navbar />
 
       <motion.div
