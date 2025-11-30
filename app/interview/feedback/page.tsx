@@ -248,6 +248,10 @@ export default function FeedbackPage() {
       if (!interviewId) {
         throw new Error("Interview ID not found");
       }
+      
+      console.log("Submitting feedback update for interview:", interviewId);
+      console.log("Feedback data:", feedback);
+      console.log("All question data length:", allQuestionData.length);
 
       const payload = {
         report: {
@@ -295,9 +299,12 @@ export default function FeedbackPage() {
       };
 
       const backendUrl =
-        process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000";
-      const response = await fetch(
-        `${backendUrl}/interviews/${interviewId}/feedback`,
+        process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000/api";
+      // Ensure we don't double up on /api
+      const apiUrl = backendUrl.endsWith('/api') 
+        ? `${backendUrl}/interviews/${interviewId}/feedback`
+        : `${backendUrl}/api/interviews/${interviewId}/feedback`;
+      const response = await fetch(apiUrl,
         {
           method: "PUT",
           headers: {
@@ -315,9 +322,18 @@ export default function FeedbackPage() {
 
       const result = await response.json();
       console.log("Feedback updated successfully:", result);
+      console.log("Interview status after update:", result.interview?.status);
+      console.log("Interview completedAt:", result.interview?.completedAt);
+      
+      if (result.interview?.status === "completed") {
+        toast.success("Interview completed and report saved successfully!");
+      } else {
+        console.warn("Warning: Interview status is not 'completed' after feedback update:", result.interview?.status);
+        toast.warning("Report saved, but interview status may not be updated. Please refresh the page.");
+      }
+      
       setFeedbackSubmitted(true);
-      // Don't show alert, save silently
-
+      
       return result;
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : "Unknown error";
@@ -330,11 +346,17 @@ export default function FeedbackPage() {
 
   // Auto-submit feedback and report to backend after it's loaded
   useEffect(() => {
-    if (feedback.strengths.length > 0 && interviewId && !feedbackSubmitted) {
-      // Save report to backend automatically
-      submitFeedbackUpdate();
-    }
-  }, [feedback, interviewId, feedbackSubmitted, submitFeedbackUpdate]);
+    // Wait a bit for feedback to be fully loaded
+    const timer = setTimeout(() => {
+      if (feedback.strengths.length > 0 && interviewId && !feedbackSubmitted && isLoaded) {
+        console.log("Auto-submitting feedback update...");
+        // Save report to backend automatically
+        submitFeedbackUpdate();
+      }
+    }, 1000); // Wait 1 second for feedback to be fully loaded
+
+    return () => clearTimeout(timer);
+  }, [feedback, interviewId, feedbackSubmitted, submitFeedbackUpdate, isLoaded]);
 
   // Helper for safe numeric values
   const safeValue = (val: number | undefined) =>

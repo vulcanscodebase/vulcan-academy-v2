@@ -577,8 +577,12 @@ export default function InterviewAI() {
         `Sending completion with ${allQuestionData.length} questions`
       );
       const backendUrl =
-        process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000";
-      const response = await fetch(`${backendUrl}/api/interviews/complete`, {
+        process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000/api";
+      // Ensure we don't double up on /api
+      const apiUrl = backendUrl.endsWith('/api') 
+        ? `${backendUrl}/interviews/complete`
+        : `${backendUrl}/api/interviews/complete`;
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
