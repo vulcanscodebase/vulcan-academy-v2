@@ -110,6 +110,10 @@ export default function InterviewDetails() {
 
       const data = await response.json();
       console.log("Interview data received:", data.interview); // Debug log
+      console.log("Interview status:", data.interview?.status);
+      console.log("Interview report:", data.interview?.report);
+      console.log("Interview report metrics:", data.interview?.report?.metrics);
+      
       if (data.interview) {
         setInterview(data.interview);
       } else {
@@ -241,8 +245,8 @@ export default function InterviewDetails() {
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Interview Status Info for non-completed interviews */}
-        {/* Show this section if interview has no report or report has no metrics */}
-        {(!interview.report || !interview.report?.metrics) && (
+        {/* Show this section if interview status is not completed OR has no report or report has no metrics */}
+        {(interview.status !== "completed" || !interview.report || !interview.report?.metrics) && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
