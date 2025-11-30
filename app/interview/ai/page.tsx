@@ -609,7 +609,7 @@ export default function InterviewAI() {
 
         addDebugLog("Stopping full interview video recorder");
 
-        videoRecorderRef.current.onstop = () => {
+        videoRecorderRef.current.onstop = async () => {
           addDebugLog(
             `Full interview video recording stopped, chunks: ${videoChunksRef.current.length}`
           );
@@ -638,19 +638,39 @@ export default function InterviewAI() {
 
           addDebugLog("Full interview video recording saved to sessionStorage");
 
+          // ✅ Complete the interview before navigating
+          if (interviewId) {
+            try {
+              await submitCompleteInterviewAPI();
+              addDebugLog("Interview completion API called successfully");
+            } catch (err) {
+              console.error("Error completing interview:", err);
+              addDebugLog(`Error completing interview: ${err}`);
+            }
+          } else {
+            addDebugLog(
+              "Warning: No interview ID found, but continuing to feedback page"
+            );
+          }
+
           try {
             const reader = new FileReader();
             reader.readAsDataURL(videoBlob);
-            reader.onloadend = () => {
+            reader.onloadend = async () => {
               addDebugLog(
                 "Video processing complete, navigating to feedback page"
               );
+              // Small delay to ensure API call completes
+              await new Promise(resolve => setTimeout(resolve, 500));
               router.push("/interview/feedback");
             };
           } catch (err) {
             console.error("Error processing video blob:", err);
             addDebugLog(`Error processing video: ${err}`);
-            router.push("/interview/feedback");
+            // Small delay before navigation
+            setTimeout(() => {
+              router.push("/interview/feedback");
+            }, 500);
           }
         };
 
@@ -659,15 +679,17 @@ export default function InterviewAI() {
         addDebugLog(
           "Video recorder not active, cannot end interview recording"
         );
+        // ✅ Complete the interview even if video recorder is not active
+        if (interviewId) {
+          try {
+            await submitCompleteInterviewAPI();
+            addDebugLog("Interview completion API called successfully");
+          } catch (err) {
+            console.error("Error completing interview:", err);
+            addDebugLog(`Error completing interview: ${err}`);
+          }
+        }
         router.push("/interview/feedback");
-      }
-
-      if (interviewId) {
-        await submitCompleteInterviewAPI();
-      } else {
-        addDebugLog(
-          "Warning: No interview ID found, but continuing to feedback page"
-        );
       }
 
       if (timerRef.current) clearInterval(timerRef.current);
