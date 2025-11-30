@@ -96,9 +96,12 @@ export default function InterviewDetails() {
   const fetchInterviewDetails = async () => {
     try {
       const backendUrl =
-        process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000";
+        process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000/api";
       const response = await fetch(`${backendUrl}/interviews/${interviewId}`, {
         credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
       if (!response.ok) {
@@ -106,7 +109,12 @@ export default function InterviewDetails() {
       }
 
       const data = await response.json();
-      setInterview(data.interview);
+      console.log("Interview data received:", data.interview); // Debug log
+      if (data.interview) {
+        setInterview(data.interview);
+      } else {
+        setError("Interview data not found in response");
+      }
     } catch (err) {
       console.error("Error fetching interview:", err);
       setError("Failed to load interview details");
@@ -166,14 +174,25 @@ export default function InterviewDetails() {
     );
   }
 
-  if (error || !interview) {
+  if (error) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 mb-4">{error || "Interview not found"}</p>
+          <p className="text-red-600 mb-4">{error}</p>
           <Link href="/user-profile/interviews">
             <Button>Back to Interviews</Button>
           </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!interview) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading interview details...</p>
         </div>
       </div>
     );
@@ -222,7 +241,8 @@ export default function InterviewDetails() {
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Interview Status Info for non-completed interviews */}
-        {!interview.report?.metrics && (
+        {/* Show this section if interview has no report or report has no metrics */}
+        {(!interview.report || !interview.report?.metrics) && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
