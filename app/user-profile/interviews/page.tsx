@@ -86,7 +86,15 @@ export default function MyInterviews() {
       }
 
       const data = await response.json();
-      setInterviews(data.interviews || []);
+      // Deduplicate interviews by _id to prevent showing duplicates
+      const uniqueInterviews = (data.interviews || []).reduce((acc: Interview[], current: Interview) => {
+        const exists = acc.find(item => item._id === current._id);
+        if (!exists) {
+          acc.push(current);
+        }
+        return acc;
+      }, []);
+      setInterviews(uniqueInterviews);
     } catch (err) {
       console.error("Error fetching interviews:", err);
       setError("Failed to load interviews");

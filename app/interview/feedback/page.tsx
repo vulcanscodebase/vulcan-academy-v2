@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/(layout-wrapper)/navbar";
+import { toast } from "sonner";
 
 interface InterviewMetrics {
   confidence: number;
@@ -465,12 +466,36 @@ export default function FeedbackPage() {
         "0"
       )}`;
 
+      // Prepare feedback text from strengths, improvements, and tips
+      const feedbackText = [
+        feedback.strengths && feedback.strengths.length > 0 
+          ? `Strengths:\n${feedback.strengths.map((s, i) => `${i + 1}. ${s}`).join('\n')}` 
+          : '',
+        feedback.improvements && feedback.improvements.length > 0 
+          ? `Areas for Improvement:\n${feedback.improvements.map((s, i) => `${i + 1}. ${s}`).join('\n')}` 
+          : '',
+        feedback.tips && feedback.tips.length > 0 
+          ? `Tips:\n${feedback.tips.map((s, i) => `${i + 1}. ${s}`).join('\n')}` 
+          : '',
+      ].filter(Boolean).join('\n\n') || 'No feedback available';
+
+      // Prepare resume analysis text
+      const resumeAnalysisText = resumeAnalysis && resumeAnalysis.atsScore > 0
+        ? `ATS Score: ${resumeAnalysis.atsScore}/100\n\nImprovement Suggestions:\n${(resumeAnalysis.tips || []).map((tip: string, i: number) => `${i + 1}. ${tip}`).join('\n')}`
+        : 'No resume analysis available';
+
+      // Prepare question data with answers
+      const questionData = allQuestionData.map((q: QuestionData) => ({
+        question: q.question || 'No question',
+        answer: q.transcript || 'No answer provided',
+      }));
+
       const pdfData = {
         reportDate: new Date().toLocaleDateString(),
         reportId,
-        allQuestionData,
-        feedback,
-        resumeAnalysis,
+        allQuestionData: questionData,
+        feedback: feedbackText,
+        resumeAnalysis: resumeAnalysisText,
       };
 
       const response = await fetch("/api/generate-pdf", {
@@ -482,7 +507,8 @@ export default function FeedbackPage() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to generate PDF");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to generate PDF");
       }
 
       // Create blob and download
@@ -495,9 +521,9 @@ export default function FeedbackPage() {
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error generating PDF:", error);
-      alert("Failed to generate PDF. Please try again.");
+      toast.error(error?.message || "Failed to generate PDF. Please try again.");
     } finally {
       setIsGeneratingPDF(false);
     }

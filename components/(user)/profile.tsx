@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import {
   Card,
   CardHeader,
@@ -20,7 +19,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import profile_placeholder from "@/public/about.jpg";
 import { useAuth } from "../context/authcontext";
 import { updateUserById } from "../api";
 import { requestHandler } from "@/utils/auth";
@@ -54,7 +52,7 @@ export function ProfileSetup() {
     name: "",
     dob: "",
     email: "",
-    profilePhoto: profile_placeholder.src,
+    profilePhoto: "",
     educationStatus: "",
     schoolOrCollege: "",
     profession: "",
@@ -76,7 +74,7 @@ export function ProfileSetup() {
         name: user.name || "",
         dob: formatDate((user as any).dob),
         email: user.email || "",
-        profilePhoto: (user as any).profilePhoto || profile_placeholder.src,
+        profilePhoto: (user as any).profilePhoto || "",
         educationStatus: (user as any).educationStatus || "",
         schoolOrCollege: (user as any).schoolOrCollege || "",
         profession: (user as any).profession || "",
@@ -86,9 +84,27 @@ export function ProfileSetup() {
       setFormData(updatedForm);
       initialFormData.current = updatedForm;
       
-      // Get remaining interviews (licenses) count
-      setRemainingInterviews((user as any).licenses || 0);
+      // Get remaining interviews (licenses) count - ensure it's fetched properly
+      const userLicenses = (user as any).licenses;
+      if (userLicenses !== undefined && userLicenses !== null) {
+        setRemainingInterviews(Number(userLicenses));
+      } else {
+        // If licenses not in user object, refresh user data
+        getUser().then(() => {
+          const refreshedUser = JSON.parse(localStorage.getItem("user") || "{}");
+          setRemainingInterviews(Number(refreshedUser.licenses || 0));
+        });
+      }
+    } else {
+      // If user is not loaded yet, fetch it
+      getUser().then(() => {
+        const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+        if (storedUser.licenses !== undefined && storedUser.licenses !== null) {
+          setRemainingInterviews(Number(storedUser.licenses));
+        }
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -196,15 +212,6 @@ export function ProfileSetup() {
           <CardHeader className="flex flex-col items-center text-center">
             <div className="mt-4 text-2xl font-semibold text-vulcan-dark">
               My Profile
-            </div>
-            <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-vulcan-accent-blue shadow-lg">
-              <Image
-                src={formData.profilePhoto || profile_placeholder.src}
-                alt="Profile"
-                width={120}
-                height={120}
-                className="object-cover w-full h-full"
-              />
             </div>
             <CardTitle className="mt-4 text-2xl font-semibold text-vulcan-dark">
               {formData.name}

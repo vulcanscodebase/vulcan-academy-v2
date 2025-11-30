@@ -221,6 +221,47 @@ export default function InterviewDetails() {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        {/* Interview Status Info for non-completed interviews */}
+        {!interview.report?.metrics && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-gray-200/20 mb-8"
+          >
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Clock className="w-10 h-10 text-blue-600" />
+              </div>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-3">
+                Interview {interview.status === "started" ? "Started" : interview.status === "in_progress" ? "In Progress" : "Not Completed"}
+              </h2>
+              <p className="text-gray-600 mb-4">
+                {interview.status === "started" || interview.status === "in_progress"
+                  ? "This interview is still in progress. Complete the interview to view detailed feedback and metrics."
+                  : "This interview has not been completed yet. Complete the interview to view detailed feedback and metrics."}
+              </p>
+              <div className="mt-6">
+                <span className={`px-4 py-2 rounded-full text-sm font-medium ${
+                  interview.status === "started" || interview.status === "in_progress"
+                    ? "bg-blue-100 text-blue-800"
+                    : "bg-gray-100 text-gray-800"
+                }`}>
+                  Status: {interview.status.charAt(0).toUpperCase() + interview.status.slice(1)}
+                </span>
+              </div>
+              {interview.status === "started" || interview.status === "in_progress" ? (
+                <div className="mt-6">
+                  <Link href="/interview">
+                    <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+                      Continue Interview
+                    </Button>
+                  </Link>
+                </div>
+              ) : null}
+            </div>
+          </motion.div>
+        )}
+
         {/* Overall Performance */}
         {interview.report?.metrics && (
           <motion.div
