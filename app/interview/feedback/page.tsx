@@ -253,48 +253,69 @@ export default function FeedbackPage() {
       console.log("Feedback data:", feedback);
       console.log("All question data length:", allQuestionData.length);
 
+      // Calculate metrics - always provide metrics even if empty to ensure report displays
+      const metrics = allQuestionData.length > 0
+        ? {
+            avgConfidence:
+              allQuestionData.reduce(
+                (sum, q) => sum + (q.metrics?.confidence || 0),
+                0
+              ) / allQuestionData.length,
+            avgBodyLanguage:
+              allQuestionData.reduce(
+                (sum, q) => sum + (q.metrics?.bodyLanguage || 0),
+                0
+              ) / allQuestionData.length,
+            avgKnowledge:
+              allQuestionData.reduce(
+                (sum, q) => sum + (q.metrics?.knowledge || 0),
+                0
+              ) / allQuestionData.length,
+            avgSkillRelevance:
+              allQuestionData.reduce(
+                (sum, q) => sum + (q.metrics?.skillRelevance || 0),
+                0
+              ) / allQuestionData.length,
+            avgFluency:
+              allQuestionData.reduce(
+                (sum, q) => sum + (q.metrics?.fluency || 0),
+                0
+              ) / allQuestionData.length,
+            totalQuestions: allQuestionData.length,
+          }
+        : {
+            // Provide default metrics if no question data
+            avgConfidence: 0,
+            avgBodyLanguage: 0,
+            avgKnowledge: 0,
+            avgSkillRelevance: 0,
+            avgFluency: 0,
+            totalQuestions: 0,
+          };
+
+      //  Only submit if we have actual feedback content or valid metrics
+      const hasValidFeedback = feedback.strengths.length > 0 || feedback.improvements.length > 0 || feedback.tips.length > 0;
+      const hasValidMetrics = allQuestionData.length > 0 && allQuestionData.some(q => q.metrics && (q.metrics.confidence || q.metrics.knowledge || q.metrics.fluency));
+      
+      // Don't save report if no valid data
+      if (!hasValidFeedback && !hasValidMetrics) {
+        console.log("No valid feedback or metrics to save. Skipping report submission.");
+        setFeedbackSubmitted(true); // Mark as submitted to prevent retry
+        return null;
+      }
+
       const payload = {
         report: {
-          strengths: feedback.strengths,
-          improvements: feedback.improvements,
-          tips: feedback.tips,
+          strengths: feedback.strengths.length > 0 ? feedback.strengths : [],
+          improvements: feedback.improvements.length > 0 ? feedback.improvements : [],
+          tips: feedback.tips.length > 0 ? feedback.tips : [],
           overallFeedback:
             feedback.strengths.length > 0
               ? `Strong in: ${feedback.strengths[0]}. Areas to improve: ${
                   feedback.improvements[0] || "communication skills"
                 }.`
-              : "Interview completed",
-          metrics:
-            allQuestionData.length > 0
-              ? {
-                  avgConfidence:
-                    allQuestionData.reduce(
-                      (sum, q) => sum + (q.metrics?.confidence || 0),
-                      0
-                    ) / allQuestionData.length,
-                  avgBodyLanguage:
-                    allQuestionData.reduce(
-                      (sum, q) => sum + (q.metrics?.bodyLanguage || 0),
-                      0
-                    ) / allQuestionData.length,
-                  avgKnowledge:
-                    allQuestionData.reduce(
-                      (sum, q) => sum + (q.metrics?.knowledge || 0),
-                      0
-                    ) / allQuestionData.length,
-                  avgSkillRelevance:
-                    allQuestionData.reduce(
-                      (sum, q) => sum + (q.metrics?.skillRelevance || 0),
-                      0
-                    ) / allQuestionData.length,
-                  avgFluency:
-                    allQuestionData.reduce(
-                      (sum, q) => sum + (q.metrics?.fluency || 0),
-                      0
-                    ) / allQuestionData.length,
-                  totalQuestions: allQuestionData.length,
-                }
-              : {},
+              : hasValidMetrics ? "Interview completed with recorded responses" : "",
+          metrics: metrics, // Always include metrics
         },
       };
 
@@ -348,15 +369,18 @@ export default function FeedbackPage() {
   useEffect(() => {
     // Wait a bit for feedback to be fully loaded
     const timer = setTimeout(() => {
-      if (feedback.strengths.length > 0 && interviewId && !feedbackSubmitted && isLoaded) {
+      // Submit if we have interviewId and haven't submitted yet (even if feedback is empty)
+      if (interviewId && !feedbackSubmitted && isLoaded) {
         console.log("Auto-submitting feedback update...");
+        console.log("Feedback strengths length:", feedback.strengths.length);
+        console.log("All question data length:", allQuestionData.length);
         // Save report to backend automatically
         submitFeedbackUpdate();
       }
-    }, 1000); // Wait 1 second for feedback to be fully loaded
+    }, 2000); // Wait 2 seconds for feedback to be fully loaded
 
     return () => clearTimeout(timer);
-  }, [feedback, interviewId, feedbackSubmitted, submitFeedbackUpdate, isLoaded]);
+  }, [feedback, interviewId, feedbackSubmitted, submitFeedbackUpdate, isLoaded, allQuestionData]);
 
   // Helper for safe numeric values
   const safeValue = (val: number | undefined) =>
