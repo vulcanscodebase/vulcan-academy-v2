@@ -324,7 +324,7 @@ export default function FeedbackPage() {
       // Ensure we don't double up on /api
       const apiUrl = backendUrl.endsWith('/api') 
         ? `${backendUrl}/interviews/${interviewId}/feedback`
-        : `${backendUrl}/api/interviews/${interviewId}/feedback`;
+        : `${backendUrl}/interviews/${interviewId}/feedback`;
       const response = await fetch(apiUrl,
         {
           method: "PUT",

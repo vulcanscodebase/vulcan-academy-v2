@@ -581,7 +581,7 @@ export default function InterviewAI() {
       // Ensure we don't double up on /api
       const apiUrl = backendUrl.endsWith('/api') 
         ? `${backendUrl}/interviews/complete`
-        : `${backendUrl}/api/interviews/complete`;
+        : `${backendUrl}/interviews/complete`;
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
