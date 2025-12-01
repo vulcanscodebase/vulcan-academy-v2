@@ -229,7 +229,7 @@ export default function ResumeUpload() {
 
     try {
       localStorage.setItem("jobTitle", jobTitle);
-      localStorage.setItem("mode", mode);
+      localStorage.setItem("interviewMode", mode);
 
       const formData = new FormData();
       formData.append("file", selectedFile);
@@ -309,14 +309,7 @@ export default function ResumeUpload() {
         if (typeof evaluation.followUpQuestion === "string") {
           localStorage.setItem("followUpQuestion", evaluation.followUpQuestion);
         }
-        if (typeof evaluation.technicalQuestion === "string") {
-          localStorage.setItem(
-            "technicalQuestion",
-            evaluation.technicalQuestion
-          );
-        }
         localStorage.removeItem("followUpQuestions");
-        localStorage.removeItem("technicalQuestions");
       }
 
       // ✅ Start interview and deduct license when user proceeds after resume upload

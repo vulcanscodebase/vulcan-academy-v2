@@ -69,12 +69,12 @@ export default function InterviewAI() {
     
     setIsLoaded(true);
     const storedTitle = localStorage.getItem("jobTitle");
+    const storedMode = localStorage.getItem("interviewMode") ?? "";
 
     if (storedTitle) {
       const rawFollowUps = localStorage.getItem("followUpQuestions");
       const rawTechnicals = localStorage.getItem("technicalQuestions");
       const singleFollowUp = localStorage.getItem("followUpQuestion");
-      const singleTechnical = localStorage.getItem("technicalQuestion");
 
       const parseArray = (raw: string | null): string[] => {
         if (!raw) return [];
@@ -102,15 +102,8 @@ export default function InterviewAI() {
         singleFollowUp.trim() !== ""
           ? singleFollowUp
           : null;
-      const sanitizedSingleTechnical =
-        singleTechnical &&
-        singleTechnical !== "undefined" &&
-        singleTechnical !== "null" &&
-        singleTechnical.trim() !== ""
-          ? singleTechnical
-          : null;
 
-      fetch(`/api/questions?title=${encodeURIComponent(storedTitle)}`)
+      fetch(`/api/questions?title=${encodeURIComponent(storedTitle)}&mode=${encodeURIComponent(storedMode)}`)
         .then((res) => {
           if (!res.ok) throw new Error("Failed to fetch questions");
           return res.json();
@@ -127,8 +120,6 @@ export default function InterviewAI() {
           if (technicals.length > 0) {
             modifiedQuestions.push(...technicals);
             modifiedQuestions.splice(-technicals.length, technicals.length);
-          } else if (sanitizedSingleTechnical) {
-            modifiedQuestions.push(sanitizedSingleTechnical);
           }
 
           setQuestions(modifiedQuestions);
