@@ -1,75 +1,610 @@
 {
-  "Frontend Developer": [
-    "What things in your graduation prepared you for this job?",
-    "Why would you like to work in this field?",
-    "Tell me about a time you faced a difficult challenge. What did you do about it?",
-    "Tell me about the toughest front-end bug or integration challenge you solved recently—how did you diagnose it, and what was the outcome?",
-    "Describe the concrete steps you take to make an interface accessible (e.g., ARIA roles, keyboard flows, colour-contrast). Why is this important?"
-  ],
-  "Backend Developer": [
-    "Can you explain the concept of status codes in HTTP?",
-    "If you are building a simple backend for a todo-list app, how would you design the backend workflow (database, API endpoints, request flow)?",
-    "Explain primary key, foreign key, and indexes in a relational database.",
-    "How is authentication different from authorization?",
-    "Can you explain the difference between process and thread?"
-  ],
-  "UX Designer": [
-    "Can you explain the design thinking process?",
-    "What are the key principles of good UX design?",
-    "How would you conduct a user research study for a new product?",
-    "What is a user persona and why is it important in design?",
-    "How do you collaborate with developers to ensure your designs are implemented correctly?"
-  ],
-  "Marketing": [
-    "What is the difference between inbound marketing and outbound marketing?",
-    "How would you define the marketing funnel (Awareness, Consideration, Conversion, Retention)?",
-    "What are some important Key Performance Indicators you would track in a marketing campaign?",
-    "How would you decide what type of content to create for a new product launch?",
-    "Imagine your company is launching a new online course. How would you plan the marketing strategy for the first 3 months?"
-  ],
-  "Sales Executive": [
-    "Can you explain the sales funnel or sales cycle?",
-    "What is the difference between lead generation and prospecting?",
-    "How would you approach a cold call with a potential client?",
-    "What steps would you take to handle a customer’s objection?",
-    "How do you build rapport with a new customer?",
-    "Imagine you have to sell a product to someone who says, “I’m not interested.” What would you do?"
-  ],
-  "Business Analyst": [
-    "How would you explain the difference between functional requirements and non-functional requirements?",
-    "Which tools have you heard of or used for BA work?",
-    "What is a use case? Can you give a simple example?",
-    "How do you handle a situation where stakeholders give conflicting requirements?",
-    "How would you explain data-driven decision making?"
-  ],
-  "Digital Marketing": [
-    "What is the difference between SEO (Search Engine Optimization) and SEM (Search Engine Marketing)?",
-    "How would you measure if a content marketing campaign is successful?",
-    "Can you explain the concept of a marketing funnel (Awareness, Consideration, Conversion, Retention)?",
-    "What are some important KPIs (Key Performance Indicators) you would monitor in a digital marketing campaign?",
-    "How do you present return on investment for digital marketing to a client?"
-  ],
-  "Customer Service": [
-    "What do you understand by good customer service?",
-    "What steps would you take to handle an angry or dissatisfied customer?",
-    "How would you explain a technical issue to a customer who has no technical background?",
-    "If you don’t know the answer to a customer’s question, what would you do?",
-    "Imagine a customer has been waiting too long for a solution. How would you reassure and retain their trust?"
-  ],
-  "Accountant": [
-    "What are the three main types of financial statements and what do they show?",
-    "What is double-entry bookkeeping? Can you give a simple example?",
-    "Can you explain the difference between capital expenditure and revenue expenditure?",
-    "Can you explain what trial balance is and why it must tally?",
-    "Imagine you find a small error in the balance sheet at the last stage of reporting—what steps would you take to correct it?"
-  ],
-  "Teacher": [
-    "Explain a topic of your choice in 2 minutes. (Compulsory)",
-    "How do you motivate students who are underperforming?",
-    "Describe a time when you had to adapt your teaching style to a difficult class.",
-    "What technological tools do you integrate with your class?",
-    "How do you assess students’ understanding during a class?"
-  ],
+  "Frontend Developer": {
+    "Basic": {
+      "Pool1": [
+        "What in your graduation or past learning experience has prepared you the most for a front-end role?",
+        "What excites you the most about working as a front-end developer?",
+        "How do you stay disciplined and consistent when working on long or repetitive UI tasks?",
+        "Tell me about a moment when you realised coding was the right career path for you.",
+        "How do you deal with frustration when a component doesn’t work after multiple attempts?",
+        "Describe a situation where you had to learn a new tool or framework quickly. How did you approach it?"
+      ],
+      "Pool2": [
+        "Describe the concrete steps you take to make an interface accessible (e.g., ARIA roles, keyboard flows, colour contrast). Why is this important?",
+        "Explain the difference between class selectors, ID selectors, and attribute selectors in CSS. When should each be used?",
+        "What is the DOM, and how does JavaScript interact with it?",
+        "What is the difference between inline, inline-block, and block elements in HTML?",
+        "Explain how flexbox works. When would you choose flexbox over grid?",
+        "Describe how browser caching works for front-end assets.",
+        "What are semantic HTML tags? Why do we use them?",
+        "Explain how responsive design works. What tools or CSS properties help achieve it?",
+        "How do you optimise images and static assets for faster page loading?"
+      ],
+      "Pool3": [
+        "Tell me about the toughest front-end bug or integration challenge you solved recently—how did you diagnose it, and what was the outcome?",
+        "Describe a time when you were asked to redesign or rebuild a component. How did you handle user feedback and technical constraints?",
+        "Talk about a time when working with a backend API was difficult—what did you do to ensure the UI still functioned smoothly?",
+        "Give an example of a time you faced a difficult challenge. What did you do about it?",
+        "Describe a situation where you improved performance or reduced load time—what steps did you take?",
+        "Tell me about a front-end feature you built that you’re most proud of. Why does it stand out?",
+        "Describe a time when you had to work under a very tight deadline. What strategies helped you deliver?"
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "How do you stay disciplined and consistent when working on long or repetitive UI tasks?",
+        "Tell me about a moment when you realised coding was the right career path for you.",
+        "How do you deal with frustration when a component doesn’t work after multiple attempts?",
+        "Describe a situation where you had to learn a new tool or framework quickly. How did you approach it?",
+        "How do you handle feedback on your design or code, especially when you disagree with it?",
+        "What do you do when faced with conflicting priorities—like fixing bugs vs. shipping new features?",
+        "Give an example of a team situation where you took responsibility even without being asked.",
+        "What do you think is the most important personal quality a front-end developer needs, and how do you embody it?"
+      ],
+      "Pool2": [
+        "How do you implement media queries in React, and what steps do you take to ensure the UI adapts well on Android, iPad, and laptops?",
+        "Explain the difference between client-side rendering, server-side rendering, and static site generation. When do you use each?",
+        "What strategies do you use to reduce bundle size and improve React app performance?",
+        "Explain the reconciliation process in React. How does React decide what to re-render?",
+        "How do you manage application-wide state? Compare Redux, Context API, and other options.",
+        "How do you handle debouncing or throttling in search bars or scroll-based events?",
+        "What is lazy loading, and how do you implement it in React?",
+        "How do you manage environment variables and configuration for different environments (dev, staging, production)?",
+        "When working with APIs, how do you handle loading states, caching, and error states in the UI?",
+        "What security risks exist in front-end apps (XSS, CSRF, content injection), and how do you mitigate them?"
+      ],
+      "Pool3": [
+        "Tell me about the toughest front-end bug or integration challenge you solved recently—how did you diagnose it, and what was the outcome?",
+        "Describe a time when you were asked to redesign or rebuild a component. How did you handle user feedback and technical constraints?",
+        "Talk about a time when working with a backend API was difficult—what did you do to ensure the UI still functioned smoothly?",
+        "Tell me about a time when you had to choose between a quick fix and a long-term solution. What did you decide and why?",
+        "Describe a situation when you collaborated with a designer. How did you bridge the gap between design expectations and technical feasibility?",
+        "Talk about a moment when you had conflicting opinions with your teammates on how to build a feature. How did you resolve it?",
+        "Tell me about a front-end feature you built that you’re most proud of. Why does it stand out?",
+        "Describe a time when you had to work under a very tight deadline. What strategies helped you deliver?"
+      ]
+    }
+  },
+  "Backend Developer": {
+    "Basic": {
+      "Pool1": [
+        "What in your graduation or past learning experience has prepared you the most for a backend development role?",
+        "What motivates you to pursue backend development?",
+        "Tell me about a moment when you realised you enjoy solving backend or system-level problems.",
+        "How do you stay calm and systematic when production issues or server errors arise?",
+        "Describe a time when you learned a new backend technology or concept quickly. How did you approach it?",
+        "Backend work often involves invisible tasks. How do you stay motivated without immediate visual results?",
+        "What personal quality do you think is most important for a backend developer, and how do you embody it?"
+      ],
+      "Pool2": [
+        "Explain the difference between REST APIs, GraphQL, and SOAP.",
+        "What is the purpose of HTTP methods like GET, POST, PUT, PATCH, and DELETE?",
+        "Describe how a server handles a request–response cycle.",
+        "What is the difference between SQL databases and NoSQL databases? Give examples.",
+        "Explain how authentication differs from authorization.",
+        "What is middleware in backend frameworks (e.g., Express.js, Django, Spring Boot)?",
+        "Explain indexing in databases. How does it improve query performance?",
+        "What is CORS and why is it important?",
+        "What is environment-based configuration? Why shouldn’t sensitive data be hard-coded?",
+        "What are status codes? Explain common codes like 200, 400, 401, 403, 404, and 500."
+      ],
+      "Pool3": [
+        "Tell me about the most difficult backend bug you solved—how did you diagnose it and what was the final fix?",
+        "Describe a time when your API was working locally but failing in production. What steps did you take to find the issue?",
+        "Tell me about a performance bottleneck you resolved. What tools or methods helped you?",
+        "Tell me about a situation where you redesigned or refactored a backend module to make it more efficient.",
+        "Tell me about a moment when you had to work on a feature with a very tight deadline. How did you plan and deliver?",
+        "Tell me about a backend feature you built that you’re most proud of. Why does it stand out?"
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "Tell me about a moment when you realised you enjoy solving backend or system-level problems.",
+        "How do you stay calm and systematic when production issues or server errors arise?",
+        "Describe a time when you learned a new backend technology or concept quickly. How did you approach it?",
+        "Backend work often involves invisible tasks. How do you stay motivated without immediate visual results?",
+        "How do you handle feedback on your architecture, code quality, or API design?",
+        "Tell me about a time you took responsibility for a backend issue even when the root cause wasn’t obvious.",
+        "How do you manage conflicting priorities—like feature building, refactoring, and fixing bugs?",
+        "What personal quality do you think is most important for a backend developer, and how do you embody it?"
+      ],
+      "Pool2": [
+        "Explain how you design a scalable API that can handle high traffic.",
+        "How do you structure a backend application so that it remains modular and maintainable?",
+        "Describe the steps you take to optimize slow database queries.",
+        "How do you implement caching? Compare Redis, in-memory caching, and CDN-based caching.",
+        "Explain how JWT works and how you secure token-based authentication.",
+        "How do you handle file uploads safely, especially large files?",
+        "Describe rate limiting. How do you implement it and why is it important?",
+        "How do you detect and prevent common security threats like SQL injection, XSS, and CSRF?",
+        "Explain message queues. Why and when would you use systems like RabbitMQ, Kafka, or AWS SQS?",
+        "How do you handle database migrations in production without downtime?"
+      ],
+      "Pool3": [
+        "Tell me about the most difficult backend bug you solved—how did you diagnose it and what was the final fix?",
+        "Describe a time when your API was working locally but failing in production. What steps did you take to find the issue?",
+        "Describe a time when you had to collaborate closely with front-end developers to design an API. What made it challenging?",
+        "Tell me about a situation where you redesigned or refactored a backend module to make it more efficient.",
+        "Describe a time when you had to deal with poor documentation or unclear requirements. What did you do?",
+        "Tell me about a moment when you had to work on a feature with a very tight deadline. How did you plan and deliver?",
+        "Describe a situation where you had to handle data inconsistency issues. How did you identify the cause?",
+        "Describe a time a deployment went wrong. What happened, how did you respond, and what did you learn?"
+      ]
+    }
+  },
+  "UX Designer": {
+    "Basic": {
+      "Pool1": [
+        "What in your graduation or past experience has prepared you to think from a user’s perspective?",
+        "What excites you the most about becoming a UX designer?",
+        "UX often involves multiple iterations. How do you stay motivated when your designs are repeatedly changed or rejected?",
+        "Tell me about a moment when you realised you enjoy understanding user behaviour.",
+        "How do you handle feedback that contradicts your design choices?",
+        "UX design requires patience and empathy. How do you practice both in your work?",
+        "What personal quality do you believe is most important for a UX designer, and how do you demonstrate it?"
+      ],
+      "Pool2": [
+        "What is your approach to understanding user needs before starting any design?",
+        "Explain the difference between UX and UI design. Why are both important?",
+        "What are user personas, and how do they guide design decisions?",
+        "Describe what usability testing is. When should it be conducted?",
+        "What are wireframes? How do they differ from prototypes?",
+        "Explain Nielsen’s 10 Usability Heuristics and name at least three.",
+        "What is information architecture? Why is it important in UX?",
+        "How do you define user journeys and task flows?",
+        "What tools do you use for low-fidelity and high-fidelity designs?",
+        "Describe the importance of accessibility in UX design."
+      ],
+      "Pool3": [
+        "Tell me about a UX problem you solved that had a major impact on user satisfaction. How did you approach it?",
+        "Tell me about a time you redesigned a feature or flow. What improvements were made and how did you measure success?",
+        "Tell me about a time when you simplified a complex interface. What was the result?",
+        "Describe a time you conducted usability testing. What insights did you gain and how did they shape the final design?",
+        "Tell me about a UX design you are most proud of. Why does it stand out?",
+        "Describe a time your design failed or didn’t perform as expected. What did you learn from it?"
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "UX often involves multiple iterations. How do you stay motivated when your designs are repeatedly changed or rejected?",
+        "How do you handle feedback that contradicts your design choices?",
+        "Describe a time when you stepped in to solve a design-related problem even though it wasn’t assigned to you.",
+        "What do you do when you feel creatively stuck or unable to generate new ideas?",
+        "How do you balance user needs with business requirements when they conflict?",
+        "UX design requires patience and empathy. How do you practice both in your work?",
+        "What personal quality do you believe is most important for a UX designer, and how do you demonstrate it?"
+      ],
+      "Pool2": [
+        "How do you plan and conduct user research when there is very little time or budget?",
+        "Explain how you create, implement, or maintain a design system.",
+        "How do you use analytics or behaviour-tracking tools (e.g., Hotjar, Google Analytics) to guide UX decisions?",
+        "How do you validate whether a design change has actually improved user experience?",
+        "What is cognitive load, and how do you reduce it in your designs?",
+        "Explain how you conduct A/B testing and how you interpret the results.",
+        "How do you design for multiple devices—mobile, tablet, and desktop—while maintaining consistency?",
+        "How do you hand off your designs to developers to ensure accuracy?",
+        "Describe how you use inclusive design principles when creating user experiences.",
+        "What steps do you take to ensure user data privacy and compliance (e.g., GDPR) within UX design?"
+      ],
+      "Pool3": [
+        "Tell me about a UX problem you solved that had a major impact on user satisfaction. How did you approach it?",
+        "Describe a situation where your research findings contradicted stakeholder opinions. What did you do?",
+        "Describe a moment when you had very unclear or incomplete requirements. How did you proceed?",
+        "Tell me about a time when you simplified a complex interface. What was the result?",
+        "Describe a situation where deadlines were tight, but user research was still needed. How did you balance both?",
+        "Tell me about a conflict with a developer or product manager regarding a design decision. How did you resolve it?",
+        "Describe a time you conducted usability testing. What insights did you gain and how did they shape the final design?",
+        "Describe a time your design failed or didn’t perform as expected. What did you learn from it?"
+      ]
+    }
+  },
+  "Marketing": {
+    "Basic": {
+      "Pool1": [
+        "What in your graduation or experience has prepared you for a marketing role?",
+        "What excites you the most about working in marketing?",
+        "Marketing requires constant creativity. How do you stay inspired when ideas don’t come easily?",
+        "Tell me about a moment when you realised you enjoy understanding customer behaviour.",
+        "How do you handle negative feedback on your campaign ideas or strategies?",
+        "Describe a time when you took initiative to solve a marketing-related challenge without being asked.",
+        "What personal quality do you believe is most important for a marketer, and how do you embody it?"
+      ],
+      "Pool2": [
+        "Explain the 4Ps of marketing. How do they guide campaign creation?",
+        "What is the difference between branding and marketing?",
+        "What is a target audience? How do you define it for a new product?",
+        "Explain what a customer journey is.",
+        "What is segmentation? Why is it important in marketing?",
+        "Describe organic vs. paid marketing with an example.",
+        "What is a value proposition? Why does it matter?",
+        "What are the key metrics you track in a basic marketing campaign?",
+        "What is competitor analysis, and how do you conduct it?",
+        "Explain the importance of storytelling in marketing."
+      ],
+      "Pool3": [
+        "Tell me about a marketing campaign you worked on in college or in your locality. What made it successful?",
+        "Tell me about a situation where you disagreed with the creative direction proposed by the team. How did you handle it?",
+        "Give an example of a time you had to work under a very tight deadline for a campaign launch.",
+        "Tell me about a time you managed a social media crisis or negative comments. What did you do?",
+        "Describe a situation where you created a low-budget campaign that still performed well.",
+        "Tell me about a marketing idea you’re especially proud of. What impact did it have?"
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "What in your graduation or past experience has prepared you for a marketing role?",
+        "What excites you the most about working in marketing?",
+        "How do you handle negative feedback on your campaign ideas or strategies?",
+        "Describe a time when you took initiative to solve a marketing-related challenge without being asked.",
+        "How do you stay updated with trends and changes in the marketing world?",
+        "What do you do when a campaign does not perform well despite your effort?",
+        "How do you balance creativity with business needs and budget constraints?"
+      ],
+      "Pool2": [
+        "How do you create a complete marketing funnel for a new product?",
+        "Explain how you measure campaign effectiveness using analytics tools (Google Analytics, Meta Ads, etc.).",
+        "How do you run A/B testing for ads or landing pages?",
+        "Explain SEO vs. SEM. When do you use each?",
+        "What strategies do you use to improve conversion rates on a landing page?",
+        "How do you build and manage a brand’s social media presence?",
+        "What steps do you take to develop a content marketing strategy?",
+        "Explain how retargeting works and why it is effective.",
+        "How do you handle a situation where the cost per lead (CPL) keeps increasing?",
+        "Describe the process of creating a multi-channel campaign and ensuring message consistency."
+      ],
+      "Pool3": [
+        "Describe a time when your campaign underperformed. What did you do to fix it?",
+        "Tell me about a situation where you disagreed with the creative direction proposed by the team. How did you handle it?",
+        "Describe a moment when you used customer insights to improve a marketing decision.",
+        "Give an example of a time you had to work under a very tight deadline for a campaign launch.",
+        "Describe a situation where you created a low-budget campaign that still performed well.",
+        "Tell me about a moment when you identified a new market opportunity and recommended it to the team.",
+        "Describe a time when collaboration with sales or product teams helped improve a campaign outcome."
+      ]
+    }
+  },
+  "Sales Executive": {
+    "Basic": {
+      "Pool1": [
+        "What in your graduation or past experience has prepared you for a sales role?",
+        "What motivates you the most about working in sales?",
+        "Sales involve frequent rejection. How do you stay motivated?",
+        "Tell me about a moment when you realised you enjoy building relationships with people.",
+        "Describe a time you took the initiative to close a deal or help a customer without being asked.",
+        "How do you balance being persuasive with being respectful and ethical?",
+        "What personal quality do you think is most important for a Sales Executive, and how do you demonstrate it?"
+      ],
+      "Pool2": [
+        "What is the sales funnel? Explain each stage briefly.",
+        "What does “qualifying a lead” mean? How do you do it?",
+        "Explain the difference between B2B and B2C sales.",
+        "What are open-ended questions in sales? Why are they useful?",
+        "How do you identify customer needs during a conversation?",
+        "What are the key components of a good sales pitch?",
+        "Explain the importance of product knowledge in sales.",
+        "What is rapport building? How do you build rapport with a new customer?",
+        "What is objection handling? List some common objections.",
+        "Why is follow-up important after the first interaction?"
+      ],
+      "Pool3": [
+        "Tell me about the toughest sale you closed. What made it difficult, and how did you win it?",
+        "Tell me about a situation where you turned a dissatisfied customer into a happy one.",
+        "Describe a moment when you lost a major deal. What did you learn from it?",
+        "Tell me about a time you had to convince a skeptical person. How did you approach it?",
+        "Describe a situation where you had to handle a person’s objections. What was your strategy?",
+        "Describe a moment when teamwork helped you close a deal."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "Sales involve frequent rejection. How do you stay motivated?",
+        "How do you react when a client dismisses or challenges your pitch?",
+        "Describe a time you took the initiative to close a deal or help a customer without being asked.",
+        "How do you handle pressure when you have monthly or weekly sales targets?",
+        "What do you do when you feel your sales performance is not improving?",
+        "How do you balance being persuasive with being respectful and ethical?"
+      ],
+      "Pool2": [
+        "Explain how you plan and manage your sales pipeline effectively.",
+        "Describe your approach to negotiating pricing with a customer.",
+        "What are common closing techniques you use?",
+        "How do you use CRM tools (e.g., HubSpot, Zoho, Salesforce) to manage leads?",
+        "How do you track sales performance metrics like leads, conversions, and revenue?",
+        "How do you identify upselling and cross-selling opportunities?",
+        "What strategies do you use to reduce customer churn or increase retention?",
+        "Explain how you handle customers who go silent after showing initial interest.",
+        "How do you create urgency without pressuring the client unethically?",
+        "What steps do you take to prepare for a sales presentation or meeting?"
+      ],
+      "Pool3": [
+        "Tell me about the toughest sale you closed. What made it difficult, and how did you win it?",
+        "Tell me about a situation where you turned a dissatisfied customer into a happy one.",
+        "Describe a moment when you lost a major deal. What did you learn from it?",
+        "Tell me about a time when you exceeded your sales targets. What contributed to your success?",
+        "Describe a moment when teamwork helped you close a deal.",
+        "Tell me about a time when you adapted your pitch for different customer segments.",
+        "Describe a time when a deal was stuck for too long. How did you revive the conversation?"
+      ]
+    }
+  },
+  "Project Management": {
+    "Basic": {
+      "Pool1": [
+        "What in your graduation or past experience has prepared you for a project management role?",
+        "What motivates you most about managing projects and teams?",
+        "Project management often involves pressure and deadlines. How do you stay calm and focused?",
+        "Tell me about a moment when you realised you enjoy planning, organizing, or coordinating work.",
+        "How do you react when your project plan is challenged or changed by stakeholders?",
+        "Describe a time you took initiative to solve a project issue without being asked.",
+        "How do you handle situations where your team members miss deadlines or commitments?",
+        "What do you do to improve yourself as a project manager when you notice gaps in your skills?",
+        "How do you balance project constraints like time, budget, and quality when they conflict?",
+        "What personal quality do you believe is most important for a project manager, and how do you demonstrate it?"
+      ],
+      "Pool2": [
+        "What are the five phases of the project life cycle?",
+        "What is a project charter? Why is it important?",
+        "Explain the difference between a project and operations.",
+        "What is scope in project management? How do you define it?",
+        "What tools do you use for project planning and scheduling (e.g., Gantt charts)?",
+        "What is risk identification? Give an example.",
+        "What is a stakeholder? How do you manage stakeholder expectations?",
+        "Explain the difference between milestones and deliverables.",
+        "Why is documentation important in project management?"
+      ],
+      "Pool3": [
+        "Tell me about the most challenging project you managed. What made it tough, and how did you handle it?",
+        "Describe a situation where a project was falling behind schedule. What steps did you take?",
+        "Tell me about a conflict between team members. How did you resolve it?",
+        "Tell me about a time you managed a project with unclear or changing requirements.",
+        "Describe how you handled a major risk that suddenly became an issue.",
+        "Tell me about a project where your leadership directly improved team performance.",
+        "Describe a time when a deliverable failed or did not meet expectations. What did you learn?"
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "What in your graduation or past experience has prepared you for a project management role?",
+        "What motivates you most about managing projects and teams?",
+        "Project management often involves pressure and deadlines. How do you stay calm and focused?",
+        "Tell me about a moment when you realised you enjoy planning, organizing, or coordinating work.",
+        "How do you react when your project plan is challenged or changed by stakeholders?",
+        "Describe a time you took initiative to solve a project issue without being asked.",
+        "How do you handle situations where your team members miss deadlines or commitments?",
+        "What do you do to improve yourself as a project manager when you notice gaps in your skills?",
+        "How do you balance project constraints like time, budget, and quality when they conflict?",
+        "What personal quality do you believe is most important for a project manager, and how do you demonstrate it?"
+      ],
+      "Pool2": [
+        "Explain the difference between Agile, Waterfall, and Hybrid methodologies.",
+        "How do you estimate project timelines using techniques like PERT or critical path method?",
+        "How do you perform qualitative and quantitative risk analysis?",
+        "Explain how you manage project scope creep.",
+        "What strategies do you use for resource allocation and workload balancing?",
+        "Describe your approach to budgeting and cost management.",
+        "How do you measure project performance using KPIs or Earned Value Management (EVM)?",
+        "What communication plan do you create for complex projects with multiple stakeholders?",
+        "How do you manage vendor relationships and third-party dependencies?",
+        "How do you conduct a project retrospective and ensure learnings are applied?"
+      ],
+      "Pool3": [
+        "Tell me about the most challenging project you managed. What made it tough, and how did you handle it?",
+        "Describe a situation where a project was falling behind schedule. What steps did you take?",
+        "Tell me about a conflict between team members. How did you resolve it?",
+        "Tell me about a time you managed a project with unclear or changing requirements.",
+        "Describe how you handled a major risk that suddenly became an issue.",
+        "Tell me about a time you had to manage multiple projects simultaneously. How did you prioritize?",
+        "Describe a situation where your project exceeded the planned budget. What corrective actions did you take?",
+        "Describe a time when a deliverable failed or did not meet expectations. What did you learn?"
+      ]
+    }
+  },
+  "Civil Engineering": {
+    "Basic": {
+      "Pool1": [
+        "What in your graduation or past experiences has prepared you for a role as a civil engineer?",
+        "What motivates you to pursue civil engineering as a career?",
+        "Civil engineering projects can be high-pressure. How do you stay calm and focused on-site?",
+        "Tell me about a moment when you realised you enjoy solving real-world structural or construction problems.",
+        "How do you handle feedback or criticism on your design or estimation work?",
+        "How do you ensure accuracy and attention to detail while preparing drawings, estimates, or reports?",
+        "How do you stay updated with new construction techniques or industry standards?",
+        "What personal quality do you believe is essential for a civil engineer, and how do you demonstrate it?"
+      ],
+      "Pool2": [
+        "What are the main types of cement? Where is each type used?",
+        "Explain the difference between working stress method and limit state method.",
+        "What are the common tests used to check the quality of concrete?",
+        "What is the purpose of surveying in civil engineering?",
+        "Explain compaction and its importance in soil engineering.",
+        "What is the difference between a slab, beam, and column?",
+        "What is slump test in concrete? What does it indicate?",
+        "Explain the concept of factor of safety.",
+        "What is the difference between dead load and live load?",
+        "What are the common types of foundations? Give examples."
+      ],
+      "Pool3": [
+        "Tell me about a construction or structural issue you solved. What steps did you take to diagnose and fix it?",
+        "Describe a situation where your project was getting delayed. What did you do to bring it back on schedule?",
+        "Describe a time you managed conflict between contractors, workers, or stakeholders.",
+        "Tell me about a scenario where unexpected soil conditions affected your project. How did you handle it?",
+        "Describe a challenging estimation or quantity surveying task you completed.",
+        "Tell me about a time you worked under tight deadlines or adverse weather conditions.",
+        "Describe a project where you contributed significantly to cost reduction, safety, or quality improvement."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "Civil engineering projects can be high-pressure. How do you stay calm and focused on-site?",
+        "Tell me about a moment when you realised you enjoy solving real-world structural or construction problems.",
+        "How do you handle feedback or criticism on your design or estimation work?",
+        "Describe a time you took initiative to solve an engineering or technical problem without being asked.",
+        "How do you ensure accuracy and attention to detail while preparing drawings, estimates, or reports?",
+        "How do you stay updated with new construction techniques or industry standards?",
+        "Civil work often happens outdoors in challenging environments. How do you balance safety and productivity?",
+        "What personal quality do you believe is essential for a civil engineer, and how do you demonstrate it?"
+      ],
+      "Pool2": [
+        "How do you determine the type of foundation required based on soil conditions?",
+        "Explain how you design a reinforced concrete beam for bending and shear.",
+        "How do you conduct a mix design for M-grade concrete?",
+        "What steps do you take to ensure quality control during construction?",
+        "Explain how you estimate cost, materials, and quantity for a large project.",
+        "How do you select appropriate construction materials for durability and environment?",
+        "What is pre-stressed concrete? When is it preferred over RCC?",
+        "Explain the difference between static and dynamic load analysis.",
+        "How do you manage waterlogging and drainage issues at a construction site?",
+        "How do you apply relevant codes (IS codes or standards) in design and construction?"
+      ],
+      "Pool3": [
+        "Tell me about a time when you had to enforce safety rules on-site. How did you handle resistance?",
+        "Describe a situation where a design was not feasible on-site. How did you modify or resolve it?",
+        "Tell me about a moment when you discovered poor workmanship. What actions did you take?",
+        "Describe a time you managed conflict between contractors, workers, or stakeholders.",
+        "Tell me about a scenario where unexpected soil conditions affected your project. How did you handle it?",
+        "Describe a challenging estimation or quantity surveying task you completed.",
+        "Tell me about a time you worked under tight deadlines or adverse weather conditions.",
+        "Describe a project where you contributed significantly to cost reduction, safety, or quality improvement."
+      ]
+    }
+  },
+  "Mechanical Engineering": {
+    "Basic": {
+      "Pool1": [
+        "What in your graduation or past experience has prepared you for a mechanical engineering role?",
+        "What motivates you to work in mechanical engineering?",
+        "Mechanical engineering often involves problem-solving under pressure. How do you stay calm and focused?",
+        "Tell me about a moment when you realised you enjoyed understanding how machines and systems work.",
+        "How do you handle feedback or criticism on your designs, calculations, or reports?",
+        "How do you ensure accuracy in measurements, drawings, or simulations?",
+        "How do you stay updated with new manufacturing methods or mechanical technologies?",
+        "What personal quality do you believe is essential for a mechanical engineer, and how do you demonstrate it?"
+      ],
+      "Pool2": [
+        "State the first law of thermodynamics. How is it applied in real systems?",
+        "What is the difference between stress and strain?",
+        "Explain the concepts of laminar flow and turbulent flow.",
+        "What is entropy? Why is it important?",
+        "Describe different types of fits (interference, clearance, transition).",
+        "What are the common manufacturing processes (casting, forging, machining, welding)?",
+        "What is Bernoulli’s equation? Where is it used?",
+        "Explain the difference between a boiler and a heat exchanger.",
+        "What is fatigue failure? What causes it?",
+        "What are the common types of gears? Give examples of where each is used."
+      ],
+      "Pool3": [
+        "Tell me about a mechanical or thermal problem you solved. How did you diagnose it?",
+        "Describe a time when a machine or system failed unexpectedly. What did you do?",
+        "Tell me about a situation where you improved a design, process, or component.",
+        "Describe a situation where you had to coordinate with electrical, civil, or production teams.",
+        "Tell me about a design that initially failed testing. How did you revise it?",
+        "Tell me about a quality control issue you resolved.",
+        "Describe a project where your contribution significantly improved efficiency, cost, or reliability."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "Mechanical engineering often involves problem-solving under pressure. How do you stay calm and focused?",
+        "Tell me about a moment when you realised you enjoyed understanding how machines and systems work.",
+        "How do you handle feedback or criticism on your designs, calculations, or reports?",
+        "Describe a time you took initiative to fix a mechanical or technical problem without being asked.",
+        "How do you stay updated with new manufacturing methods or mechanical technologies?",
+        "What do you do when a machine or experiment repeatedly fails during testing?",
+        "What personal quality do you believe is essential for a mechanical engineer, and how do you demonstrate it?"
+      ],
+      "Pool2": [
+        "How do you approach designing a machine component to withstand dynamic loads?",
+        "Explain how you would calculate heat transfer through a composite wall.",
+        "How do you select materials based on strength, temperature, and environmental requirements?",
+        "What steps do you take to perform a finite element analysis (FEA) on a component?",
+        "Explain how CNC machines work and how you prepare a part program.",
+        "How do you optimize a production system using lean manufacturing principles?",
+        "Explain how a refrigeration cycle works and its major components.",
+        "How do you evaluate vibration in rotating machinery?",
+        "Describe the difference between hydraulic and pneumatic systems. When would you use each?",
+        "How do you incorporate safety standards and tolerances into mechanical design?"
+      ],
+      "Pool3": [
+        "Describe a time when a machine or system failed unexpectedly. What did you do?",
+        "Tell me about a situation where you improved a design, process, or component.",
+        "Describe a moment when you had to deal with limited resources or a tight budget.",
+        "Tell me about a time you noticed a safety risk during manufacturing or testing. What did you do?",
+        "Describe a situation where you had to coordinate with electrical, civil, or production teams.",
+        "Tell me about a design that initially failed testing. How did you revise it?",
+        "Describe a time you worked under tight deadlines for fabrication or assembly.",
+        "Describe a project where your contribution significantly improved efficiency, cost, or reliability."
+      ]
+    }
+  },
+  "Electrical Engineering": {
+    "Basic": {
+      "Pool1": [
+        "What in your graduation or past experience has prepared you for an electrical engineering role?",
+        "What motivates you to pursue electrical engineering as a career?",
+        "Electrical work involves strict safety compliance. How do you stay disciplined and careful on-site or in labs?",
+        "Tell me about a moment when you realised you enjoy working with circuits, machines, or electrical systems.",
+        "How do you maintain accuracy and avoid mistakes while working on complex circuits?",
+        "How do you stay updated with new technologies or electrical standards?",
+        "What do you do when you face repeated failures during testing or prototyping?",
+        "What personal quality do you believe is essential for an electrical engineer, and how do you embody it?"
+      ],
+      "Pool2": [
+        "What is Ohm’s Law? Give a practical example.",
+        "Explain the difference between AC and DC supply.",
+        "What are the main types of electrical machines (motors and generators)?",
+        "What is power factor? Why is it important?",
+        "Explain Kirchhoff’s Current Law (KCL) and Voltage Law (KVL).",
+        "What are transformers used for?",
+        "What is the difference between a fuse and a circuit breaker?",
+        "Explain the purpose of earthing/grounding in electrical systems.",
+        "What are the common types of electrical loads?",
+        "What are capacitors and inductors? Give basic applications for each."
+      ],
+      "Pool3": [
+        "Tell me about a complex electrical problem you solved. How did you diagnose and fix it?",
+        "Tell me about a time you implemented a design improvement to increase efficiency or safety.",
+        "Tell me about a time you identified a major safety risk. What did you do next?",
+        "Describe a situation where you worked with other engineering teams (mechanical, civil, electronics) to solve an issue.",
+        "Tell me about a design or calculation that initially failed. How did you revise it?",
+        "Describe a moment when you had to troubleshoot complex equipment with limited documentation.",
+        "Tell me about a maintenance challenge you resolved under tight deadlines.",
+        "Describe a project where your contribution significantly improved reliability, cost, or energy efficiency."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "Electrical work involves strict safety compliance. How do you stay disciplined and careful on-site or in labs?",
+        "Tell me about a moment when you realised you enjoy working with circuits, machines, or electrical systems.",
+        "How do you respond when your calculations or circuit designs are challenged or criticised?",
+        "Describe a time you took initiative to diagnose or fix an electrical issue without being asked.",
+        "How do you maintain accuracy and avoid mistakes while working on complex circuits?",
+        "How do you stay updated with new technologies or electrical standards?",
+        "What do you do when you face repeated failures during testing or prototyping?",
+        "What personal quality do you believe is essential for an electrical engineer, and how do you embody it?"
+      ],
+      "Pool2": [
+        "How do you select the right transformer for a given load and voltage level?",
+        "Explain how you analyse harmonics and their impact on electrical systems.",
+        "Describe the working principle of a three-phase induction motor.",
+        "How do you design and evaluate protection schemes like relays and circuit breakers?",
+        "Explain how you calculate fault levels in a distribution system.",
+        "How do you perform load flow analysis? What tools or methods do you use?",
+        "Explain PID control and where it is used in electrical engineering.",
+        "How do you size cables based on current, temperature, and installation conditions?",
+        "Describe how renewable energy sources (solar, wind) integrate into the grid.",
+        "What steps do you take to improve energy efficiency in electrical systems?"
+      ],
+      "Pool3": [
+        "Tell me about a complex electrical problem you solved. How did you diagnose and fix it?",
+        "Describe a situation where an electrical system failed or tripped unexpectedly. What actions did you take?",
+        "Tell me about a time you implemented a design improvement to increase efficiency or safety.",
+        "Describe a moment when you had to handle a high-pressure situation involving power failure or urgent repair.",
+        "Describe a moment when you had to troubleshoot complex equipment with limited documentation.",
+        "Tell me about a maintenance challenge you resolved under tight deadlines.",
+        "Describe a project where your contribution significantly improved reliability, cost, or energy efficiency."
+      ]
+    }
+  },
   "General": [
     "Tell me about yourself",
     "What things in your graduation have you found to be useful.",
