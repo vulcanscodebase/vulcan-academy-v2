@@ -22,6 +22,13 @@ interface Interview {
   startedAt: string;
   completedAt?: string;
   status: string;
+  questionsData?: any[];
+  userId?: {
+    _id: string;
+    name: string;
+    email: string;
+    profilePhoto?: string;
+  };
   report?: {
     strengths?: string[];
     improvements?: string[];
@@ -33,7 +40,17 @@ interface Interview {
       avgKnowledge?: number;
       avgSkillRelevance?: number;
       avgFluency?: number;
+      totalQuestions?: number;
     };
+  };
+  resume?: {
+    text?: string;
+    fileName?: string;
+    evaluation?: any;
+  };
+  metadata?: {
+    atsScore?: number;
+    resumeTips?: string[];
   };
 }
 
@@ -43,6 +60,7 @@ export default function MyInterviews() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState<string | null>(null);
 
   useEffect(() => {
     const checkAuthAndFetchInterviews = async () => {
@@ -138,6 +156,108 @@ export default function MyInterviews() {
     const total =
       avgConfidence + avgBodyLanguage + avgKnowledge + avgSkillRelevance + avgFluency;
     return Math.round((total / 25) * 100);
+  };
+
+  const handleDownloadPDF = async (interviewId: string) => {
+    if (isGeneratingPDF) return;
+
+    setIsGeneratingPDF(interviewId);
+    try {
+      // Fetch full interview details
+      const backendUrl =
+        process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000/api";
+      const response = await fetch(`${backendUrl}/interviews/${interviewId}`, {
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch interview details");
+      }
+
+      const data = await response.json();
+      const interview = data.interview;
+
+      if (!interview || !interview.report) {
+        throw new Error("Interview report not found");
+      }
+
+      const reportId = `RPT-${new Date().getFullYear()}-${String(
+        new Date().getMonth() + 1
+      ).padStart(2, "0")}-${String(Math.floor(Math.random() * 1000)).padStart(
+        3,
+        "0"
+      )}`;
+
+      // Prepare feedback text
+      const feedbackText = [
+        interview.report.strengths && interview.report.strengths.length > 0 
+          ? `Strengths:\n${interview.report.strengths.map((s: string, i: number) => `${i + 1}. ${s}`).join('\n')}` 
+          : '',
+        interview.report.improvements && interview.report.improvements.length > 0 
+          ? `Areas for Improvement:\n${interview.report.improvements.map((s: string, i: number) => `${i + 1}. ${s}`).join('\n')}` 
+          : '',
+        interview.report.tips && interview.report.tips.length > 0 
+          ? `Tips:\n${interview.report.tips.map((s: string, i: number) => `${i + 1}. ${s}`).join('\n')}` 
+          : '',
+        interview.report.overallFeedback ? `\nOverall Feedback:\n${interview.report.overallFeedback}` : '',
+      ].filter(Boolean).join('\n\n') || 'No feedback available';
+
+      // Prepare question data
+      const questionData = (interview.questionsData || []).map((q: any) => ({
+        question: q.question || 'No question',
+        answer: q.transcript || 'No answer provided',
+      }));
+
+      // Prepare resume analysis
+      const resumeAnalysisText = interview.metadata?.atsScore 
+        ? `ATS Score: ${interview.metadata.atsScore}/100\n\nImprovement Suggestions:\n${(interview.metadata.resumeTips || []).map((tip: string, i: number) => `${i + 1}. ${tip}`).join('\n')}`
+        : interview.resume?.evaluation 
+          ? `ATS Score: ${interview.resume.evaluation.atsScore || 'N/A'}/100\n\nImprovement Suggestions:\n${(interview.resume.evaluation.resumeTips || []).map((tip: string, i: number) => `${i + 1}. ${tip}`).join('\n')}`
+          : 'No resume analysis available';
+
+      const pdfData = {
+        reportDate: new Date().toLocaleDateString(),
+        reportId,
+        candidateName: interview.userId?.name || 'Unknown',
+        candidateEmail: interview.userId?.email || '',
+        jobRole: interview.jobRole || 'General Interview',
+        allQuestionData: questionData,
+        feedback: feedbackText,
+        resumeAnalysis: resumeAnalysisText,
+      };
+
+      const pdfResponse = await fetch("/api/generate-pdf", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(pdfData),
+      });
+
+      if (!pdfResponse.ok) {
+        const errorData = await pdfResponse.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to generate PDF");
+      }
+
+      // Create blob and download
+      const blob = await pdfResponse.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `Interview_Report_${interview.jobRole.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error: any) {
+      console.error("Error generating PDF:", error);
+      alert(error?.message || "Failed to generate PDF. Please try again.");
+    } finally {
+      setIsGeneratingPDF(null);
+    }
   };
 
   if (isLoading) {
@@ -287,10 +407,14 @@ export default function MyInterviews() {
                       View Details
                     </Button>
 
-                    {interview.status === "completed" && (
-                      <Button variant="outline">
+                    {interview.status === "completed" && interview.report?.metrics && (
+                      <Button 
+                        variant="outline"
+                        onClick={() => handleDownloadPDF(interview._id)}
+                        disabled={isGeneratingPDF === interview._id}
+                      >
                         <Download className="w-4 h-4 mr-2" />
-                        Download Report
+                        {isGeneratingPDF === interview._id ? "Generating..." : "Download Report"}
                       </Button>
                     )}
                   </div>

@@ -16,6 +16,7 @@ import {
   MessageSquare,
   BarChart3,
   Star,
+  Upload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -559,7 +560,7 @@ export default function InterviewDetails() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-gray-200/20"
+            className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-gray-200/20 mb-8"
           >
             <div className="flex items-center space-x-3 mb-6">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
@@ -578,6 +579,149 @@ export default function InterviewDetails() {
                 </div>
               ))}
             </div>
+          </motion.div>
+        )}
+
+        {/* Overall Feedback */}
+        {interview.report?.overallFeedback && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-gray-200/20 mb-8"
+          >
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center">
+                <MessageSquare className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="text-xl font-semibold text-gray-900">Overall Feedback</h2>
+            </div>
+            <p className="text-gray-700 leading-relaxed">{interview.report.overallFeedback}</p>
+          </motion.div>
+        )}
+
+        {/* Question-by-Question Analysis */}
+        {interview.questionsData && interview.questionsData.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-gray-200/20 mb-8"
+          >
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl flex items-center justify-center">
+                <BarChart3 className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900">Question-by-Question Analysis</h2>
+                <p className="text-sm text-gray-600 mt-1">Detailed breakdown of each interview question</p>
+              </div>
+            </div>
+            <div className="space-y-6">
+              {interview.questionsData.map((q: any, index: number) => (
+                <div key={index} className="border-b last:border-b-0 pb-6 last:pb-0">
+                  {/* Question */}
+                  <div className="mb-4">
+                    <h3 className="font-semibold text-sm text-gray-600 mb-2">
+                      Question {q.questionNumber || index + 1}
+                    </h3>
+                    <p className="font-medium text-gray-900">{q.question}</p>
+                  </div>
+
+                  {/* Transcript */}
+                  {q.transcript && q.transcript !== "Transcript is empty" && (
+                    <div className="mb-4 p-3 rounded-lg bg-gray-50">
+                      <p className="text-xs text-gray-600 mb-1">Response:</p>
+                      <p className="text-sm text-gray-700">{q.transcript}</p>
+                    </div>
+                  )}
+
+                  {/* Metrics */}
+                  {q.metrics && (
+                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-3">
+                      <div className="text-center p-2 rounded-lg border bg-gray-50">
+                        <p className="text-xs text-gray-600 mb-1">Confidence</p>
+                        <StarRating value={q.metrics.confidence || 0} />
+                      </div>
+                      <div className="text-center p-2 rounded-lg border bg-gray-50">
+                        <p className="text-xs text-gray-600 mb-1">Body Language</p>
+                        <StarRating value={q.metrics.bodyLanguage || 0} />
+                      </div>
+                      <div className="text-center p-2 rounded-lg border bg-gray-50">
+                        <p className="text-xs text-gray-600 mb-1">Knowledge</p>
+                        <StarRating value={q.metrics.knowledge || 0} />
+                      </div>
+                      <div className="text-center p-2 rounded-lg border bg-gray-50">
+                        <p className="text-xs text-gray-600 mb-1">Fluency</p>
+                        <StarRating value={q.metrics.fluency || 0} />
+                      </div>
+                      <div className="text-center p-2 rounded-lg border bg-gray-50">
+                        <p className="text-xs text-gray-600 mb-1">Skill Relevance</p>
+                        <StarRating value={q.metrics.skillRelevance || 0} />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* AI Feedback for this question */}
+                  {q.metrics?.feedback && (
+                    <div className="p-3 rounded-lg bg-purple-50">
+                      <p className="text-xs text-gray-600 mb-1">AI Feedback:</p>
+                      <p className="text-sm text-gray-700">{q.metrics.feedback}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Resume Analysis */}
+        {interview.metadata && (interview.metadata.atsScore || interview.metadata.resumeTips) && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-gray-200/20 mb-8"
+          >
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center">
+                <Upload className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900">Resume Analysis</h2>
+                <p className="text-sm text-gray-600 mt-1">ATS compatibility and improvement suggestions</p>
+              </div>
+            </div>
+            {interview.metadata.atsScore && (
+              <div className="mb-6">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-medium text-gray-900">ATS Score</span>
+                  <span className={`font-bold text-2xl px-4 py-2 rounded-lg ${
+                    interview.metadata.atsScore >= 80
+                      ? "bg-green-100 text-green-800"
+                      : interview.metadata.atsScore >= 60
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-red-100 text-red-800"
+                  }`}>
+                    {interview.metadata.atsScore}/100
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {interview.metadata.resumeTips && interview.metadata.resumeTips.length > 0 && (
+              <div>
+                <h4 className="font-medium mb-3 text-gray-900">Improvement Suggestions:</h4>
+                <div className="space-y-2">
+                  {interview.metadata.resumeTips.map((tip: string, index: number) => (
+                    <div
+                      key={index}
+                      className="flex items-start space-x-3 p-3 rounded-lg bg-purple-50"
+                    >
+                      <div className="w-2 h-2 rounded-full bg-purple-500 mt-2"></div>
+                      <p className="text-sm text-gray-700">{tip}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </motion.div>
         )}
       </div>
