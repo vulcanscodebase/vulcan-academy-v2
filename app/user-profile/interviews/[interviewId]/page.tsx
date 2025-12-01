@@ -190,10 +190,19 @@ export default function InterviewDetails() {
         interview.report.overallFeedback ? `\nOverall Feedback:\n${interview.report.overallFeedback}` : '',
       ].filter(Boolean).join('\n\n') || 'No feedback available';
 
-      // Prepare question data
-      const questionData = (interview.questionsData || []).map((q) => ({
+      // Prepare question data with full metrics and feedback
+      const questionData = (interview.questionsData || []).map((q: any) => ({
         question: q.question || 'No question',
         answer: q.transcript || 'No answer provided',
+        questionNumber: q.questionNumber || 0,
+        metrics: q.metrics ? {
+          confidence: q.metrics.confidence || 0,
+          bodyLanguage: q.metrics.bodyLanguage || 0,
+          knowledge: q.metrics.knowledge || 0,
+          skillRelevance: q.metrics.skillRelevance || 0,
+          fluency: q.metrics.fluency || 0,
+          feedback: q.metrics.feedback || '',
+        } : null,
       }));
 
       // Prepare resume analysis - check metadata first (from backend), then resume.evaluation
@@ -205,6 +214,7 @@ export default function InterviewDetails() {
 
       const pdfData = {
         reportDate: new Date().toLocaleDateString(),
+        downloadTimestamp: new Date().toLocaleString(),
         reportId,
         candidateName: interview.userId?.name || 'Unknown',
         candidateEmail: interview.userId?.email || '',
@@ -212,6 +222,7 @@ export default function InterviewDetails() {
         allQuestionData: questionData,
         feedback: feedbackText,
         resumeAnalysis: resumeAnalysisText,
+        reportType: 'user',
       };
 
       const response = await fetch("/api/generate-pdf", {

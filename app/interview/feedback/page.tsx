@@ -530,18 +530,29 @@ export default function FeedbackPage() {
         ? `ATS Score: ${resumeAnalysis.atsScore}/100\n\nImprovement Suggestions:\n${(resumeAnalysis.tips || []).map((tip: string, i: number) => `${i + 1}. ${tip}`).join('\n')}`
         : 'No resume analysis available';
 
-      // Prepare question data with answers
+      // Prepare question data with full metrics and feedback
       const questionData = allQuestionData.map((q: QuestionData) => ({
         question: q.question || 'No question',
         answer: q.transcript || 'No answer provided',
+        questionNumber: q.questionNumber || 0,
+        metrics: q.metrics ? {
+          confidence: q.metrics.confidence || 0,
+          bodyLanguage: q.metrics.bodyLanguage || 0,
+          knowledge: q.metrics.knowledge || 0,
+          skillRelevance: q.metrics.skillRelevance || 0,
+          fluency: q.metrics.fluency || 0,
+          feedback: q.metrics.feedback || '',
+        } : null,
       }));
 
       const pdfData = {
         reportDate: new Date().toLocaleDateString(),
+        downloadTimestamp: new Date().toLocaleString(),
         reportId,
         allQuestionData: questionData,
         feedback: feedbackText,
         resumeAnalysis: resumeAnalysisText,
+        reportType: 'user',
       };
 
       const response = await fetch("/api/generate-pdf", {
