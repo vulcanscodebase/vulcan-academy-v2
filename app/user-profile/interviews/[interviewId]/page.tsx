@@ -43,6 +43,12 @@ interface Interview {
   completedAt?: string;
   status: string;
   questionsData?: QuestionData[];
+  userId?: {
+    _id: string;
+    name: string;
+    email: string;
+    profilePhoto?: string;
+  };
   report?: {
     strengths?: string[];
     improvements?: string[];
@@ -61,6 +67,10 @@ interface Interview {
     text?: string;
     fileName?: string;
     evaluation?: any;
+  };
+  metadata?: {
+    atsScore?: number;
+    resumeTips?: string[];
   };
 }
 
@@ -185,14 +195,19 @@ export default function InterviewDetails() {
         answer: q.transcript || 'No answer provided',
       }));
 
-      // Prepare resume analysis
-      const resumeAnalysisText = interview.resume?.evaluation 
-        ? JSON.stringify(interview.resume.evaluation, null, 2)
-        : 'No resume analysis available';
+      // Prepare resume analysis - check metadata first (from backend), then resume.evaluation
+      const resumeAnalysisText = interview.metadata?.atsScore 
+        ? `ATS Score: ${interview.metadata.atsScore}/100\n\nImprovement Suggestions:\n${(interview.metadata.resumeTips || []).map((tip: string, i: number) => `${i + 1}. ${tip}`).join('\n')}`
+        : interview.resume?.evaluation 
+          ? `ATS Score: ${interview.resume.evaluation.atsScore || 'N/A'}/100\n\nImprovement Suggestions:\n${(interview.resume.evaluation.resumeTips || []).map((tip: string, i: number) => `${i + 1}. ${tip}`).join('\n')}`
+          : 'No resume analysis available';
 
       const pdfData = {
         reportDate: new Date().toLocaleDateString(),
         reportId,
+        candidateName: interview.userId?.name || 'Unknown',
+        candidateEmail: interview.userId?.email || '',
+        jobRole: interview.jobRole || 'General Interview',
         allQuestionData: questionData,
         feedback: feedbackText,
         resumeAnalysis: resumeAnalysisText,

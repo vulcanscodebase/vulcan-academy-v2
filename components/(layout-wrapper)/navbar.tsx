@@ -113,27 +113,27 @@ export function Navbar() {
                   Sign In
                 </Button>
               </Link>
-              <Link href="/signup" prefetch={false}>
+              {/* <Link href="/signup" prefetch={false}>
                 <Button className="bg-vulcan-accent-blue text-vulcan-white hover:bg-vulcan-accent-blue/90">
                   Sign Up
                 </Button>
-              </Link>
+              </Link> */}
             </div>
           ) : (
             <div className="hidden md:flex items-center space-x-3">
-              <Button 
+              {/* <Button 
               variant="ghost" 
               size="icon" 
               onClick={() => router.push("/user-dash")}>
                 <LayoutDashboard className="h-5 w-5" />
-              </Button>
+              </Button> */}
               <Button 
               variant="ghost" 
               size="icon" 
               onClick={() => router.push("/user-profile")}>
                 <User className="h-5 w-5" />
               </Button>
-              <Button
+              {/* <Button
                 variant="ghost"
                 size="icon"
                 onClick={handleCartIconClick}
@@ -143,7 +143,7 @@ export function Navbar() {
                 <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-vulcan-accent-blue text-[10px] text-white font-medium">
                   {getTotalItems()}
                 </span>
-              </Button>
+              </Button> */}
               <Button 
               variant="ghost" 
               size="icon" 
@@ -183,13 +183,13 @@ export function Navbar() {
 
             {!token ? (
               <div className="flex flex-col space-y-3 mt-4 w-full max-w-xs">
-                <Link 
+                {/* <Link 
                 href="/signup" 
                 prefetch={false}>
                   <Button className="bg-vulcan-accent-blue text-vulcan-white hover:bg-vulcan-accent-blue/90 w-full">
                     Sign Up
                   </Button>
-                </Link>
+                </Link> */}
                 <Link 
                 href="/signin" 
                 prefetch={false}>
@@ -203,19 +203,19 @@ export function Navbar() {
               </div>
             ) : (
               <div className="flex justify-center space-x-6 mt-4">
-                <Button 
+                {/* <Button 
                 variant="ghost" 
                 size="icon" 
                 onClick={() => router.push("/user-dash")}>
                   <LayoutDashboard className="h-5 w-5" />
-                </Button>
+                </Button> */}
                 <Button 
                 variant="ghost" 
                 size="icon" 
                 onClick={() => router.push("/user-profile")}>
                 <User className="h-5 w-5" />
                 </Button>
-                <Button
+                {/* <Button
                   variant="ghost"
                   size="icon"
                   onClick={handleCartIconClick}
@@ -225,7 +225,7 @@ export function Navbar() {
                   <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-vulcan-accent-blue text-[10px] text-white font-medium">
                     {getTotalItems()}
                   </span>
-                </Button>
+                </Button> */}
                 <Button 
                 variant="ghost" 
                 size="icon" 

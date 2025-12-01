@@ -30,7 +30,7 @@ export function ProfileHeader() {
 
         {/* Right: Dashboard + Back */}
         <div className="flex items-center gap-3">
-          <Button
+          {/* <Button
             variant="ghost"
             size="icon"
             className="text-foreground/70 hover:text-vulcan-accent-blue"
@@ -40,7 +40,7 @@ export function ProfileHeader() {
             <Link href="/user-dash">
               <MdDashboard className="h-5 w-5" />
             </Link>
-          </Button>
+          </Button> */}
         </div>
       </div>
     </header>

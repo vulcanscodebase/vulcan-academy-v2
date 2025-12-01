@@ -75,13 +75,13 @@ export default function InterviewPage(){
                     Sign In to Continue
                   </Button>
                   
-                  <Button
+                  {/* <Button
                     onClick={() => router.push("/signup")}
                     variant="outline"
                     className="px-8 py-6 rounded-2xl text-lg font-semibold border-2"
                   >
                     Create Account
-                  </Button>
+                  </Button> */}
                 </div>
 
                 {/* Features Preview */}
