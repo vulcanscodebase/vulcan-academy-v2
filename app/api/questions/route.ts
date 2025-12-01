@@ -3,10 +3,10 @@ import fs from "fs/promises"
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  const title = searchParams.get("title")
-  const mode = searchParams.get("mode") || "Basic" // default to Basic if not provided
+  const titleQuery = searchParams.get("title")
+  const modeQuery = searchParams.get("mode") || "Basic" // default to Basic if not provided
 
-  if (!title) {
+  if (!titleQuery) {
     return new Response(JSON.stringify({ error: "Missing 'title' query parameter" }), {
       status: 400,
       headers: { "Content-Type": "application/json" },
@@ -18,8 +18,10 @@ export async function GET(req: Request) {
     const fileContents = await fs.readFile(filePath, "utf-8")
     const questionsMap = JSON.parse(fileContents)
 
-    // Fallback to "General" if title not found
-    const jobQuestions = questionsMap[title] || questionsMap["General"]
+    const jobEntry = Object.entries(questionsMap).find(
+      ([key]) => key.toLowerCase() === titleQuery.toLowerCase()
+    )
+    const jobQuestions = jobEntry?.[1] || questionsMap["General"]
 
     if (!jobQuestions) {
       return new Response(JSON.stringify({ error: "No questions available." }), {
@@ -28,38 +30,44 @@ export async function GET(req: Request) {
       })
     }
 
-    // If General, just return its questions
-    if (title === "General") {
+    if ((jobEntry?.[0] || "General") === "General") {
       return new Response(JSON.stringify({ questions: jobQuestions.slice(0, 3) }), {
         status: 200,
         headers: { "Content-Type": "application/json" },
       })
     }
 
-    // Ensure mode exists in data
-    const modeQuestions = jobQuestions[mode]
+    const normalizedMode = modeQuery.charAt(0).toUpperCase() + modeQuery.slice(1).toLowerCase()
+    const modeQuestions = jobQuestions[normalizedMode]
+
     if (!modeQuestions) {
-      return new Response(JSON.stringify({ error: `No questions found for mode '${mode}'` }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      })
+      // Fallback to General if mode not found
+      const generalQuestions = questionsMap["General"]
+      const fallbackQuestions = generalQuestions.slice(0, 3)
+      return new Response(
+        JSON.stringify({ questions: fallbackQuestions, fallback: true }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }
+      )
     }
 
+    // Build selected questions
     const pools = ["Pool1", "Pool2", "Pool3"]
-
     const selectedQuestions: string[] = []
 
-    // Always Q1 is "Tell me about yourself"
+    // Q1 is always "Tell me about yourself"
     selectedQuestions.push("Tell me about yourself")
 
-    // For Q2, Q3, Q4: pick one random question from Pool1, Pool2, Pool3
+    // Q2-Q4: pick one random question from Pool1, Pool2, Pool3
     pools.forEach((pool, index) => {
       const poolQuestions = modeQuestions[pool]
       if (poolQuestions && poolQuestions.length > 0) {
         const randomIndex = Math.floor(Math.random() * poolQuestions.length)
         selectedQuestions.push(poolQuestions[randomIndex])
       } else {
-        // If pool missing or empty, fallback to General questions (skip Q1)
+        // Fallback to General questions if pool missing or empty
         const generalQuestions = questionsMap["General"]
         if (generalQuestions && generalQuestions.length > index) {
           selectedQuestions.push(generalQuestions[index])
