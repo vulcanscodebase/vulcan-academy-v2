@@ -70,10 +70,7 @@ export default function ResumeUpload() {
     "Civil Engineering",
     "Mechanical Engineering",
     "Electrical Engineering",
-    "Electronics and Communication (Embedded Systems and IoT)",
-    "Assistant Professor Accounting",
-    "Assistant Professor Marketing",
-    "Assistant Professor HR", 
+    "Electronics and Communication (Embedded Systems and IoT)", 
   ];
 
   const degreeOptions: Array<{ key: string; label: string }> = [
@@ -92,9 +89,6 @@ export default function ResumeUpload() {
     "Digital Marketing",
     "Accountant",
     "Customer Service",
-    "Assistant Professor Accounting",
-    "Assistant Professor Marketing",
-    "Assistant Professor HR",
   ]
 
   const DEGREE_ROLE_MAP: Record<string, string[]> = {

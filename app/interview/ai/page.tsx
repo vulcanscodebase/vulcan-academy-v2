@@ -19,6 +19,7 @@ import { Navbar } from "@/components/(layout-wrapper)/navbar";
 export default function InterviewAI() {
   const router = useRouter();
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [earlyFollowUpInsertIndex, setEarlyFollowUpInsertIndex] = useState(2);
   const [isRecording, setIsRecording] = useState(false);
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -363,11 +364,22 @@ export default function InterviewAI() {
 
                   if (followUpQuestion) {
                     const updatedQuestions = [...questions];
-                    updatedQuestions.push(followUpQuestion);
+                  
+                    if (currentQuestion < 2) {
+                      // Insert follow-ups of Q1/Q2 in order at indexes 2 → 3
+                      updatedQuestions.splice(earlyFollowUpInsertIndex, 0, followUpQuestion);
+                      // Move pointer forward so next follow-up goes right after it
+                      setEarlyFollowUpInsertIndex((prev) => prev + 1);
+                      addDebugLog(
+                        `Follow-up inserted at index ${earlyFollowUpInsertIndex}: "${followUpQuestion}"`
+                      );
+                    } else {
+                      // All other follow-ups appended at end
+                      updatedQuestions.push(followUpQuestion);
+                      addDebugLog(`Follow-up appended to end: "${followUpQuestion}"`);
+                    }
+                  
                     setQuestions(updatedQuestions);
-                    addDebugLog(
-                      `Follow-up question added to end: "${followUpQuestion}"`
-                    );
                   }
                 } catch (followUpError) {
                   console.error(
