@@ -882,7 +882,7 @@ export default function FeedbackPage() {
 
                     <div className="p-4 bg-purple-50/50 rounded-2xl">
                       <h3 className="font-medium text-gray-900 mb-2">
-                        AI Feedback
+                        Vulcan Interview Master Feedback
                       </h3>
                       <p className="text-gray-700 leading-relaxed">
                         {interviewMetrics.feedback}
@@ -1107,35 +1107,6 @@ export default function FeedbackPage() {
               {isGeneratingPDF ? "Generating PDF..." : "Download Report as PDF"}
             </Button>
           </motion.div>
-
-          {/* Debug Information */}
-          {showDebug && debugInfo.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-lg border border-gray-200/20 mb-8"
-            >
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Debug Information
-              </h3>
-              <div className="bg-gray-100 rounded-2xl p-4 max-h-60 overflow-y-auto">
-                <pre className="text-xs font-mono text-gray-700">
-                  {debugInfo.map((log, index) => (
-                    <div key={index} className="mb-1">
-                      {log}
-                    </div>
-                  ))}
-                </pre>
-              </div>
-            </motion.div>
-          )}
-
-          <button
-            onClick={() => setShowDebug(!showDebug)}
-            className="text-xs text-gray-400 hover:text-gray-600 mb-8 block mx-auto"
-          >
-            {showDebug ? "Hide Debug Info" : "Show Debug Info"}
-          </button>
 
           {/* Footer */}
           <motion.div
