@@ -9,7 +9,6 @@ const requestBodySchema = z.object({
   jobTitle: z.string().min(1, "Job title is required"),
 })
 
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
@@ -24,31 +23,39 @@ export async function POST(request: NextRequest) {
 
     const { text, jobTitle } = parsed.data
 
-    // Truncate text if too long
+    // Truncate long resumes
     const maxTextLength = 8000
     const truncatedText =
       text.length > maxTextLength ? text.substring(0, maxTextLength) + "..." : text
 
-    const prompt = `
-You are an ATS (Applicant Tracking System) optimization assistant.
-
-Analyze the following resume for the job title "${jobTitle}" and return ONLY a valid JSON object with these exact fields:
-
-{
-  "atsScore": <integer 0-100>,
-  "tips": ["<tip1>", "<tip2>", "<tip3>"],
-  "followUpQuestions": ["<resume-based question 1>", "<resume-based question 2>"]
-}
-
-Rules:
-- atsScore: Integer between 0-100 based on job relevance
-- tips: Exactly 3 actionable resume improvement tips
-- followUpQuestions: 2 specific questions about their experience/skills found in the resume
-- Return ONLY the JSON object, no other text
-
-Resume Text:
-${truncatedText}
-`.trim()
+      const prompt = `
+      You are an interview preparation assistant.
+      
+      Analyze the following resume specifically for the job title "${jobTitle}" and return ONLY a valid JSON object with these exact fields:
+      
+      {
+        "atsScore": <integer 0-100>,
+        "tips": ["<tip1>", "<tip2>", "<tip3>"],
+        "followUpQuestion": "<a single resume-based follow-up question>"
+      }
+      
+      Rules:
+      - atsScore: Integer between 0-100 based strictly on resume relevance.
+      - tips: Exactly 3 improvement tips tied to the resume and job title.
+      - followUpQuestion:
+          - Must be based strictly on a specific experience, project, achievement, or skill mentioned in the resume.
+          - Must NOT reference the job title directly.
+          - Must NOT ask about role responsibilities, job duties, or what the position entails.
+          - Must NOT ask about general job preparation.
+          - Must NOT ask hypothetical questions.
+          - Must NOT ask broad or generic questions.
+          - Must NOT ask anything resembling: "How have you prepared for the general position?" or "Can you describe the responsibilities of this role?"
+          - The question MUST be anchored to content directly found in the resume text.
+      - Return ONLY the JSON object, no surrounding text.
+      
+      Resume Text:
+      ${truncatedText}
+      `.trim()
 
     const result = await generateText({
       model: google("gemini-2.0-flash-lite"),
@@ -59,17 +66,13 @@ ${truncatedText}
 
     let output = result.text.trim()
 
-    // Clean up formatting issues
     output = output
       .replace(/```json\s*/g, "")
       .replace(/```\s*/g, "")
       .trim()
 
-    // Extract JSON if wrapped in extra text
     const jsonMatch = output.match(/{[\s\S]*}/)
-    if (jsonMatch) {
-      output = jsonMatch[0]
-    }
+    if (jsonMatch) output = jsonMatch[0]
 
     let parsedOutput
     try {
@@ -78,7 +81,7 @@ ${truncatedText}
       console.error("JSON Parse Error:", parseError)
       console.error("Raw output:", output)
 
-      // Fallback response
+      // Fallback
       return NextResponse.json({
         status: "success",
         evaluation: {
@@ -86,16 +89,10 @@ ${truncatedText}
           tips: [
             "Highlight your most recent and relevant skills more clearly",
             "Include measurable achievements where possible",
-            "Tailor your resume summary to show intent for your career path",
+            "Tailor your resume summary to better align with the job title",
           ],
-          followUpQuestions: [
-            `Can you elaborate on your most significant achievement from your resume?`,
-            `What motivated you to pursue the skills listed in your resume?`,
-          ],
-          technicalQuestions: [
-            "What kind of job are you applying for?",
-            "What experience have you gained so far?",
-          ],
+          followUpQuestion:
+            "Can you expand on one key accomplishment from your recent experience?",
         },
       })
     }
@@ -105,62 +102,49 @@ ${truncatedText}
       .object({
         atsScore: z.number().int().min(0).max(100),
         tips: z.array(z.string()).length(3),
-        followUpQuestions: z.array(z.string()).length(2),
+        followUpQuestion: z.string(),
       })
       .safeParse(parsedOutput)
 
     if (!validationResult.success) {
       console.error("Validation Error:", validationResult.error)
 
-      // Return fallback if validation fails
       return NextResponse.json({
         status: "success",
         evaluation: {
-          atsScore: parsedOutput.atsScore || 70,
+          atsScore: parsedOutput?.atsScore || 70,
           tips:
-            Array.isArray(parsedOutput.tips) && parsedOutput.tips.length >= 3
+            Array.isArray(parsedOutput?.tips) && parsedOutput.tips.length >= 3
               ? parsedOutput.tips.slice(0, 3)
               : [
                   "Highlight your most recent and relevant skills more clearly",
                   "Include measurable achievements where possible",
-                  "Tailor your resume summary to show intent for your career path",
+                  "Tailor your resume summary to better align with the job title",
                 ],
-          followUpQuestions:
-            Array.isArray(parsedOutput.followUpQuestions) &&
-            parsedOutput.followUpQuestions.length >= 2
-              ? parsedOutput.followUpQuestions.slice(0, 2)
-              : [
-                  `Can you elaborate on your most significant achievement from your resume?`,
-                  `What motivated you to pursue the skills listed in your resume?`,
-                ],
-          technicalQuestions: [
-            "What kind of job are you applying for?",
-            "What experience have you gained so far?",
-          ],
+          followUpQuestion:
+            typeof parsedOutput?.followUpQuestion === "string"
+              ? parsedOutput.followUpQuestion
+              : "Can you elaborate on a project mentioned in your resume?",
         },
       })
     }
 
-    // Return validated data + hardcoded technical questions
+    // Final successful return
     return NextResponse.json({
       status: "success",
       evaluation: {
         atsScore: validationResult.data.atsScore,
         tips: validationResult.data.tips,
-        followUpQuestions: validationResult.data.followUpQuestions,
-        technicalQuestions: [
-          "What kind of job are you applying for?",
-          "What experience have you gained so far?",
-        ],
+        followUpQuestion: validationResult.data.followUpQuestion,
       },
     })
   } catch (error) {
-    console.error("❌ Error evaluating resume (general):", error)
+    console.error("❌ General error:", error)
 
     if (error instanceof Error) {
       if (error.message.includes("rate limit")) {
         return NextResponse.json(
-          { error: "Service temporarily unavailable. Please try again in a moment." },
+          { error: "Service temporarily unavailable. Please try again." },
           { status: 429 }
         )
       }

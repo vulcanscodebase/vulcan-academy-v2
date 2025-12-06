@@ -264,40 +264,18 @@ export default function ResumeUpload() {
       const isGeneral = jobTitle.toLowerCase() === "general";
 
       if (isGeneral) {
-        const followUpArr = Array.isArray(evaluation.followUpQuestions)
-          ? evaluation.followUpQuestions.filter(
-              (q: unknown) =>
-                typeof q === "string" &&
-                q.trim() !== "" &&
-                q !== "undefined" &&
-                q !== "null"
-            )
-          : [];
-        const technicalArr = Array.isArray(evaluation.technicalQuestions)
-          ? evaluation.technicalQuestions.filter(
-              (q: unknown) =>
-                typeof q === "string" &&
-                q.trim() !== "" &&
-                q !== "undefined" &&
-                q !== "null"
-            )
-          : [];
-
-        localStorage.setItem("followUpQuestions", JSON.stringify(followUpArr));
-        localStorage.setItem(
-          "technicalQuestions",
-          JSON.stringify(technicalArr)
-        );
-
-        if (followUpArr[0]) {
-          localStorage.setItem("followUpQuestion", followUpArr[0]);
+        const followUp =
+          typeof evaluation.followUpQuestion === "string" &&
+          evaluation.followUpQuestion.trim() !== "" &&
+          evaluation.followUpQuestion !== "undefined" &&
+          evaluation.followUpQuestion !== "null"
+            ? evaluation.followUpQuestion
+            : null;
+      
+        if (followUp) {
+          localStorage.setItem("followUpQuestion", followUp);
         } else {
           localStorage.removeItem("followUpQuestion");
-        }
-        if (technicalArr[0]) {
-          localStorage.setItem("technicalQuestion", technicalArr[0]);
-        } else {
-          localStorage.removeItem("technicalQuestion");
         }
       } else {
         if (typeof evaluation.followUpQuestion === "string") {
