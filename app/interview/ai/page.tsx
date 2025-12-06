@@ -73,8 +73,7 @@ export default function InterviewAI() {
     const storedMode = localStorage.getItem("interviewMode") ?? "";
 
     if (storedTitle) {
-      const rawFollowUps = localStorage.getItem("followUpQuestions");
-      const rawTechnicals = localStorage.getItem("technicalQuestions");
+
       const singleFollowUp = localStorage.getItem("followUpQuestion");
 
       const parseArray = (raw: string | null): string[] => {
@@ -94,8 +93,7 @@ export default function InterviewAI() {
         }
       };
 
-      const followUps = parseArray(rawFollowUps);
-      const technicals = parseArray(rawTechnicals);
+
       const sanitizedSingleFollowUp =
         singleFollowUp &&
         singleFollowUp !== "undefined" &&
@@ -111,18 +109,7 @@ export default function InterviewAI() {
         })
         .then((data) => {
           const modifiedQuestions = [...data.questions];
-
-          if (followUps.length > 0) {
-            modifiedQuestions.splice(1, 0, ...followUps);
-          } else if (sanitizedSingleFollowUp) {
-            modifiedQuestions.splice(1, 0, sanitizedSingleFollowUp);
-          }
-
-          if (technicals.length > 0) {
-            modifiedQuestions.push(...technicals);
-            modifiedQuestions.splice(-technicals.length, technicals.length);
-          }
-
+          modifiedQuestions.splice(1, 0, sanitizedSingleFollowUp);
           setQuestions(modifiedQuestions);
         })
         .catch((error) => {

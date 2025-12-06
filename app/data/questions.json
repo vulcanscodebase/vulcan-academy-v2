@@ -907,9 +907,136 @@
     ]
   }
   },
-  "General": [
-    "Tell me about yourself",
-    "What things in your graduation have you found to be useful.",
-    "Can you describe a time you worked in a team?"
-  ]
+  "Teacher": {
+    "Basic": {
+      "Pool1": [
+        "What inspired you to teach your subject, and how do you keep your passion alive?",
+        "How do you ensure students understand the fundamentals of your subject?",
+        "What steps do you take to simplify complex concepts in your subject area?",
+        "How do you handle students who show no interest in your subject?",
+        "How do you stay updated with new trends or developments in your teaching field?",
+        "How do you respond when a student challenges your explanation of a subject concept?",
+        "What is your approach to handling diverse learning speeds in your subject-based classes?",
+        "How do you incorporate real-life examples from your subject area to make learning engaging?",
+        "What do you do to build confidence in students who struggle in your subject?",
+        "How do you evaluate your effectiveness in teaching your subject?"
+      ],
+      "Pool2": [
+        "Tell me about a time you helped a struggling student understand a difficult topic.",
+        "Describe a classroom situation where your explanation didn’t work. What did you do next?",
+        "Tell me about a moment you handled a disruptive student without affecting the class flow.",
+        "Describe a time you used an unconventional method to teach a topic.",
+        "Tell me about a class where students were losing interest. How did you re-engage them?",
+        "Describe a time you had to manage a large class while ensuring everyone understood the lesson.",
+        "Tell me about a class activity that worked exceptionally well. Why was it effective?",
+        "Describe a situation where a student misunderstood a concept because of your teaching. How did you fix it?",
+        "Tell me about a lesson plan you changed at the last minute. Why and how?",
+        "Describe a difficult teaching day and how you maintained your professionalism."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "How do you integrate your research interests into your teaching practice?",
+        "Describe how your subject expertise and research background complement one another.",
+        "How do you encourage students to think beyond textbooks and into inquiry or research?",
+        "What motivates you to pursue research alongside teaching?",
+        "How do you ensure your teaching reflects the latest research in your field?",
+        "Describe a time your research experience improved your classroom delivery.",
+        "What is your approach to balancing teaching workload with research commitments?",
+        "How do you respond when your research findings contradict existing curriculum content?",
+        "What steps do you take to build academic curiosity in students?",
+        "How do you mentor students who show interest in research?"
+      ],
+      "Pool2": [
+        "Tell me about a time your research experience helped you solve a classroom challenge.",
+        "Describe a situation where you guided a student through a research or project-based assignment.",
+        "Tell me about a conflict between academic requirements and new research evidence.",
+        "Describe how you handled a student group that struggled with analytical or research skills.",
+        "Tell me about a time you incorporated a recent research paper into your teaching.",
+        "Describe a situation where your research faced setbacks but you still had teaching responsibilities.",
+        "Tell me about a time you supervised an academic project or presentation effectively.",
+        "Describe a time you encouraged students to question a concept using a research mindset.",
+        "Tell me about a classroom discussion where your research background enriched the learning experience.",
+        "Describe a moment you identified a research opportunity from your teaching environment."
+      ]
+    }
+  },
+  "General": {
+    "Basic": {
+      "Pool1": [
+        "What in your education or background has prepared you for professional work?",
+        "What motivates you to apply for jobs at this stage of your career?",
+        "How do you stay organised when handling multiple tasks?",
+        "Describe how you learn new skills or tools.",
+        "How do you handle situations where instructions aren’t clear?",
+        "What do you do when you face a problem you don’t immediately know how to solve?",
+        "How do you stay productive on days when you feel low or distracted?",
+        "How do you respond when someone corrects you or gives feedback?",
+        "What steps do you take to manage your time effectively?",
+        "How do you ensure you communicate clearly with others?"
+      ],
+      "Pool2": [
+        "What are professional ethics, and why are they important?",
+        "How do you collaborate effectively in a team?",
+        "What is the purpose of documentation in any job?",
+        "What basic digital tools are you comfortable using (e.g., email, spreadsheets)?",
+        "Why is customer or stakeholder communication important?",
+        "What does “problem-solving” mean to you?",
+        "What is the difference between tasks, goals, and outcomes?",
+        "How do you approach learning a new tool or software?",
+        "What is the importance of deadlines in the workplace?",
+        "How do you ensure your work meets basic quality standards?"
+      ],
+      "Pool3": [
+        "Tell me about a time you worked with someone who had a different working style.",
+        "Describe a moment when you received unclear instructions. What did you do?",
+        "Tell me about a time you helped someone on your team.",
+        "Describe a situation when you had to learn something quickly.",
+        "Tell me about a moment when you handled a small mistake effectively.",
+        "Describe a time you adjusted your communication style for someone.",
+        "Tell me about a situation where you balanced multiple tasks at once.",
+        "Describe a moment when you resolved a simple conflict or misunderstanding.",
+        "Tell me about a time when you suggested a small improvement in your team or workflow.",
+        "Describe a situation where you had to meet a deadline with limited time."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "Describe a time you took initiative even when it wasn’t expected.",
+        "How do you handle situations where colleagues disagree with your approach?",
+        "Tell me about a time you overcame a major setback.",
+        "How do you decide what to prioritise when everything feels urgent?",
+        "Describe a moment when you influenced someone without formal authority.",
+        "How do you stay calm and professional in stressful situations?",
+        "Tell me about a time you took responsibility for a mistake.",
+        "How do you ensure your decisions are fair and unbiased?",
+        "Describe how you manage long-term goals alongside daily tasks.",
+        "What do you do to maintain continuous improvement in your work style?"
+      ],
+      "Pool2": [
+        "How do you analyse a problem before proposing a solution?",
+        "Describe how you make data-driven decisions in your work.",
+        "What steps do you take to plan a small project from start to finish?",
+        "How do you handle documentation for complex tasks or projects?",
+        "What strategies do you use to ensure long-term goals align with daily activities?",
+        "How do you measure success or performance in your role?",
+        "How do you handle cross-functional collaboration?",
+        "What frameworks do you use to break down large problems into smaller parts?",
+        "How do you track your progress on tasks and deliverables?",
+        "What methods do you use to evaluate risks before making decisions?"
+      ],
+      "Pool3": [
+        "Tell me about a major problem you solved that made a significant impact.",
+        "Describe a time you handled a conflict between team members or stakeholders.",
+        "Tell me about a situation where you had to make a difficult decision with limited information.",
+        "Describe a moment when you managed an unexpected crisis professionally.",
+        "Tell me about a time you took the lead during a challenging situation.",
+        "Describe a situation where your analysis or judgment prevented a bigger issue.",
+        "Tell me about a time you significantly improved a process or system.",
+        "Describe a scenario where you had to push back against unrealistic expectations.",
+        "Tell me about a time you handled a long-term project with many moving parts.",
+        "Describe a situation where your work directly contributed to measurable success."
+      ]
+    }
+  }
 }

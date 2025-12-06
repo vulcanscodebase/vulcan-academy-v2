@@ -4,7 +4,7 @@ import fs from "fs/promises"
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const titleQuery = searchParams.get("title")
-  const modeQuery = searchParams.get("mode") || "Basic" // default to Basic if not provided
+  const modeQuery = searchParams.get("mode") || "Basic"
 
   if (!titleQuery) {
     return new Response(JSON.stringify({ error: "Missing 'title' query parameter" }), {
@@ -18,34 +18,37 @@ export async function GET(req: Request) {
     const fileContents = await fs.readFile(filePath, "utf-8")
     const questionsMap = JSON.parse(fileContents)
 
+    // case-insensitive role/key lookup
     const jobEntry = Object.entries(questionsMap).find(
       ([key]) => key.toLowerCase() === titleQuery.toLowerCase()
     )
-    const jobQuestions = jobEntry?.[1] || questionsMap["General"]
+    const roleName = jobEntry?.[0] || "General"
+    const roleData = jobEntry?.[1] || questionsMap["General"]
 
-    if (!jobQuestions) {
-      return new Response(JSON.stringify({ error: "No questions available." }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      })
-    }
+    // Normalize mode (Basic / Advanced)
+    const normalizedMode =
+      modeQuery.charAt(0).toUpperCase() + modeQuery.slice(1).toLowerCase()
 
-    if ((jobEntry?.[0] || "General") === "General") {
-      return new Response(JSON.stringify({ questions: jobQuestions.slice(0, 3) }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      })
-    }
+    // Special handling for TEACHER role
+    const isTeacher = roleName.toLowerCase() === "teacher"
+    if (isTeacher) {
+      const modeQuestions = roleData[normalizedMode] || roleData["Basic"]
 
-    const normalizedMode = modeQuery.charAt(0).toUpperCase() + modeQuery.slice(1).toLowerCase()
-    const modeQuestions = jobQuestions[normalizedMode]
+      const teacherQ1 = "Tell me about yourself"
+      const teacherQ2 = modeQuestions?.Pool1?.length
+        ? modeQuestions.Pool1[Math.floor(Math.random() * modeQuestions.Pool1.length)]
+        : "Explain your educational background."
 
-    if (!modeQuestions) {
-      // Fallback to General if mode not found
-      const generalQuestions = questionsMap["General"]
-      const fallbackQuestions = generalQuestions.slice(0, 3)
+      const teacherQ3 = "Explain a topic of your choice in 2 minutes"
+
+      const teacherQ4 = modeQuestions?.Pool2?.length
+        ? modeQuestions.Pool2[Math.floor(Math.random() * modeQuestions.Pool2.length)]
+        : "Describe how you teach complex subjects."
+
       return new Response(
-        JSON.stringify({ questions: fallbackQuestions, fallback: true }),
+        JSON.stringify({
+          questions: [teacherQ1, teacherQ2, teacherQ3, teacherQ4],
+        }),
         {
           status: 200,
           headers: { "Content-Type": "application/json" },
@@ -53,24 +56,35 @@ export async function GET(req: Request) {
       )
     }
 
-    // Build selected questions
+
+    const modeQuestions = roleData[normalizedMode]
+    const generalRole = questionsMap["General"]
+
+    // If mode missing → fallback to General
+    const activeModeData =
+      modeQuestions ||
+      generalRole["Basic"] ||
+      {}
+
+    // Q1 — always this
+    const selectedQuestions: string[] = ["Tell me about yourself"]
+
+    // pools to pull from
     const pools = ["Pool1", "Pool2", "Pool3"]
-    const selectedQuestions: string[] = []
 
-    // Q1 is always "Tell me about yourself"
-    selectedQuestions.push("Tell me about yourself")
-
-    // Q2-Q4: pick one random question from Pool1, Pool2, Pool3
     pools.forEach((pool, index) => {
-      const poolQuestions = modeQuestions[pool]
+      const poolQuestions = activeModeData[pool]
+
       if (poolQuestions && poolQuestions.length > 0) {
         const randomIndex = Math.floor(Math.random() * poolQuestions.length)
         selectedQuestions.push(poolQuestions[randomIndex])
       } else {
-        // Fallback to General questions if pool missing or empty
-        const generalQuestions = questionsMap["General"]
-        if (generalQuestions && generalQuestions.length > index) {
-          selectedQuestions.push(generalQuestions[index])
+        // Fallback to General → same pool index (0,1,2)
+        const fallbackPool = generalRole["Basic"][pool]
+
+        if (fallbackPool && fallbackPool.length > 0) {
+          const randomIndex = Math.floor(Math.random() * fallbackPool.length)
+          selectedQuestions.push(fallbackPool[randomIndex])
         } else {
           selectedQuestions.push("No question available")
         }
