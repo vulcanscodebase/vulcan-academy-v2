@@ -66,7 +66,7 @@ export function Navbar() {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Vulcan Interview", href: "/interview" },
+    { name: "Vulcans Interview", href: "/vulcans-interview-master" },
     { name: "About Us", href: "/about" },
     { name: "Contact Us", href: "/contact" },
   ];
@@ -176,7 +176,9 @@ export function Navbar() {
                 onClick={() => router.push("/interview")}
               >
                 <ClipboardList className="h-4 w-4" />
-                <span className="text-sm font-medium">Available: {availableCredits}</span>
+                <span className="text-sm font-medium">
+                  Take Interview • {availableCredits} left
+                </span>
               </Button>
 
               {/* <Button
@@ -294,19 +296,20 @@ export function Navbar() {
                 </Link>
               </div>
             ) : (
-              <div className="flex flex-col items-center space-y-4 mt-4">
-                {/* Available Interviews Button */}
-                <Button
-                  variant="outline"
-                  className="flex items-center gap-2 border-vulcan-accent-blue text-vulcan-accent-blue hover:bg-vulcan-accent-blue hover:text-white w-full max-w-xs"
+              <div className="flex flex-col items-center space-y-6 mt-4">
+                {/* Available Interviews Link */}
+                <div
                   onClick={() => {
                     router.push("/interview");
                     setIsMobileMenuOpen(false);
                   }}
+                  className="flex items-center gap-2 text-vulcan-accent-blue hover:text-vulcan-accent-blue/80 cursor-pointer transition-colors"
                 >
-                  <ClipboardList className="h-4 w-4" />
-                  <span className="text-sm font-medium">Available Interviews: {availableCredits}</span>
-                </Button>
+                  <ClipboardList className="h-5 w-5" />
+                  <span className="text-lg font-medium">
+                    Take Interview • {availableCredits} left
+                  </span>
+                </div>
 
                 <div className="flex justify-center space-x-6">
                   {/* <Button
@@ -333,7 +336,11 @@ export function Navbar() {
                       {getTotalItems()}
                     </span>
                   </Button> */}
-                  <Button variant="ghost" size="icon" onClick={handleLogoutClick}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleLogoutClick}
+                  >
                     <LogOut className="h-5 w-5 text-red-500" />
                   </Button>
                 </div>
