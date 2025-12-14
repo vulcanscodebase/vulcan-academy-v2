@@ -14,10 +14,10 @@ export default function About() {
         <Navbar />
         <WhoWeAre />
         <OurPurpose />
-        <OurExpertise />
+        {/* <OurExpertise />
         <OurLeaders />
         <Questions />
-        <BeforeFooter />
+        <BeforeFooter /> */}
         <Footer />
       </main>
     </div>

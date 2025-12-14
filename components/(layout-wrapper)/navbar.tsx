@@ -13,29 +13,40 @@ import {
   LogOut,
   User,
   LayoutDashboard,
+  ClipboardList,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "../context/authcontext";
 import { useCart } from "../context/cartcontext";
-import {toast} from "sonner"
+import { toast } from "sonner";
 
 export function Navbar() {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
+  const pathname = usePathname();
   const [isMounted, setIsMounted] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  
 
-  const { token, logout } = useAuth();
+  const { token, logout, user } = useAuth();
   const { setIsCartOpen, getTotalItems } = useCart();
 
   const [confirmMsg, setConfirmMsg] = useState("");
+  const [availableCredits, setAvailableCredits] = useState<number>(0);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      const userLicenses = (user as any).licenses;
+      if (userLicenses !== undefined && userLicenses !== null) {
+        setAvailableCredits(Number(userLicenses));
+      }
+    }
+  }, [user]);
 
   const handleLogoutClick = () => {
     setIsConfirmModalOpen(true);
@@ -55,9 +66,13 @@ export function Navbar() {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Vulcan Interview", href:"/interview"},
+    { name: "Vulcan Interview", href: "/interview" },
     { name: "About Us", href: "/about" },
     { name: "Contact Us", href: "/contact" },
+  ];
+
+  const authenticatedNavLinks = [
+    { name: "Reports", href: "/user-profile/interviews" },
   ];
 
   return (
@@ -76,16 +91,49 @@ export function Navbar() {
 
         {/* Desktop Links */}
         <div className="hidden md:flex flex-1 justify-center items-center space-x-10 lg:space-x-14">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="text-foreground/70 hover:text-vulcan-accent-blue transition-colors"
-              prefetch={false}
-            >
-              {link.name}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isActive =
+              link.href === "/"
+                ? pathname === link.href
+                : pathname === link.href ||
+                  pathname.startsWith(link.href + "/");
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={`transition-colors pb-1 border-b-2 ${
+                  isActive
+                    ? "text-vulcan-accent-blue border-vulcan-accent-blue"
+                    : "text-foreground/70 border-transparent hover:text-vulcan-accent-blue"
+                }`}
+                prefetch={false}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
+          {token &&
+            authenticatedNavLinks.map((link) => {
+              const isActive =
+                link.href === "/"
+                  ? pathname === link.href
+                  : pathname === link.href ||
+                    pathname.startsWith(link.href + "/");
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`transition-colors pb-1 border-b-2 ${
+                    isActive
+                      ? "text-vulcan-accent-blue border-vulcan-accent-blue"
+                      : "text-foreground/70 border-transparent hover:text-vulcan-accent-blue"
+                  }`}
+                  prefetch={false}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
         </div>
 
         {/* Right */}
@@ -121,16 +169,27 @@ export function Navbar() {
             </div>
           ) : (
             <div className="hidden md:flex items-center space-x-3">
-              {/* <Button 
-              variant="ghost" 
-              size="icon" 
+              {/* Available Interviews Button */}
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 border-vulcan-accent-blue text-vulcan-accent-blue hover:bg-vulcan-accent-blue hover:text-white"
+                onClick={() => router.push("/interview")}
+              >
+                <ClipboardList className="h-4 w-4" />
+                <span className="text-sm font-medium">Available: {availableCredits}</span>
+              </Button>
+
+              {/* <Button
+              variant="ghost"
+              size="icon"
               onClick={() => router.push("/user-dash")}>
                 <LayoutDashboard className="h-5 w-5" />
               </Button> */}
-              <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={() => router.push("/user-profile")}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => router.push("/user-profile")}
+              >
                 <User className="h-5 w-5" />
               </Button>
               {/* <Button
@@ -144,10 +203,7 @@ export function Navbar() {
                   {getTotalItems()}
                 </span>
               </Button> */}
-              <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={handleLogoutClick}>
+              <Button variant="ghost" size="icon" onClick={handleLogoutClick}>
                 <LogOut className="h-5 w-5 text-red-500" />
               </Button>
             </div>
@@ -160,7 +216,11 @@ export function Navbar() {
             className="md:hidden text-foreground/70 hover:bg-accent hover:text-accent-foreground"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isMobileMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </Button>
         </div>
       </div>
@@ -169,17 +229,51 @@ export function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-16 left-0 w-full bg-vulcan-white/95 dark:bg-vulcan-deep-navy/95 border-b border-border shadow-md py-6 transition-all duration-300">
           <div className="container mx-auto flex flex-col items-center space-y-6 px-4">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="text-foreground/80 hover:text-vulcan-accent-blue text-lg transition-colors"
-                prefetch={false}
-              >
-                {link.name}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const isActive =
+                link.href === "/"
+                  ? pathname === link.href
+                  : pathname === link.href ||
+                    pathname.startsWith(link.href + "/");
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`text-lg transition-colors pb-1 border-b-2 ${
+                    isActive
+                      ? "text-vulcan-accent-blue border-vulcan-accent-blue"
+                      : "text-foreground/80 border-transparent hover:text-vulcan-accent-blue"
+                  }`}
+                  prefetch={false}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
+            {token &&
+              authenticatedNavLinks.map((link) => {
+                const isActive =
+                  link.href === "/"
+                    ? pathname === link.href
+                    : pathname === link.href ||
+                      pathname.startsWith(link.href + "/");
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`text-lg transition-colors pb-1 border-b-2 ${
+                      isActive
+                        ? "text-vulcan-accent-blue border-vulcan-accent-blue"
+                        : "text-foreground/80 border-transparent hover:text-vulcan-accent-blue"
+                    }`}
+                    prefetch={false}
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
 
             {!token ? (
               <div className="flex flex-col space-y-3 mt-4 w-full max-w-xs">
@@ -190,9 +284,7 @@ export function Navbar() {
                     Sign Up
                   </Button>
                 </Link> */}
-                <Link 
-                href="/signin" 
-                prefetch={false}>
+                <Link href="/signin" prefetch={false}>
                   <Button
                     variant="outline"
                     className="border-vulcan-accent-blue text-vulcan-accent-blue hover:bg-vulcan-accent-blue hover:text-white w-full"
@@ -202,36 +294,49 @@ export function Navbar() {
                 </Link>
               </div>
             ) : (
-              <div className="flex justify-center space-x-6 mt-4">
-                {/* <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={() => router.push("/user-dash")}>
-                  <LayoutDashboard className="h-5 w-5" />
-                </Button> */}
-                <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={() => router.push("/user-profile")}>
-                <User className="h-5 w-5" />
+              <div className="flex flex-col items-center space-y-4 mt-4">
+                {/* Available Interviews Button */}
+                <Button
+                  variant="outline"
+                  className="flex items-center gap-2 border-vulcan-accent-blue text-vulcan-accent-blue hover:bg-vulcan-accent-blue hover:text-white w-full max-w-xs"
+                  onClick={() => {
+                    router.push("/interview");
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  <ClipboardList className="h-4 w-4" />
+                  <span className="text-sm font-medium">Available Interviews: {availableCredits}</span>
                 </Button>
-                {/* <Button
+
+                <div className="flex justify-center space-x-6">
+                  {/* <Button
                   variant="ghost"
                   size="icon"
-                  onClick={handleCartIconClick}
-                  className="relative"
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-vulcan-accent-blue text-[10px] text-white font-medium">
-                    {getTotalItems()}
-                  </span>
-                </Button> */}
-                <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={handleLogoutClick}>
-                  <LogOut className="h-5 w-5 text-red-500" />
-                </Button>
+                  onClick={() => router.push("/user-dash")}>
+                    <LayoutDashboard className="h-5 w-5" />
+                  </Button> */}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => router.push("/user-profile")}
+                  >
+                    <User className="h-5 w-5" />
+                  </Button>
+                  {/* <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleCartIconClick}
+                    className="relative"
+                  >
+                    <ShoppingCart className="h-5 w-5" />
+                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-vulcan-accent-blue text-[10px] text-white font-medium">
+                      {getTotalItems()}
+                    </span>
+                  </Button> */}
+                  <Button variant="ghost" size="icon" onClick={handleLogoutClick}>
+                    <LogOut className="h-5 w-5 text-red-500" />
+                  </Button>
+                </div>
               </div>
             )}
           </div>
@@ -244,14 +349,13 @@ export function Navbar() {
           <div className="bg-white dark:bg-vulcan-deep-navy p-6 rounded-lg shadow-lg w-80">
             <p className="text-center mb-4">{confirmMsg}</p>
             <div className="flex justify-between">
-              <Button 
-              variant="outline" 
-              onClick={() => setIsConfirmModalOpen(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setIsConfirmModalOpen(false)}
+              >
                 Cancel
               </Button>
-              <Button 
-              variant="destructive" 
-              onClick={handleConfirmLogout}>
+              <Button variant="destructive" onClick={handleConfirmLogout}>
                 Logout
               </Button>
             </div>
