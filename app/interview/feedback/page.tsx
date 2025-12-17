@@ -414,11 +414,10 @@ export default function FeedbackPage() {
     const numQuestions = allQuestionData.length;
     const totalScore =
       totalConfidence +
-      totalBodyLanguage +
       totalKnowledge +
       totalFluency +
       totalSkillRelevance;
-    const totalPossible = 25 * numQuestions;
+    const totalPossible = 20 * numQuestions;
     const percentageScore = (totalScore / totalPossible) * 100;
 
     const getThreshold = (x: number) => (x / 500) * totalPossible;
