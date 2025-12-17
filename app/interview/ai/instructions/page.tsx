@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { ChevronRight, ChevronDown, Play, Sparkles, Award, Users, Target, BarChart3, Lightbulb } from "lucide-react"
+import { motion } from "framer-motion"
+import { ChevronRight, Play, Lightbulb, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -15,10 +15,10 @@ export default function InterviewInstructions() {
 
   useEffect(() => {
     // Check authentication
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token")
     if (!token) {
-      router.push("/signin");
-      return;
+      router.push("/signin")
+      return
     }
     setIsLoaded(true)
   }, [router])
@@ -26,6 +26,17 @@ export default function InterviewInstructions() {
   const toggleExpand = (stepId: number) => {
     setExpandedSteps((prev) => (prev.includes(stepId) ? prev.filter((id) => id !== stepId) : [...prev, stepId]))
   }
+
+  const importantInstructions = [
+    "Once the interview begins, it cannot be paused or restarted. Please start only when you are ready to answer questions continuously for approximately 15 minutes.",
+    "Each question is generated based on your previous answers. Make sure your responses are clear, accurate, and well-structured, as they directly influence the next questions.",
+    "Ideal answer duration: 1–2 minutes. Answers longer than 3 minutes will not be considered.",
+    "Keep your responses focused and relevant.",
+    "Ensure you are in a quiet environment with minimal distractions. Use a stable internet connection and test your microphone/camera (if applicable) before starting.",
+    "Take a few seconds (maximum 8 seconds) to organize your thoughts before answering. Well-thought-out responses are valued more than rushed ones.",
+    "Answer based on your own knowledge and experience. There are no trick questions—authentic responses lead to better evaluation.",
+    "Avoid using notes, browsers, or external help during the interview to ensure an accurate assessment.",
+  ]
 
   const preparationTips = [
     "Ensure you're in a quiet, well-lit environment",
@@ -61,6 +72,39 @@ export default function InterviewInstructions() {
               transition={{ delay: 0.2, duration: 0.6 }}
               className="space-y-3 sm:space-y-4"
             >
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                className="bg-gradient-to-r from-amber-50 to-orange-50 backdrop-blur-xl rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-lg border-2 border-amber-200/50"
+              >
+                <div className="flex items-center space-x-2 sm:space-x-3 mb-2 sm:mb-3">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg">
+                    <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm sm:text-base font-bold text-amber-900">Important Instructions</h3>
+                    <p className="text-xs text-amber-700">Before You Start</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-2">
+                  {importantInstructions.map((instruction, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.4 + index * 0.05 }}
+                      className="flex items-start space-x-2 group bg-white/60 rounded-lg sm:rounded-xl p-2 hover:bg-white/80 transition-colors"
+                    >
+                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-500 mt-1.5 sm:mt-2 group-hover:bg-orange-600 transition-colors flex-shrink-0"></div>
+                      <p className="text-xs sm:text-sm text-gray-700 leading-relaxed group-hover:text-gray-900 transition-colors">
+                        {instruction}
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
@@ -73,7 +117,7 @@ export default function InterviewInstructions() {
                     <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-sm sm:text-base font-bold text-green-800">Quick Tips</h3>
+                    <h3 className="text-sm sm:text-base font-bold text-green-800">Preparation Tips</h3>
                     <p className="text-xs text-green-600">Essential preparation guidelines</p>
                   </div>
                 </div>
@@ -101,13 +145,13 @@ export default function InterviewInstructions() {
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="bg-white/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-lg border border-gray-200/20 overflow-hidden h-fit"
+              className="bg-white/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-lg border border-gray-200/20 overflow-hidden h-fit lg:sticky lg:top-24"
             >
-              <div className="h-32 sm:h-48 bg-gradient-to-br from-blue-500 to-purple-600 relative flex items-center justify-center">
+              <div className="h-48 sm:h-64 lg:h-80 bg-gradient-to-br from-blue-500 to-purple-600 relative flex items-center justify-center">
                 <div className="text-center text-white">
-                  <Play className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-3 opacity-80" />
-                  <p className="text-base sm:text-lg font-medium">Video Tutorial</p>
-                  <p className="text-xs sm:text-sm opacity-80">Complete Interview Guide</p>
+                  <Play className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 opacity-80" />
+                  <p className="text-lg sm:text-xl font-medium">Video Tutorial</p>
+                  <p className="text-sm sm:text-base opacity-80">Complete Interview Guide</p>
                 </div>
               </div>
 
@@ -133,4 +177,3 @@ export default function InterviewInstructions() {
     </div>
   )
 }
-
