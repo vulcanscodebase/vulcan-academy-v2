@@ -53,7 +53,7 @@ vulcan-academy-v2/
 | `/` | `app/page.tsx` | Homepage |
 | `/about` | `app/about/page.tsx` | About Us page |
 | `/contact` | `app/contact/page.tsx` | Contact Us page |
-| `/interview` | `app/interview/page.tsx` | Interview master public page |
+| `/interview` | `app/interview/page.tsx` | Vulcan Prep 360 public page |
 | `/tests` | `app/tests/page.tsx` | Tests page |
 | `/signin` | `app/signin/page.tsx` | Sign In page |
 | `/signup` | `app/signup/page.tsx` | Sign Up page |
@@ -71,7 +71,7 @@ vulcan-academy-v2/
 |-------|-----------|-------------|
 | `/user-dash` | `app/user-dash/page.tsx` | User Dashboard (main) |
 | `/user-dash/courses` | `app/user-dash/courses/page.tsx` | User's enrolled courses |
-| `/user-dash/interview-master` | `app/user-dash/interview-master/page.tsx` | Interview Master dashboard |
+| `/user-dash/interview-master` | `app/user-dash/interview-master/page.tsx` | Vulcan Prep 360 dashboard |
 | `/user-dash/mytests` | `app/user-dash/mytests/page.tsx` | User's tests |
 
 ### Admin Routes
@@ -125,10 +125,10 @@ vulcan-academy-v2/
 ### Dashboard Components
 - **`components/(my-dashboard)/user-navbar.tsx`** - Dashboard navigation
 - **`components/(my-dashboard)/my-courses.tsx`** - User courses list
-- **`components/(my-dashboard)/interview-master.tsx`** - Interview master dashboard
+- **`components/(my-dashboard)/interview-master.tsx`** - Vulcan Prep 360 dashboard
 - **`components/(my-dashboard)/tests.tsx`** - Tests dashboard
 
-### Interview Master Components
+### Vulcan Prep 360 Components
 - **`components/(interview-master)/coursescardpublic.tsx`** - Public course cards
 - **`components/(interview-master)/coursessection.tsx`** - Courses section
 - **`components/(interview-master)/pagination.tsx`** - Pagination component
@@ -351,7 +351,7 @@ Located in `components/ui/` - Comprehensive set of reusable UI components:
    - Course browsing
    - Course enrollment
    - User dashboard for enrolled courses
-   - Interview master section
+   - Vulcan Prep 360 section
 
 4. **User Dashboard**
    - Course tracking

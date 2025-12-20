@@ -881,7 +881,7 @@ export default function FeedbackPage() {
 
                     <div className="p-4 bg-purple-50/50 rounded-2xl">
                       <h3 className="font-medium text-gray-900 mb-2">
-                        Vulcan Interview Master Feedback
+                        Vulcan Prep 360 Feedback
                       </h3>
                       <p className="text-gray-700 leading-relaxed">
                         {interviewMetrics.feedback}

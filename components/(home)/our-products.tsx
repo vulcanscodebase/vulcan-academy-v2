@@ -90,7 +90,7 @@ import { SectionExpand } from "@/components/ui/section-expand"
 
 export function OurProducts() {
   const item = {
-    title: "Vulcan Interview Master",
+    title: "Vulcan Prep 360",
     description:
       "Master interviews with ease. Ace your next interview with expert-guided practice sessions, mock interviews, and real-time feedback.",
     image: "/learning.jpg", // replace with your actual image path

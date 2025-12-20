@@ -26,7 +26,7 @@ export default function InterviewPage(){
 
     const handleStartInterview = () => {
       if (!isAuthenticated) {
-        alert("Please sign in to access the AI Interview Master");
+        alert("Please sign in to access Vulcan Prep 360");
         router.push("/signin");
         return;
       }
@@ -64,7 +64,7 @@ export default function InterviewPage(){
                 </h1>
                 
                 <p className="text-xl text-gray-600 mb-8">
-                  Please sign in to access the Vulcan Interview Master and start your practice interviews.
+                  Please sign in to access the Vulcan Prep 360 and start your practice interviews.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -156,7 +156,7 @@ export default function InterviewPage(){
               <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl mb-12">
                 <Image
                   src="/hero-section.png"
-                  alt="Vulcan Interview Master"
+                  alt="Vulcan Prep 360"
                   fill
                   className="object-cover"
                   priority

@@ -3,11 +3,18 @@ import { Marquee } from "@/components/ui/marquee"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { SectionExpand } from "@/components/ui/section-expand"
 
-const reviews = [
+type Review = {
+  name: string
+  username: string
+  body: string
+  img: string
+}
+
+const reviews: Review[] = [
   {
     name: "Vedanth",
     username: "VEDANTH",
-    body: "Vulcan Interview Master has transformed my interview preparation. The realistic mock interviews and detailed feedback helped me land my dream job!",
+    body: "Vulcan Prep 360 has transformed my interview preparation. The realistic mock interviews and detailed feedback helped me land my dream job!",
     img: "/avatar-of-a-happy-user.jpg", // replace with real image
   },
   {
@@ -26,7 +33,7 @@ const reviews = [
 
 // Display all 3 reviews in a single row or adjust layout as needed
 const firstRow = reviews
-const secondRow = [] // Empty since we only have 3 reviews
+const secondRow: Review[] = [] // Empty since we only have 3 reviews
 
 const ReviewCard = ({
   img,

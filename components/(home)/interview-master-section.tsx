@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 // Data definition
 const productData = {
-  title: "Vulcan Interview Master",
+  title: "Vulcan Prep 360",
   description:
     "Master interviews with ease. Ace your next interview with expert-guided practice sessions, mock interviews, and real-time feedback.",
   image: "/interview.png",

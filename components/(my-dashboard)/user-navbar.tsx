@@ -12,7 +12,7 @@ import { useAuth } from "../context/authcontext";
 const navLinks = [
   // { id: 1, name: "Courses", path: "courses" },
   // { id: 2, name: "Tests", path: "mytests" },
-  { id: 3, name: "Interview Master", path:"interview-master"}
+  { id: 3, name: "Prep 360", path:"interview-master"}
 ];
 
 export function UserNavbar() {
