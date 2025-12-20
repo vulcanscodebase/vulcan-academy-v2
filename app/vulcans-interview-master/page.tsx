@@ -29,7 +29,7 @@ export default function InterviewPage() {
             <div className="relative w-full m-8 overflow-hidden">
               <Image
                 src="/interview.png"
-                alt="Vulcan Interview Master"
+                alt="Vulcan Prep 360"
                 fill
                 className="object-cover"
                 priority
@@ -40,13 +40,13 @@ export default function InterviewPage() {
               <div className="flex items-center gap-2 mb-2">
                 <Sparkles className="h-6 w-6 text-vulcan-accent-blue" />
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-light tracking-tight">
-                  Vulcan Interview Master
+                  Vulcan Prep 360
                 </h1>
               </div>
               <p className="text-base md:text-lg text-foreground/80 leading-relaxed">
                 Interviews can be stressful — but what if you could practice
                 with an AI that feels just like a real interviewer, without the
-                pressure? Vulcan Interview Master helps you sharpen your
+                pressure? Vulcan Prep 360 helps you sharpen your
                 communication, boost your confidence, and get actionable
                 feedback to improve so you can walk into every interview fully
                 prepared to impress.
@@ -87,7 +87,7 @@ export default function InterviewPage() {
           <div className="flex items-center gap-3 mb-6">
             <Target className="h-8 w-8 text-vulcan-accent-blue" />
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-light tracking-tight text-foreground">
-              Why Vulcan Interview Master?
+              Why Vulcan Prep 360?
             </h2>
           </div>
           <Card className="border border-border/60 shadow-md bg-gradient-to-br from-background to-muted/10">
@@ -96,7 +96,7 @@ export default function InterviewPage() {
                 Interviews can be intimidating. No matter how much you prepare,
                 that one question — "Tell me about yourself" — can make your
                 mind go blank. We've all been there. That's why Vulcan Academy
-                created Vulcan Interview Master, an AI-powered interview
+                created Vulcan Prep 360, an AI-powered interview
                 simulation platform that helps you practice in a safe,
                 supportive, and smart environment. It feels like a real
                 interview but instead of judging you, it helps you grow.
@@ -110,7 +110,7 @@ export default function InterviewPage() {
           <div className="flex items-center gap-3 mb-6">
             <MessageSquare className="h-8 w-8 text-vulcan-accent-blue" />
             <h3 className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight text-foreground">
-              What is Vulcan Interview Master?
+              What is Vulcan Prep 360?
             </h3>
           </div>
           <Card className="border border-border/60 shadow-md">
@@ -256,7 +256,7 @@ export default function InterviewPage() {
                       Actionable Guidance
                     </h4>
                     <p className="text-foreground/80 leading-relaxed">
-                      Vulcan Interview Master goes beyond pointing out mistakes.
+                      Vulcan Prep 360 goes beyond pointing out mistakes.
                       It tells you why they happened, and guides you towards
                       improvement. You'll even get suggestions for specific
                       courses and exercises that can help you close skill gaps.
@@ -329,7 +329,7 @@ export default function InterviewPage() {
           <Card className="border border-border/60 shadow-lg bg-gradient-to-br from-vulcan-accent-blue/5 via-background to-muted/10">
             <CardContent className="p-8 md:p-12">
               <p className="text-lg md:text-xl text-foreground/80 leading-relaxed max-w-4xl">
-                We built Vulcan Interview Master to help you discover your
+                We built Vulcan Prep 360 to help you discover your
                 potential — not just to get a job, but to grow into the
                 confident, capable version of yourself that every opportunity
                 deserves. We know what our clients deserve and we try to match

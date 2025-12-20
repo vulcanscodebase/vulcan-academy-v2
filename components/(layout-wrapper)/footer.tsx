@@ -4,7 +4,7 @@ import { Facebook, Twitter, Instagram } from "lucide-react";
 
 const navItems = [
   { name: "Home", path: "/" },
-  { name: "Interview Master", path:"/interview"},
+  { name: "Vulcan Prep 360", path:"/interview"},
   // { name: "Tests", path: "/tests" },
   // { name: "Courses", path: "/courses" },
   { name: "About Us", path: "/about" },

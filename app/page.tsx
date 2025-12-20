@@ -17,7 +17,7 @@ export default function Home() {
       <main className="min-h-screen">
         <Navbar />
 
-        {/* Vulcan Interview Master Hero Section */}
+        {/* Vulcan Prep 360 Hero Section */}
         <section className="relative flex-1 w-full h-screen flex items-center overflow-hidden bg-white pt-16 md:pt-20">
           {/* Background with gradient */}
           <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-muted/30" />
@@ -45,7 +45,7 @@ export default function Home() {
 
                   {/* Heading */}
                   <h1 className="text-3xl md:text-5xl lg:text-6xl font-light tracking-tight text-foreground text-balance">
-                    Vulcan Interview Master
+                    Vulcan Prep 360
                     <span className="block mt-1 text-vulcan-accent-blue">
                       Master interviews with ease
                     </span>
@@ -55,7 +55,7 @@ export default function Home() {
                   <p className="mt-3 md:mt-4 text-base md:text-lg text-foreground/80 text-pretty max-w-xl">
                     Ace your next interview with expert-guided practice
                     sessions, mock interviews, and real-time feedback. Vulcan
-                    Interview Master is your comprehensive platform to prepare
+                    Prep 360 is your comprehensive platform to prepare
                     confidently for your next career opportunity.
                   </p>
 
@@ -145,7 +145,7 @@ export default function Home() {
                     <div className="relative w-full aspect-[4/3] lg:aspect-[4/5] rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-vulcan-accent-blue/20 to-vulcan-deep-navy/20 border border-border/50">
                       <Image
                         src="/interview-report.jpg"
-                        alt="Vulcan Interview Master"
+                        alt="Vulcan Prep 360"
                         fill
                         className="object-cover object-center"
                         priority
