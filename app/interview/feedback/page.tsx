@@ -1117,10 +1117,6 @@ export default function FeedbackPage() {
             <p className="text-lg font-medium mb-2">
               &ldquo;Every step forward is progress—keep growing!&rdquo;
             </p>
-            <p className="text-sm">
-              Contact us at support@interviewai.com | ©{" "}
-              {new Date().getFullYear()} InterviewAI. All rights reserved.
-            </p>
           </motion.div>
         </div>
       </div>

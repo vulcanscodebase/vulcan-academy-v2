@@ -42,8 +42,32 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
+interface Transaction {
+  id: string;
+  collegeId: string;
+  collegeName: string;
+  type: "credit" | "debit";
+  amount: number;
+  description: string;
+  createdAt: string;
+  createdBy: string;
+}
+
+interface College {
+  id: string;
+  name: string;
+  code: string;
+  location: string;
+  email: string;
+  phone: string;
+  totalStudents: number;
+  status: "active" | "inactive";
+  createdAt: string;
+  credits: number;
+}
+
 // Mock transactions data
-const mockTransactions = [
+const mockTransactions: Transaction[] = [
   {
     id: "1",
     collegeId: "1",
@@ -97,7 +121,7 @@ const mockTransactions = [
 ];
 
 // Mock data - replace with API calls later
-const mockColleges = [
+const mockColleges: College[] = [
   {
     id: "1",
     name: "MIT College of Engineering",
@@ -159,30 +183,6 @@ const mockColleges = [
     credits: 500,
   },
 ];
-
-interface Transaction {
-  id: string;
-  collegeId: string;
-  collegeName: string;
-  type: "credit" | "debit";
-  amount: number;
-  description: string;
-  createdAt: string;
-  createdBy: string;
-}
-
-interface College {
-  id: string;
-  name: string;
-  code: string;
-  location: string;
-  email: string;
-  phone: string;
-  totalStudents: number;
-  status: "active" | "inactive";
-  createdAt: string;
-  credits: number;
-}
 
 export default function CollegesPage() {
   const [colleges, setColleges] = useState<College[]>(mockColleges);

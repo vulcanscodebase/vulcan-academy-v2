@@ -37,6 +37,10 @@ export default function InterviewAI() {
   const [isProcessingAnswer, setIsProcessingAnswer] = useState(false)
   const processingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
+  // Auto-record timers
+  const autoStartTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const autoStopTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
   const [interviewId, setInterviewId] = useState<string | null>(null)
 
   const addDebugLog = (message: string) => {
@@ -719,6 +723,9 @@ export default function InterviewAI() {
       if (timerRef.current) clearInterval(timerRef.current)
       if (processingTimeoutRef.current) clearTimeout(processingTimeoutRef.current)
 
+      if (autoStartTimeoutRef.current) clearTimeout(autoStartTimeoutRef.current)
+      if (autoStopTimeoutRef.current) clearTimeout(autoStopTimeoutRef.current)
+
       const currentVideoRecorder = videoRecorderRef.current
       if (currentVideoRecorder && currentVideoRecorder.state !== "inactive") {
         currentVideoRecorder.stop()
@@ -728,6 +735,52 @@ export default function InterviewAI() {
       addDebugLog("Interview page cleanup complete")
     }
   }, [])
+
+  // Auto start/stop recording per question
+  useEffect(() => {
+    // Clear any existing timers whenever dependencies change
+    if (autoStartTimeoutRef.current) {
+      clearTimeout(autoStartTimeoutRef.current)
+      autoStartTimeoutRef.current = null
+    }
+    if (autoStopTimeoutRef.current) {
+      clearTimeout(autoStopTimeoutRef.current)
+      autoStopTimeoutRef.current = null
+    }
+
+    // Do nothing if interview hasn't started
+    if (!interviewStarted) {
+      return
+    }
+
+    // Schedule auto-start after 10s if not currently recording and question not yet completed
+    if (!currentQuestionRecording && !recordingDone && !isProcessingAnswer) {
+      autoStartTimeoutRef.current = setTimeout(() => {
+        addDebugLog(`Auto-starting recording for question ${currentQuestion + 1} after 10 seconds`)
+        handleStartQuestionRecording()
+      }, 10000)
+    }
+
+    // Schedule auto-stop after 2 minutes if currently recording
+    if (currentQuestionRecording) {
+      autoStopTimeoutRef.current = setTimeout(() => {
+        addDebugLog(`Auto-stopping recording for question ${currentQuestion + 1} after 2 minutes`)
+        handleStopQuestionRecording()
+      }, 2 * 60 * 1000)
+    }
+
+    // Cleanup on dependency change
+    return () => {
+      if (autoStartTimeoutRef.current) {
+        clearTimeout(autoStartTimeoutRef.current)
+        autoStartTimeoutRef.current = null
+      }
+      if (autoStopTimeoutRef.current) {
+        clearTimeout(autoStopTimeoutRef.current)
+        autoStopTimeoutRef.current = null
+      }
+    }
+  }, [interviewStarted, currentQuestion, currentQuestionRecording, recordingDone, isProcessingAnswer])
 
   const isLastQuestion = currentQuestion === questions.length - 1
 
@@ -742,13 +795,13 @@ export default function InterviewAI() {
         className="text-center py-3 sm:py-4 px-4 sm:px-6 flex-shrink-0"
       >
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight mb-1 sm:mb-2">
-          AI Interview
+          Vulcan Prep Interview
           <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent ml-2">
             Experience
           </span>
         </h1>
         <p className="text-gray-600 text-xs sm:text-sm">
-          Engage naturally with our AI interviewer and showcase your best self.
+          Engage naturally with our Vulcan Prep interviewer and showcase your best self.
         </p>
       </motion.div>
 
