@@ -71,7 +71,7 @@ export default function Home() {
                             Realistic Mock Interviews
                           </span>
                           <span className="text-xs md:text-sm text-foreground/80">
-                            AI-powered interviews with real scenarios
+                            Vulcan Prep interviews with real scenarios
                           </span>
                         </div>
                       </div>

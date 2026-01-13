@@ -37,6 +37,15 @@ export default function InterviewAI() {
   const [isProcessingAnswer, setIsProcessingAnswer] = useState(false)
   const processingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
+  // Auto-record timers
+  const autoStartTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const autoStopTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Countdown states
+  const [autoStartCountdown, setAutoStartCountdown] = useState<number | null>(null)
+  const [autoStopCountdown, setAutoStopCountdown] = useState<number | null>(null)
+
   const [interviewId, setInterviewId] = useState<string | null>(null)
 
   const addDebugLog = (message: string) => {
@@ -269,6 +278,15 @@ export default function InterviewAI() {
     }
 
     try {
+      // Reset recordingDone when starting a new recording
+      setRecordingDone(false)
+      // Clear auto-start countdown when manually starting
+      setAutoStartCountdown(null)
+      if (autoStartTimeoutRef.current) {
+        clearTimeout(autoStartTimeoutRef.current)
+        autoStartTimeoutRef.current = null
+      }
+      
       if (mediaStream) {
         const audioTracks = mediaStream.getAudioTracks()
         if (audioTracks.length > 0) {
@@ -298,6 +316,13 @@ export default function InterviewAI() {
   }
 
   const handleStopQuestionRecording = async () => {
+    // Clear auto-stop countdown when manually stopping
+    setAutoStopCountdown(null)
+    if (autoStopTimeoutRef.current) {
+      clearTimeout(autoStopTimeoutRef.current)
+      autoStopTimeoutRef.current = null
+    }
+    
     const audioRecorder = mediaRecorderRef.current
 
     if (!audioRecorder || audioRecorder.state === "inactive") {
@@ -719,6 +744,10 @@ export default function InterviewAI() {
       if (timerRef.current) clearInterval(timerRef.current)
       if (processingTimeoutRef.current) clearTimeout(processingTimeoutRef.current)
 
+      if (autoStartTimeoutRef.current) clearTimeout(autoStartTimeoutRef.current)
+      if (autoStopTimeoutRef.current) clearTimeout(autoStopTimeoutRef.current)
+      if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current)
+
       const currentVideoRecorder = videoRecorderRef.current
       if (currentVideoRecorder && currentVideoRecorder.state !== "inactive") {
         currentVideoRecorder.stop()
@@ -728,6 +757,101 @@ export default function InterviewAI() {
       addDebugLog("Interview page cleanup complete")
     }
   }, [])
+
+  // Auto start/stop recording per question with countdown
+  useEffect(() => {
+    // Clear any existing timers and intervals whenever dependencies change
+    if (autoStartTimeoutRef.current) {
+      clearTimeout(autoStartTimeoutRef.current)
+      autoStartTimeoutRef.current = null
+    }
+    if (autoStopTimeoutRef.current) {
+      clearTimeout(autoStopTimeoutRef.current)
+      autoStopTimeoutRef.current = null
+    }
+    if (countdownIntervalRef.current) {
+      clearInterval(countdownIntervalRef.current)
+      countdownIntervalRef.current = null
+    }
+
+    // Reset countdowns
+    setAutoStartCountdown(null)
+    setAutoStopCountdown(null)
+
+    // Do nothing if interview hasn't started
+    if (!interviewStarted) {
+      return
+    }
+
+    // Schedule auto-start after 20s if not currently recording and question not yet completed
+    if (!currentQuestionRecording && !recordingDone && !isProcessingAnswer) {
+      setAutoStartCountdown(20)
+      
+      // Update countdown every second
+      countdownIntervalRef.current = setInterval(() => {
+        setAutoStartCountdown((prev) => {
+          if (prev === null || prev <= 1) {
+            return null
+          }
+          return prev - 1
+        })
+      }, 1000)
+
+      autoStartTimeoutRef.current = setTimeout(() => {
+        addDebugLog(`Auto-starting recording for question ${currentQuestion + 1} after 20 seconds`)
+        setAutoStartCountdown(null)
+        if (countdownIntervalRef.current) {
+          clearInterval(countdownIntervalRef.current)
+          countdownIntervalRef.current = null
+        }
+        handleStartQuestionRecording()
+      }, 20000)
+    }
+
+    // Schedule auto-stop after 2 minutes if currently recording
+    if (currentQuestionRecording) {
+      setAutoStopCountdown(120) // 2 minutes = 120 seconds
+      
+      // Update countdown every second
+      if (countdownIntervalRef.current) {
+        clearInterval(countdownIntervalRef.current)
+      }
+      countdownIntervalRef.current = setInterval(() => {
+        setAutoStopCountdown((prev) => {
+          if (prev === null || prev <= 1) {
+            return null
+          }
+          return prev - 1
+        })
+      }, 1000)
+
+      autoStopTimeoutRef.current = setTimeout(() => {
+        addDebugLog(`Auto-stopping recording for question ${currentQuestion + 1} after 2 minutes`)
+        setAutoStopCountdown(null)
+        if (countdownIntervalRef.current) {
+          clearInterval(countdownIntervalRef.current)
+          countdownIntervalRef.current = null
+        }
+        handleStopQuestionRecording()
+      }, 2 * 60 * 1000)
+    }
+
+    // Cleanup on dependency change
+    return () => {
+      if (autoStartTimeoutRef.current) {
+        clearTimeout(autoStartTimeoutRef.current)
+        autoStartTimeoutRef.current = null
+      }
+      if (autoStopTimeoutRef.current) {
+        clearTimeout(autoStopTimeoutRef.current)
+        autoStopTimeoutRef.current = null
+      }
+      if (countdownIntervalRef.current) {
+        clearInterval(countdownIntervalRef.current)
+        countdownIntervalRef.current = null
+      }
+    }
+  }, [interviewStarted, currentQuestion, currentQuestionRecording, recordingDone, isProcessingAnswer])
 
   const isLastQuestion = currentQuestion === questions.length - 1
 
@@ -742,13 +866,13 @@ export default function InterviewAI() {
         className="text-center py-3 sm:py-4 px-4 sm:px-6 flex-shrink-0"
       >
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight mb-1 sm:mb-2">
-          AI Interview
+          Vulcan Prep Interview
           <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent ml-2">
             Experience
           </span>
         </h1>
         <p className="text-gray-600 text-xs sm:text-sm">
-          Engage naturally with our AI interviewer and showcase your best self.
+          Engage naturally with our Vulcan Prep interviewer and showcase your best self.
         </p>
       </motion.div>
 
@@ -858,15 +982,21 @@ export default function InterviewAI() {
                       {!currentQuestionRecording ? (
                         <button
                           onClick={handleStartQuestionRecording}
-                          disabled={recordingDone || isProcessingAnswer}
+                          disabled={isProcessingAnswer}
                           className={`px-3 sm:px-4 py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center space-x-2 justify-center ${
-                            recordingDone || isProcessingAnswer
+                            isProcessingAnswer
                               ? "bg-gray-400 text-gray-600 cursor-not-allowed"
                               : "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
                           }`}
                         >
                           <Mic className="w-3 h-3 sm:w-4 sm:h-4" />
-                          <span>{isProcessingAnswer ? "Processing..." : "Record Answer"}</span>
+                          <span>
+                            {isProcessingAnswer
+                              ? "Processing..."
+                              : autoStartCountdown !== null
+                                ? `Record Answer (${autoStartCountdown}s)`
+                                : "Record Answer"}
+                          </span>
                         </button>
                       ) : (
                         <button
@@ -874,7 +1004,11 @@ export default function InterviewAI() {
                           className="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white px-3 sm:px-4 py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 justify-center"
                         >
                           <StopCircle className="w-3 h-3 sm:w-4 sm:h-4" />
-                          <span>Stop & Submit</span>
+                          <span>
+                            {autoStopCountdown !== null
+                              ? `Stop & Submit (${Math.floor(autoStopCountdown / 60)}:${String(autoStopCountdown % 60).padStart(2, "0")})`
+                              : "Stop & Submit"}
+                          </span>
                         </button>
                       )}
 

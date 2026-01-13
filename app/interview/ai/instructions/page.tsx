@@ -158,7 +158,7 @@ export default function InterviewInstructions() {
               <div className="p-4 sm:p-6">
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">Interview Preparation</h3>
                 <p className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6 leading-relaxed">
-                  Watch this comprehensive guide to understand the AI interview process and learn proven strategies for
+                  Watch this comprehensive guide to understand the Vulcan Prep interview process and learn proven strategies for
                   success. Get insights on body language, communication techniques, and how to showcase your skills
                   effectively.
                 </p>
