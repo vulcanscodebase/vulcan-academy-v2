@@ -70,7 +70,8 @@ export default function ResumeUpload() {
     "Civil Engineering",
     "Mechanical Engineering",
     "Electrical Engineering",
-    "Electronics and Communication (Embedded Systems and IoT)", 
+    "Electronics and Communication (Embedded Systems and IoT)",
+    "Work From Home Jobs",
   ];
 
   const degreeOptions: Array<{ key: string; label: string }> = [
@@ -98,7 +99,7 @@ export default function ResumeUpload() {
     BCOM_MCOM: BBA_MBA_AND_BCOM_MCOM_ROLES,
     BA_MA: ["Teacher", "Marketing", "Customer Service"],
     BSC_MSC: ["Business Analyst", "Accountant"],
-    OTHERS: ["Customer Service", "Sales Executive", "Marketing", "Project Management"],
+    OTHERS: ["Work From Home Jobs", "Customer Service", "Sales Executive", "Marketing", "Project Management"],
   }
 
   const unique = (arr: string[]) => Array.from(new Set(arr))
@@ -155,7 +156,7 @@ export default function ResumeUpload() {
     setSelectedDegreeKey(nextKey)
     const matches = getPrioritizedRoles(jobTitle)
     setFilteredRoles(matches)
-    setShowDropdown(false) 
+    setShowDropdown(false)
   }
 
 
@@ -266,12 +267,12 @@ export default function ResumeUpload() {
       if (isGeneral) {
         const followUp =
           typeof evaluation.followUpQuestion === "string" &&
-          evaluation.followUpQuestion.trim() !== "" &&
-          evaluation.followUpQuestion !== "undefined" &&
-          evaluation.followUpQuestion !== "null"
+            evaluation.followUpQuestion.trim() !== "" &&
+            evaluation.followUpQuestion !== "undefined" &&
+            evaluation.followUpQuestion !== "null"
             ? evaluation.followUpQuestion
             : null;
-      
+
         if (followUp) {
           localStorage.setItem("followUpQuestion", followUp);
         } else {
@@ -377,11 +378,10 @@ export default function ResumeUpload() {
                         type="button"
                         key={deg.key}
                         onClick={() => handleSelectDegree(deg.key)}
-                        className={`whitespace-nowrap px-3 sm:px-4 py-2 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-medium transition-all duration-200 border ${
-                          selected
-                            ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white border-transparent shadow"
-                            : "bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200"
-                        }`}
+                        className={`whitespace-nowrap px-3 sm:px-4 py-2 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-medium transition-all duration-200 border ${selected
+                          ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white border-transparent shadow"
+                          : "bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200"
+                          }`}
                         title={deg.label}
                       >
                         {deg.label}
@@ -454,44 +454,44 @@ export default function ResumeUpload() {
             </div>
 
             <div className="mt-6">
-            <label className="block text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center">
-              Select the mode of interview preparation
-          </label>
+              <label className="block text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center">
+                Select the mode of interview preparation
+              </label>
 
-          <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-4">
 
-            <Button
-              type="button"
-              variant="default"
-              onClick={() => setMode("basic")}
-              className={
-              mode === "basic"
-              ? "px-4 py-2 text-sm sm:text-base bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md hover:opacity-90"
-              : "px-4 py-2 text-sm sm:text-base border border-gray-300 text-gray-700 bg-white hover:bg-gray-100"
-            }
-            >
-            Basic
-           </Button>
+                <Button
+                  type="button"
+                  variant="default"
+                  onClick={() => setMode("basic")}
+                  className={
+                    mode === "basic"
+                      ? "px-4 py-2 text-sm sm:text-base bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md hover:opacity-90"
+                      : "px-4 py-2 text-sm sm:text-base border border-gray-300 text-gray-700 bg-white hover:bg-gray-100"
+                  }
+                >
+                  Basic
+                </Button>
 
-          <Button
-            type="button"
-            variant="default"
-            onClick={() => setMode("advanced")}
-            className={
-            mode === "advanced"
-            ? "px-4 py-2 text-sm sm:text-base bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md hover:opacity-90"
-            : "px-4 py-2 text-sm sm:text-base border border-gray-300 text-gray-700 bg-white hover:bg-gray-100"
-            }
-          >
-          Advanced
-          </Button>
+                <Button
+                  type="button"
+                  variant="default"
+                  onClick={() => setMode("advanced")}
+                  className={
+                    mode === "advanced"
+                      ? "px-4 py-2 text-sm sm:text-base bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md hover:opacity-90"
+                      : "px-4 py-2 text-sm sm:text-base border border-gray-300 text-gray-700 bg-white hover:bg-gray-100"
+                  }
+                >
+                  Advanced
+                </Button>
 
-            </div>
+              </div>
 
               <p className="mt-2 text-xs sm:text-sm text-gray-500">
-              {mode === "basic"
-              ? "Basic mode gives a simple interview preparation flow."
-              : "Advanced mode has tougher questions to test your skills."}
+                {mode === "basic"
+                  ? "Basic mode gives a simple interview preparation flow."
+                  : "Advanced mode has tougher questions to test your skills."}
               </p>
             </div>
 
@@ -504,13 +504,12 @@ export default function ResumeUpload() {
               </label>
 
               <div
-                className={`relative border-2 border-dashed rounded-2xl sm:rounded-3xl p-6 sm:p-12 text-center transition-all duration-300 ${
-                  isDragOver
-                    ? "border-blue-500 bg-blue-50"
-                    : fileName
+                className={`relative border-2 border-dashed rounded-2xl sm:rounded-3xl p-6 sm:p-12 text-center transition-all duration-300 ${isDragOver
+                  ? "border-blue-500 bg-blue-50"
+                  : fileName
                     ? "border-green-500 bg-green-50"
                     : "border-gray-300 hover:border-blue-400 hover:bg-blue-50/50"
-                }`}
+                  }`}
                 onDrop={handleDrop}
                 onDragOver={(e) => {
                   e.preventDefault();
@@ -623,11 +622,10 @@ export default function ResumeUpload() {
               <Button
                 onClick={handleSubmit}
                 disabled={!isFormValid || isSubmitting}
-                className={`w-full h-12 sm:h-14 text-sm sm:text-lg font-semibold rounded-xl sm:rounded-2xl transition-all duration-300 ${
-                  isFormValid && !isSubmitting
-                    ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
-                    : "bg-gray-200 text-gray-500 cursor-not-allowed"
-                }`}
+                className={`w-full h-12 sm:h-14 text-sm sm:text-lg font-semibold rounded-xl sm:rounded-2xl transition-all duration-300 ${isFormValid && !isSubmitting
+                  ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+                  : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  }`}
               >
                 {isSubmitting ? (
                   <div className="flex items-center">

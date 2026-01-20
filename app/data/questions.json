@@ -606,306 +606,305 @@
     }
   },
   "Electronics and Communication (Embedded Systems and IoT)": {
-  "Basic": {
-    "Pool1": [
-      "What in your graduation or past experience has prepared you for the role?",
-      "What excites you the most about working with embedded hardware or IoT technologies?",
-      "Embedded work often requires long debugging hours. How do you stay patient and focused?",
-      "Tell me about a moment when you realised you enjoy building or troubleshooting electronics.",
-      "How do you stay updated with new microcontrollers, sensors, protocols, and IoT technologies?",
-      "What do you do when unexpected behaviour occurs during testing of embedded devices?",
-      "What personal quality do you believe is essential for an embedded/IoT engineer, and how do you demonstrate it?"
-    ],
-    "Pool2": [
-      "What is the difference between a microcontroller and a microprocessor?",
-      "Explain the functioning of GPIO pins. Give an example of use.",
-      "What is the purpose of ADC and DAC in embedded systems?",
-      "Explain common communication protocols such as UART, I2C, SPI.",
-      "What is PWM? Where is it used?",
-      "Describe the difference between analog and digital sensors.",
-      "What is a pull-up resistor, and why is it used?",
-      "Explain the basic architecture of Arduino or ESP32.",
-      "What is debouncing in embedded systems?",
-      "What is a watchdog timer, and why is it important?"
-    ],
-    "Pool3": [
-      "Tell me about the most challenging embedded system bug you solved. How did you debug it?",
-      "Describe a situation where your device worked in the lab but failed in the field. What did you do?",
-      "Tell me about a time when your sensor readings were inaccurate. How did you correct them?",
-      "Describe a moment when your communication protocol failed or behaved unpredictably.",
-      "Tell me about a time you built a prototype under tight deadlines.",
-      "Tell me about a moment when you improved the power efficiency or performance of an embedded device.",
-      "Tell me about a scenario where your IoT device lost connectivity. What steps did you take to diagnose the issue?",
-      "Describe a project where your contribution significantly improved reliability, cost, or performance."
-    ]
-  },
-
-  "Advanced": {
-    "Pool1": [
-      "What in your graduation or past experience has prepared you for embedded systems or IoT roles?",
-      "Embedded work often requires long debugging hours. How do you stay patient and focused?",
-      "How do you respond when your circuit or firmware doesn’t work after multiple attempts?",
-      "Describe a time you took initiative to fix a hardware or software issue without being asked.",
-      "How do you stay updated with new microcontrollers, sensors, protocols, and IoT technologies?",
-      "How do you ensure accuracy and avoid mistakes when working with schematics, PCBs, or code?",
-      "What do you do when unexpected behaviour occurs during testing of embedded devices?"
-    ],
-    "Pool2": [
-      "How do you design an IoT system end-to-end—from sensor to cloud?",
-      "What are the advantages of using RTOS over bare-metal programming?",
-      "Explain how you optimize power consumption in battery-powered IoT devices.",
-      "How do you choose between different wireless communication protocols (BLE, LoRa, Zigbee, Wi-Fi)?",
-      "Describe how OTA (Over-The-Air) firmware updates work and how you implement them.",
-      "How do you secure IoT devices against common cyber threats?",
-      "What steps do you take to ensure reliable communication in noisy environments?",
-      "How do you handle memory constraints in microcontrollers?",
-      "Explain MQTT protocol. When is it preferred over HTTP?",
-      "Describe how you integrate embedded devices with cloud platforms (AWS IoT, Azure IoT, Google Cloud IoT)."
-    ],
-    "Pool3": [
-      "Describe a situation where your device worked in the lab but failed in the field. What did you do?",
-      "Tell me about a time when your sensor readings were inaccurate. How did you correct them?",
-      "Describe a moment when your communication protocol failed or behaved unpredictably.",
-      "Tell me about a time you built a prototype under tight deadlines.",
-      "Describe a situation where you had to coordinate with hardware and software teams to solve an issue.",
-      "Tell me about a moment when you improved the power efficiency or performance of an embedded device.",
-      "Describe a time a PCB you designed or used had issues. How did you troubleshoot it?",
-      "Tell me about a scenario where your IoT device lost connectivity. What steps did you take to diagnose the issue?"
-    ]
-  }
+    "Basic": {
+      "Pool1": [
+        "What in your graduation or past experience has prepared you for the role?",
+        "What excites you the most about working with embedded hardware or IoT technologies?",
+        "Embedded work often requires long debugging hours. How do you stay patient and focused?",
+        "Tell me about a moment when you realised you enjoy building or troubleshooting electronics.",
+        "How do you stay updated with new microcontrollers, sensors, protocols, and IoT technologies?",
+        "What do you do when unexpected behaviour occurs during testing of embedded devices?",
+        "What personal quality do you believe is essential for an embedded/IoT engineer, and how do you demonstrate it?"
+      ],
+      "Pool2": [
+        "What is the difference between a microcontroller and a microprocessor?",
+        "Explain the functioning of GPIO pins. Give an example of use.",
+        "What is the purpose of ADC and DAC in embedded systems?",
+        "Explain common communication protocols such as UART, I2C, SPI.",
+        "What is PWM? Where is it used?",
+        "Describe the difference between analog and digital sensors.",
+        "What is a pull-up resistor, and why is it used?",
+        "Explain the basic architecture of Arduino or ESP32.",
+        "What is debouncing in embedded systems?",
+        "What is a watchdog timer, and why is it important?"
+      ],
+      "Pool3": [
+        "Tell me about the most challenging embedded system bug you solved. How did you debug it?",
+        "Describe a situation where your device worked in the lab but failed in the field. What did you do?",
+        "Tell me about a time when your sensor readings were inaccurate. How did you correct them?",
+        "Describe a moment when your communication protocol failed or behaved unpredictably.",
+        "Tell me about a time you built a prototype under tight deadlines.",
+        "Tell me about a moment when you improved the power efficiency or performance of an embedded device.",
+        "Tell me about a scenario where your IoT device lost connectivity. What steps did you take to diagnose the issue?",
+        "Describe a project where your contribution significantly improved reliability, cost, or performance."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "What in your graduation or past experience has prepared you for embedded systems or IoT roles?",
+        "Embedded work often requires long debugging hours. How do you stay patient and focused?",
+        "How do you respond when your circuit or firmware doesn’t work after multiple attempts?",
+        "Describe a time you took initiative to fix a hardware or software issue without being asked.",
+        "How do you stay updated with new microcontrollers, sensors, protocols, and IoT technologies?",
+        "How do you ensure accuracy and avoid mistakes when working with schematics, PCBs, or code?",
+        "What do you do when unexpected behaviour occurs during testing of embedded devices?"
+      ],
+      "Pool2": [
+        "How do you design an IoT system end-to-end—from sensor to cloud?",
+        "What are the advantages of using RTOS over bare-metal programming?",
+        "Explain how you optimize power consumption in battery-powered IoT devices.",
+        "How do you choose between different wireless communication protocols (BLE, LoRa, Zigbee, Wi-Fi)?",
+        "Describe how OTA (Over-The-Air) firmware updates work and how you implement them.",
+        "How do you secure IoT devices against common cyber threats?",
+        "What steps do you take to ensure reliable communication in noisy environments?",
+        "How do you handle memory constraints in microcontrollers?",
+        "Explain MQTT protocol. When is it preferred over HTTP?",
+        "Describe how you integrate embedded devices with cloud platforms (AWS IoT, Azure IoT, Google Cloud IoT)."
+      ],
+      "Pool3": [
+        "Describe a situation where your device worked in the lab but failed in the field. What did you do?",
+        "Tell me about a time when your sensor readings were inaccurate. How did you correct them?",
+        "Describe a moment when your communication protocol failed or behaved unpredictably.",
+        "Tell me about a time you built a prototype under tight deadlines.",
+        "Describe a situation where you had to coordinate with hardware and software teams to solve an issue.",
+        "Tell me about a moment when you improved the power efficiency or performance of an embedded device.",
+        "Describe a time a PCB you designed or used had issues. How did you troubleshoot it?",
+        "Tell me about a scenario where your IoT device lost connectivity. What steps did you take to diagnose the issue?"
+      ]
+    }
   },
   "Business Analyst": {
-  "Basic": {
-    "Pool1": [
-      "What in your graduation or past experiences has prepared you for a business analyst role?",
-      "What motivates you to work as a business analyst?",
-      "Business analysis requires strong attention to detail. How do you stay organised during complex tasks?",
-      "Tell me about a moment when you realised you enjoy analysing data, processes, or requirements.",
-      "How do you respond when stakeholders question your analysis or documentation?",
-      "Describe a time you took initiative to solve a business problem without being asked.",
-      "How do you balance user needs with business constraints?",
-      "What do you do when a requirement is unclear or contradictory?",
-      "How do you stay updated with tools, frameworks, and industry trends relevant to business analysis?",
-      "What personal quality do you believe is essential for a business analyst, and how do you demonstrate it?"
-    ],
-    "Pool2": [
-      "What is the primary role of a business analyst in a project?",
-      "Explain the difference between requirements and specifications.",
-      "What is a user story? What are its components?",
-      "What is a process flow diagram?",
-      "What are KPIs and why are they important?",
-      "What is stakeholder mapping?",
-      "Explain the difference between qualitative and quantitative data?",
-      "What is a gap analysis?",
-      "What is requirement traceability?",
-      "What is the purpose of acceptance criteria?"
-    ],
-    "Pool3": [
-      "Describe a time when limited data made your analysis difficult. What did you do?",
-      "Tell me about a moment when you improved a small process or routine.",
-      "Describe a situation where you clarified requirements for someone.",
-      "Tell me about a time you worked with someone who disagreed with your approach.",
-      "Describe a moment where you had to explain a concept to a non-technical person.",
-      "Tell me about a time when you had to meet a deadline with minimal guidance.",
-      "Describe a situation where your assumption turned out to be wrong.",
-      "Tell me about a time you helped your team solve a problem.",
-      "Describe a time when two people misunderstood each other. How did you help?",
-      "Tell me about a moment where you handled conflicting expectations."
-    ]
-  },
-  "Advanced": {
-    "Pool1": [
-      "How do you handle situations where stakeholders disagree with your analysis?",
-      "What do you do when a business decision you recommended is not accepted?",
-      "Describe how you ensure your work remains unbiased when analysing conflicting data.",
-      "How do you prioritise tasks when everything seems urgent?",
-      "Tell me about a time you took full responsibility for a mistake in your analysis.",
-      "How do you adapt when project requirements or goals change suddenly?",
-      "Describe a time you resolved a communication gap between two teams.",
-      "How do you push back professionally when a deadline is unrealistic?",
-      "What do you do to maintain a long-term problem-solving mindset under pressure?"
-    ],
-    "Pool2": [
-      "How do you gather complex requirements from multiple stakeholders?",
-      "Explain how you use tools like SQL, Excel, or Power BI for analysis.",
-      "How do you create AS-IS and TO-BE process models?",
-      "Explain MoSCoW prioritisation with an example.",
-      "Describe the 5 Whys or Fishbone method for root-cause analysis.",
-      "How do you validate requirements to avoid rework?",
-      "Explain how you conduct feasibility analysis (technical, operational, financial).",
-      "How do you document non-functional requirements effectively?",
-      "How do you prepare wireframes or prototypes to validate ideas?",
-      "How do you measure the success of a solution post-implementation?"
-    ],
-    "Pool3": [
-      "Tell me about a complex business problem you solved using data.",
-      "Describe a time when requirements kept changing throughout the project.",
-      "Tell me about a situation where two major stakeholders had opposing priorities.",
-      "Describe a moment when your analysis influenced an important decision.",
-      "Tell me about a time you led a requirements workshop or stakeholder meeting.",
-      "Describe a situation where you uncovered a major flaw in an existing process.",
-      "Tell me about a time you dealt with incomplete or contradictory data.",
-      "Describe a moment when your analysis was initially wrong. How did you correct it?",
-      "Tell me about a scenario where you had to balance user needs, business goals, and technical feasibility.",
-      "Describe a project where your work significantly impacted business performance or efficiency."
-    ]
-  }
+    "Basic": {
+      "Pool1": [
+        "What in your graduation or past experiences has prepared you for a business analyst role?",
+        "What motivates you to work as a business analyst?",
+        "Business analysis requires strong attention to detail. How do you stay organised during complex tasks?",
+        "Tell me about a moment when you realised you enjoy analysing data, processes, or requirements.",
+        "How do you respond when stakeholders question your analysis or documentation?",
+        "Describe a time you took initiative to solve a business problem without being asked.",
+        "How do you balance user needs with business constraints?",
+        "What do you do when a requirement is unclear or contradictory?",
+        "How do you stay updated with tools, frameworks, and industry trends relevant to business analysis?",
+        "What personal quality do you believe is essential for a business analyst, and how do you demonstrate it?"
+      ],
+      "Pool2": [
+        "What is the primary role of a business analyst in a project?",
+        "Explain the difference between requirements and specifications.",
+        "What is a user story? What are its components?",
+        "What is a process flow diagram?",
+        "What are KPIs and why are they important?",
+        "What is stakeholder mapping?",
+        "Explain the difference between qualitative and quantitative data?",
+        "What is a gap analysis?",
+        "What is requirement traceability?",
+        "What is the purpose of acceptance criteria?"
+      ],
+      "Pool3": [
+        "Describe a time when limited data made your analysis difficult. What did you do?",
+        "Tell me about a moment when you improved a small process or routine.",
+        "Describe a situation where you clarified requirements for someone.",
+        "Tell me about a time you worked with someone who disagreed with your approach.",
+        "Describe a moment where you had to explain a concept to a non-technical person.",
+        "Tell me about a time when you had to meet a deadline with minimal guidance.",
+        "Describe a situation where your assumption turned out to be wrong.",
+        "Tell me about a time you helped your team solve a problem.",
+        "Describe a time when two people misunderstood each other. How did you help?",
+        "Tell me about a moment where you handled conflicting expectations."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "How do you handle situations where stakeholders disagree with your analysis?",
+        "What do you do when a business decision you recommended is not accepted?",
+        "Describe how you ensure your work remains unbiased when analysing conflicting data.",
+        "How do you prioritise tasks when everything seems urgent?",
+        "Tell me about a time you took full responsibility for a mistake in your analysis.",
+        "How do you adapt when project requirements or goals change suddenly?",
+        "Describe a time you resolved a communication gap between two teams.",
+        "How do you push back professionally when a deadline is unrealistic?",
+        "What do you do to maintain a long-term problem-solving mindset under pressure?"
+      ],
+      "Pool2": [
+        "How do you gather complex requirements from multiple stakeholders?",
+        "Explain how you use tools like SQL, Excel, or Power BI for analysis.",
+        "How do you create AS-IS and TO-BE process models?",
+        "Explain MoSCoW prioritisation with an example.",
+        "Describe the 5 Whys or Fishbone method for root-cause analysis.",
+        "How do you validate requirements to avoid rework?",
+        "Explain how you conduct feasibility analysis (technical, operational, financial).",
+        "How do you document non-functional requirements effectively?",
+        "How do you prepare wireframes or prototypes to validate ideas?",
+        "How do you measure the success of a solution post-implementation?"
+      ],
+      "Pool3": [
+        "Tell me about a complex business problem you solved using data.",
+        "Describe a time when requirements kept changing throughout the project.",
+        "Tell me about a situation where two major stakeholders had opposing priorities.",
+        "Describe a moment when your analysis influenced an important decision.",
+        "Tell me about a time you led a requirements workshop or stakeholder meeting.",
+        "Describe a situation where you uncovered a major flaw in an existing process.",
+        "Tell me about a time you dealt with incomplete or contradictory data.",
+        "Describe a moment when your analysis was initially wrong. How did you correct it?",
+        "Tell me about a scenario where you had to balance user needs, business goals, and technical feasibility.",
+        "Describe a project where your work significantly impacted business performance or efficiency."
+      ]
+    }
   },
   "Digital Marketing": {
-  "Basic": {
-    "Pool1": [
-      "What interests you the most about digital marketing?",
-      "What in your graduation or past experience has prepared you for this role?",
-      "How do you stay motivated when a campaign does not perform well?",
-      "Describe how you stay updated with online trends.",
-      "How do you handle repetitive tasks like posting content or monitoring campaigns?",
-      "What do you do when you face a concept or tool you don’t understand?",
-      "How do you approach learning new platforms like Google Ads or Meta Ads?",
-      "How do you react when your ideas are rejected by the team or client?",
-      "What steps do you take to stay organised while managing multiple campaigns?",
-      "How do you maintain creativity on days when inspiration is low?"
-    ],
-    "Pool2": [
-      "What are the main channels of digital marketing?",
-      "What is SEO and why is it important?",
-      "Explain the difference between organic and paid marketing.",
-      "What are impressions, reach, and engagement?",
-      "Explain CTA (Call to Action).",
-      "What is a conversion? Give an example.",
-      "What is a landing page and why is it important?",
-      "What tools can you use to schedule social media posts?",
-      "What is the difference between B2B and B2C digital marketing?",
-      "Explain the basic structure of a Google Ads search campaign."
-    ],
-    "Pool3": [
-      "Tell me about a time you created content that performed well.",
-      "Describe a situation when a client or teammate misunderstood your idea.",
-      "Tell me about a moment when a campaign performed poorly. How did you react?",
-      "Describe how you helped your team fix a simple marketing issue.",
-      "Tell me about a time you learned a digital tool quickly to complete a task.",
-      "Describe a moment when you had to work under a tight deadline.",
-      "Tell me about a situation where you analysed basic campaign data to draw insights.",
-      "Describe how you handled negative feedback on a design or post.",
-      "Tell me about a time you identified a small improvement in a campaign.",
-      "Describe how you adjusted content to match a target audience’s preferences."
-    ]
-  },
-  "Advanced": {
-    "Pool1": [
-      "Describe a time you used data to convince someone of your marketing idea.",
-      "How do you handle conflict between creative direction and business goals?",
-      "Digital marketing requires constant experimentation. How do you handle failures?",
-      "What do you do when your marketing strategy conflicts with a client's demand?",
-      "Describe how you prioritise tasks when multiple campaigns go live at once.",
-      "Tell me about a time you took responsibility for a performance issue in a campaign.",
-      "Explain how you balance creativity with data-driven decisions.",
-      "How do you adapt when algorithms or platform rules change suddenly?",
-      "Tell me about a time you influenced a decision without authority.",
-      "What’s your approach when senior stakeholders push for an idea you don’t agree with?"
-    ],
-    "Pool2": [
-      "How do you set up a full-funnel digital marketing strategy?",
-      "Explain how Google Analytics or GA4 helps measure user behaviour.",
-      "How do you optimise ad campaigns to reduce cost per lead (CPL)?",
-      "Describe how you perform keyword research effectively.",
-      "How do you conduct A/B testing for ads or landing pages?",
-      "Explain how retargeting works and why it is powerful.",
-      "What’s your process for improving conversion rates on a landing page?",
-      "How do you build custom audiences and lookalike audiences?",
-      "What KPIs would you track for an e-commerce campaign?",
-      "How do you maintain cross-channel consistency in messaging?"
-    ],
-    "Pool3": [
-      "Tell me about a campaign you managed that delivered exceptional results. What made it successful?",
-      "Describe a time when you had to fix a high CPL issue. What changes did you make?",
-      "Tell me about a conflict between creative teams and performance teams. How did you handle it?",
-      "Describe a moment when poor data quality affected your decisions. What did you do?",
-      "Tell me about a time when you redesigned an entire marketing funnel.",
-      "Describe a situation where your audience targeting wasn’t working. How did you diagnose it?",
-      "Tell me about a multi-channel campaign you worked on. How did you maintain consistency?",
-      "Describe a moment when you had to educate a client about realistic expectations.",
-      "Tell me about a time your analysis significantly improved a campaign’s ROI.",
-      "Describe a project where you used insights to pivot the entire marketing strategy."
-    ]
-  }
+    "Basic": {
+      "Pool1": [
+        "What interests you the most about digital marketing?",
+        "What in your graduation or past experience has prepared you for this role?",
+        "How do you stay motivated when a campaign does not perform well?",
+        "Describe how you stay updated with online trends.",
+        "How do you handle repetitive tasks like posting content or monitoring campaigns?",
+        "What do you do when you face a concept or tool you don’t understand?",
+        "How do you approach learning new platforms like Google Ads or Meta Ads?",
+        "How do you react when your ideas are rejected by the team or client?",
+        "What steps do you take to stay organised while managing multiple campaigns?",
+        "How do you maintain creativity on days when inspiration is low?"
+      ],
+      "Pool2": [
+        "What are the main channels of digital marketing?",
+        "What is SEO and why is it important?",
+        "Explain the difference between organic and paid marketing.",
+        "What are impressions, reach, and engagement?",
+        "Explain CTA (Call to Action).",
+        "What is a conversion? Give an example.",
+        "What is a landing page and why is it important?",
+        "What tools can you use to schedule social media posts?",
+        "What is the difference between B2B and B2C digital marketing?",
+        "Explain the basic structure of a Google Ads search campaign."
+      ],
+      "Pool3": [
+        "Tell me about a time you created content that performed well.",
+        "Describe a situation when a client or teammate misunderstood your idea.",
+        "Tell me about a moment when a campaign performed poorly. How did you react?",
+        "Describe how you helped your team fix a simple marketing issue.",
+        "Tell me about a time you learned a digital tool quickly to complete a task.",
+        "Describe a moment when you had to work under a tight deadline.",
+        "Tell me about a situation where you analysed basic campaign data to draw insights.",
+        "Describe how you handled negative feedback on a design or post.",
+        "Tell me about a time you identified a small improvement in a campaign.",
+        "Describe how you adjusted content to match a target audience’s preferences."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "Describe a time you used data to convince someone of your marketing idea.",
+        "How do you handle conflict between creative direction and business goals?",
+        "Digital marketing requires constant experimentation. How do you handle failures?",
+        "What do you do when your marketing strategy conflicts with a client's demand?",
+        "Describe how you prioritise tasks when multiple campaigns go live at once.",
+        "Tell me about a time you took responsibility for a performance issue in a campaign.",
+        "Explain how you balance creativity with data-driven decisions.",
+        "How do you adapt when algorithms or platform rules change suddenly?",
+        "Tell me about a time you influenced a decision without authority.",
+        "What’s your approach when senior stakeholders push for an idea you don’t agree with?"
+      ],
+      "Pool2": [
+        "How do you set up a full-funnel digital marketing strategy?",
+        "Explain how Google Analytics or GA4 helps measure user behaviour.",
+        "How do you optimise ad campaigns to reduce cost per lead (CPL)?",
+        "Describe how you perform keyword research effectively.",
+        "How do you conduct A/B testing for ads or landing pages?",
+        "Explain how retargeting works and why it is powerful.",
+        "What’s your process for improving conversion rates on a landing page?",
+        "How do you build custom audiences and lookalike audiences?",
+        "What KPIs would you track for an e-commerce campaign?",
+        "How do you maintain cross-channel consistency in messaging?"
+      ],
+      "Pool3": [
+        "Tell me about a campaign you managed that delivered exceptional results. What made it successful?",
+        "Describe a time when you had to fix a high CPL issue. What changes did you make?",
+        "Tell me about a conflict between creative teams and performance teams. How did you handle it?",
+        "Describe a moment when poor data quality affected your decisions. What did you do?",
+        "Tell me about a time when you redesigned an entire marketing funnel.",
+        "Describe a situation where your audience targeting wasn’t working. How did you diagnose it?",
+        "Tell me about a multi-channel campaign you worked on. How did you maintain consistency?",
+        "Describe a moment when you had to educate a client about realistic expectations.",
+        "Tell me about a time your analysis significantly improved a campaign’s ROI.",
+        "Describe a project where you used insights to pivot the entire marketing strategy."
+      ]
+    }
   },
   "Customer Service": {
-  "Basic": {
-    "Pool1": [
-      "What in your education or past experience has prepared you for a customer service role?",
-      "What interests you the most about working in customer service?",
-      "How do you stay calm when someone speaks to you rudely?",
-      "Describe how you make a customer feel heard and valued.",
-      "What do you do when you don’t know the answer to a customer’s question?",
-      "How do you handle repetitive tasks like answering similar queries?",
-      "How do you react when someone corrects your mistake?",
-      "What steps do you take to stay organised during busy hours?",
-      "How do you ensure you communicate clearly with customers?",
-      "How do you handle pressure during peak customer call or chat times?"
-    ],
-    "Pool2": [
-      "What is the purpose of a customer service department?",
-      "What does good customer service mean to you?",
-      "What is the difference between customer support and customer success?",
-      "What is active listening?",
-      "What are the basics of phone/email/chat etiquette?",
-      "What is a support ticket?",
-      "How do you record a customer complaint properly?",
-      "Why is following up with customers important?",
-      "What does 'closing a ticket' mean?",
-      "What are FAQs, and why are they important in customer service?"
-    ],
-    "Pool3": [
-      "Tell me about a time you handled a polite but confused person.",
-      "Describe a moment when you helped a customer who was new or unfamiliar with the product.",
-      "Tell me about a situation where you had to apologise to a customer.",
-      "Describe how you handled a customer who asked many repeated questions.",
-      "Tell me about a time you explained a technical feature in simple terms.",
-      "Describe a moment when you calmed down a slightly irritated customer.",
-      "Tell me about a time when you handled a queue of customers efficiently.",
-      "Describe a situation where a customer misunderstood you. How did you fix it?",
-      "Tell me about a moment when you solved a small issue that made a big impact for the customer.",
-      "Describe how you handled a customer who kept changing their mind."
-    ]
-  },
-  "Advanced": {
-    "Pool1": [
-      "Describe a time you went out of your way to help a customer.",
-      "How do you handle a situation where a customer keeps interrupting you?",
-      "Tell me about a time you managed an angry or frustrated customer successfully.",
-      "How do you take responsibility when a customer issue escalates?",
-      "Describe how you balance empathy with company policies.",
-      "How do you maintain professionalism when a customer is unreasonable?",
-      "Tell me about a time you mediated a conflict between two customers or team members.",
-      "Describe how you handle situations where customers demand unrealistic solutions.",
-      "What do you do when your team is overwhelmed and you must take initiative?",
-      "How do you stay resilient during long hours of customer interaction?"
-    ],
-    "Pool2": [
-      "How do you use CRM tools like Zendesk, Freshdesk, or Salesforce?",
-      "What KPIs do you think are most important in customer service?",
-      "How do you identify when an issue requires escalation?",
-      "What is the difference between Tier 1 and Tier 2 support?",
-      "How do you handle SLAs (Service Level Agreements)?",
-      "Describe how you diagnose recurring customer issues using data.",
-      "How do you collaborate with product or technical teams to solve complex issues?",
-      "What steps do you take to improve customer satisfaction scores (CSAT)?",
-      "How do you measure and respond to customer feedback trends?",
-      "Explain how you manage multiple tickets at once without compromising quality."
-    ],
-    "Pool3": [
-      "Tell me about the most difficult customer you’ve ever handled. What was the outcome?",
-      "Describe a time when a customer issue was unresolved for a long time. How did you take ownership?",
-      "Tell me about a situation where you had to deliver bad news to a customer.",
-      "Describe a moment when a customer blamed you for something out of your control.",
-      "Tell me about a situation where you handled a customer’s anger professionally and successfully.",
-      "Describe a case where you coordinated with multiple teams to solve a complex problem.",
-      "Tell me about a moment when a customer demanded something against company policy. What did you do?",
-      "Describe how you handled a situation where multiple customers were upset at the same time.",
-      "Tell me about a scenario where your solution prevented an escalation.",
-      "Describe a customer service case where your actions significantly improved customer loyalty or retention."
-    ]
-  }
+    "Basic": {
+      "Pool1": [
+        "What in your education or past experience has prepared you for a customer service role?",
+        "What interests you the most about working in customer service?",
+        "How do you stay calm when someone speaks to you rudely?",
+        "Describe how you make a customer feel heard and valued.",
+        "What do you do when you don’t know the answer to a customer’s question?",
+        "How do you handle repetitive tasks like answering similar queries?",
+        "How do you react when someone corrects your mistake?",
+        "What steps do you take to stay organised during busy hours?",
+        "How do you ensure you communicate clearly with customers?",
+        "How do you handle pressure during peak customer call or chat times?"
+      ],
+      "Pool2": [
+        "What is the purpose of a customer service department?",
+        "What does good customer service mean to you?",
+        "What is the difference between customer support and customer success?",
+        "What is active listening?",
+        "What are the basics of phone/email/chat etiquette?",
+        "What is a support ticket?",
+        "How do you record a customer complaint properly?",
+        "Why is following up with customers important?",
+        "What does 'closing a ticket' mean?",
+        "What are FAQs, and why are they important in customer service?"
+      ],
+      "Pool3": [
+        "Tell me about a time you handled a polite but confused person.",
+        "Describe a moment when you helped a customer who was new or unfamiliar with the product.",
+        "Tell me about a situation where you had to apologise to a customer.",
+        "Describe how you handled a customer who asked many repeated questions.",
+        "Tell me about a time you explained a technical feature in simple terms.",
+        "Describe a moment when you calmed down a slightly irritated customer.",
+        "Tell me about a time when you handled a queue of customers efficiently.",
+        "Describe a situation where a customer misunderstood you. How did you fix it?",
+        "Tell me about a moment when you solved a small issue that made a big impact for the customer.",
+        "Describe how you handled a customer who kept changing their mind."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "Describe a time you went out of your way to help a customer.",
+        "How do you handle a situation where a customer keeps interrupting you?",
+        "Tell me about a time you managed an angry or frustrated customer successfully.",
+        "How do you take responsibility when a customer issue escalates?",
+        "Describe how you balance empathy with company policies.",
+        "How do you maintain professionalism when a customer is unreasonable?",
+        "Tell me about a time you mediated a conflict between two customers or team members.",
+        "Describe how you handle situations where customers demand unrealistic solutions.",
+        "What do you do when your team is overwhelmed and you must take initiative?",
+        "How do you stay resilient during long hours of customer interaction?"
+      ],
+      "Pool2": [
+        "How do you use CRM tools like Zendesk, Freshdesk, or Salesforce?",
+        "What KPIs do you think are most important in customer service?",
+        "How do you identify when an issue requires escalation?",
+        "What is the difference between Tier 1 and Tier 2 support?",
+        "How do you handle SLAs (Service Level Agreements)?",
+        "Describe how you diagnose recurring customer issues using data.",
+        "How do you collaborate with product or technical teams to solve complex issues?",
+        "What steps do you take to improve customer satisfaction scores (CSAT)?",
+        "How do you measure and respond to customer feedback trends?",
+        "Explain how you manage multiple tickets at once without compromising quality."
+      ],
+      "Pool3": [
+        "Tell me about the most difficult customer you’ve ever handled. What was the outcome?",
+        "Describe a time when a customer issue was unresolved for a long time. How did you take ownership?",
+        "Tell me about a situation where you had to deliver bad news to a customer.",
+        "Describe a moment when a customer blamed you for something out of your control.",
+        "Tell me about a situation where you handled a customer’s anger professionally and successfully.",
+        "Describe a case where you coordinated with multiple teams to solve a complex problem.",
+        "Tell me about a moment when a customer demanded something against company policy. What did you do?",
+        "Describe how you handled a situation where multiple customers were upset at the same time.",
+        "Tell me about a scenario where your solution prevented an escalation.",
+        "Describe a customer service case where your actions significantly improved customer loyalty or retention."
+      ]
+    }
   },
   "Teacher": {
     "Basic": {
@@ -958,6 +957,104 @@
         "Describe a time you encouraged students to question a concept using a research mindset.",
         "Tell me about a classroom discussion where your research background enriched the learning experience.",
         "Describe a moment you identified a research opportunity from your teaching environment."
+      ]
+    }
+  },
+  "Work From Home Jobs": {
+    "Basic": {
+      "Pool1": [
+        "What in your education or training has prepared you for this role?",
+        "How do you handle situations where things don’t go as planned?",
+        "What motivates you to keep going when results are slow or unclear?",
+        "How do you respond to constructive criticism?",
+        "What does professionalism mean to you in a workplace?",
+        "How do you maintain a positive attitude during stressful situations?",
+        "What kind of work environment helps you perform at your best, and why?",
+        "How do you approach tasks that you find challenging or unfamiliar?",
+        "What does success mean to you at the beginning of your career?",
+        "How do you take responsibility for your mistakes?"
+      ],
+      "Pool2": [
+        "How do you ensure your communication is clear and professional in interviews or meetings?",
+        "How do you adjust your communication style when speaking to seniors, peers, or clients?",
+        "Can you explain a complex idea in simple words?",
+        "How do you make sure you are actively listening during conversations?",
+        "What steps do you take to improve your pronunciation or clarity while speaking?",
+        "How do you approach learning a new skill or concept quickly?",
+        "What is one skill you are currently working on improving, and how?",
+        "How do you apply feedback to improve your performance?",
+        "How do you stay updated with industry trends or job requirements?",
+        "How do you balance accuracy and fluency while speaking English?",
+        "How did you tailor your resume or LinkedIn profile for the role you are applying for?",
+        "How would you introduce yourself professionally in under one minute?",
+        "How do you prepare before presenting your ideas to others?",
+        "How do you decide what information to include or exclude in a resume or cover letter?",
+        "How have you used AI tools responsibly to support your job search or preparation?",
+        "How do you handle nervousness while speaking in professional settings?",
+        "What non-verbal behaviors help create a good first impression?",
+        "How do you ensure professional etiquette in virtual or in-person interactions?",
+        "How do you structure your answers to sound confident and relevant in interviews?",
+        "What habits help you continuously improve as a learner and job seeker?"
+      ],
+      "Pool3": [
+        "Give an example of a time you faced a difficult challenge. What did you do about it?",
+        "Tell me about a time you made a mistake. How did you handle it?",
+        "Describe a situation where you had to learn something quickly.",
+        "Tell me about a time you worked with someone very different from you.",
+        "Describe a situation where you had to manage pressure or deadlines.",
+        "Share an experience where you received feedback you didn’t initially agree with.",
+        "Tell me about a time you showed initiative without being asked.",
+        "Describe a situation where communication played a key role in success or failure.",
+        "Tell me about a time you had to explain something clearly to others.",
+        "Describe a situation where you stayed motivated despite setbacks."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "What in your education or training has prepared you for this role?",
+        "How do you handle situations where things don’t go as planned?",
+        "What motivates you to keep going when results are slow or unclear?",
+        "How do you respond to constructive criticism?",
+        "What does professionalism mean to you in a workplace?",
+        "How do you maintain a positive attitude during stressful situations?",
+        "What kind of work environment helps you perform at your best, and why?",
+        "How do you approach tasks that you find challenging or unfamiliar?",
+        "What does success mean to you at the beginning of your career?",
+        "How do you take responsibility for your mistakes?"
+      ],
+      "Pool2": [
+        "How do you ensure your communication is clear and professional in interviews or meetings?",
+        "How do you adjust your communication style when speaking to seniors, peers, or clients?",
+        "Can you explain a complex idea in simple words?",
+        "How do you make sure you are actively listening during conversations?",
+        "What steps do you take to improve your pronunciation or clarity while speaking?",
+        "How do you approach learning a new skill or concept quickly?",
+        "What is one skill you are currently working on improving, and how?",
+        "How do you apply feedback to improve your performance?",
+        "How do you stay updated with industry trends or job requirements?",
+        "How do you balance accuracy and fluency while speaking English?",
+        "How did you tailor your resume or LinkedIn profile for the role you are applying for?",
+        "How would you introduce yourself professionally in under one minute?",
+        "How do you prepare before presenting your ideas to others?",
+        "How do you decide what information to include or exclude in a resume or cover letter?",
+        "How have you used AI tools responsibly to support your job search or preparation?",
+        "How do you handle nervousness while speaking in professional settings?",
+        "What non-verbal behaviors help create a good first impression?",
+        "How do you ensure professional etiquette in virtual or in-person interactions?",
+        "How do you structure your answers to sound confident and relevant in interviews?",
+        "What habits help you continuously improve as a learner and job seeker?"
+      ],
+      "Pool3": [
+        "Give an example of a time you faced a difficult challenge. What did you do about it?",
+        "Tell me about a time you made a mistake. How did you handle it?",
+        "Describe a situation where you had to learn something quickly.",
+        "Tell me about a time you worked with someone very different from you.",
+        "Describe a situation where you had to manage pressure or deadlines.",
+        "Share an experience where you received feedback you didn’t initially agree with.",
+        "Tell me about a time you showed initiative without being asked.",
+        "Describe a situation where communication played a key role in success or failure.",
+        "Tell me about a time you had to explain something clearly to others.",
+        "Describe a situation where you stayed motivated despite setbacks."
       ]
     }
   },
