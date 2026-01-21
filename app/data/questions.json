@@ -1058,6 +1058,83 @@
       ]
     }
   },
+  "Entrepreneur": {
+    "Basic": {
+      "Pool1": [
+        "What inspired you to consider entrepreneurship in the first place?",
+        "What was the earliest business idea you ever thought of?",
+        "How did your background or upbringing influence your interest in entrepreneurship?",
+        "What challenges did you face in your earliest entrepreneurial attempts?",
+        "How did you identify your first opportunity or idea?",
+        "What do you think are the basic qualities needed to begin an entrepreneurial journey?",
+        "What is one small initiative you started (school, college, community)?",
+        "How do you approach risk when thinking about new ideas?",
+        "What motivates you to take ownership and create something of your own?"
+      ],
+      "Pool2": [
+        "How do you validate an idea before investing time or money into it?",
+        "What steps do you take to understand customer needs?",
+        "How do you manage your time when working on an idea?",
+        "Describe how you handle uncertainty in early-stage decisions.",
+        "How do you set short-term goals for your entrepreneurial projects?",
+        "What role does personal discipline play in your entrepreneurial work?",
+        "How do you ensure that your idea remains feasible?",
+        "What is your approach to learning skills you don’t yet have?",
+        "How do you build basic relationships or networks to support your ideas?",
+        "How do you measure early progress in a project or idea?"
+      ],
+      "Pool3": [
+        "Describe a time you tried to start something and faced an obstacle. What did you do?",
+        "Tell me about a moment when someone criticised your idea. How did you handle it?",
+        "Describe how you convinced someone to support your idea or initiative.",
+        "Tell me about a time when your plan didn’t go as expected.",
+        "Describe how you handled limited resources for an idea.",
+        "Tell me about a decision you made quickly with limited information.",
+        "Describe a time you collaborated with someone to build something small.",
+        "Tell me about a moment when you changed direction because your idea wasn’t working.",
+        "Describe how you handled rejection from a customer, partner, or mentor.",
+        "Tell me about a time when you took initiative even when others did not."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "What long-term entrepreneurial initiatives have you led or co-founded?",
+        "How has your entrepreneurial journey shaped your leadership style?",
+        "What patterns have you observed in your entrepreneurial attempts over time?",
+        "How do you identify gaps in the market at a strategic level?",
+        "Describe how your entrepreneurial mindset has evolved through failures.",
+        "What industries or sectors have you explored deeply, and why?",
+        "How do you balance multiple entrepreneurial ideas or ventures at once?",
+        "What personal strengths have consistently helped you in entrepreneurship?",
+        "How do you evaluate whether an opportunity aligns with your long-term vision?",
+        "How has entrepreneurship influenced your understanding of risk, growth, and resilience?"
+      ],
+      "Pool2": [
+        "How do you build and validate a minimum viable product (MVP)?",
+        "Describe your approach to building and managing a team for your venture.",
+        "How do you analyse financial feasibility and cash flow needs?",
+        "How do you acquire your first customers or early adopters?",
+        "Describe how you pivoted from an initial idea to something more viable.",
+        "What strategies do you use to scale a product or business model?",
+        "How do you create and refine your value proposition?",
+        "What frameworks do you use for decision-making under uncertainty?",
+        "How do you manage partnerships, vendors, or early-stage investors?",
+        "What systems do you put in place to measure performance in a venture?"
+      ],
+      "Pool3": [
+        "Tell me about the most challenging entrepreneurial problem you solved. What was your process?",
+        "Describe a moment when your team disagreed with your vision. How did you handle it?",
+        "Tell me about a situation where you had to make a major pivot to save a venture.",
+        "Describe a crisis where you had to take immediate action to prevent loss.",
+        "Tell me about a time when external factors (market shift, competitor move) forced you to rethink strategy.",
+        "Describe a situation where you had to pitch to skeptical investors or stakeholders.",
+        "Tell me about a time your cash flow dropped unexpectedly. What decisions did you make?",
+        "Describe how you handled a co-founder conflict or team breakdown.",
+        "Tell me about a high-stakes decision you made with very limited time.",
+        "Describe a moment you realised your venture’s vision needed to change long-term."
+      ]
+    }
+  },
   "General": {
     "Basic": {
       "Pool1": [

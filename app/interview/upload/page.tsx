@@ -72,6 +72,7 @@ export default function ResumeUpload() {
     "Electrical Engineering",
     "Electronics and Communication (Embedded Systems and IoT)",
     "Work From Home Jobs",
+    "Entrepreneur",
   ];
 
   const degreeOptions: Array<{ key: string; label: string }> = [
@@ -99,7 +100,7 @@ export default function ResumeUpload() {
     BCOM_MCOM: BBA_MBA_AND_BCOM_MCOM_ROLES,
     BA_MA: ["Teacher", "Marketing", "Customer Service"],
     BSC_MSC: ["Business Analyst", "Accountant"],
-    OTHERS: ["Work From Home Jobs", "Customer Service", "Sales Executive", "Marketing", "Project Management"],
+    OTHERS: ["Work From Home Jobs", "Entrepreneur", "Customer Service", "Sales Executive", "Marketing", "Project Management"],
   }
 
   const unique = (arr: string[]) => Array.from(new Set(arr))
