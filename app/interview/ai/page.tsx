@@ -394,7 +394,10 @@ export default function InterviewAI() {
             transcriptData = await transcriptRes.json()
 
             if (transcriptData.status === "completed") {
-              if ([0, 1, 4, 5, 6].includes(currentQuestion)) {
+              const storedTitle = localStorage.getItem("jobTitle")
+              const shouldSkipFollowUp = [4, 5, 6].includes(currentQuestion) && storedTitle === "Work From Home Jobs"
+
+              if ([0, 1, 4, 5, 6].includes(currentQuestion) && !shouldSkipFollowUp) {
                 try {
                   const followUpRes = await fetch(`/api/followup/${data.transcriptId}`, {
                     method: "POST",
