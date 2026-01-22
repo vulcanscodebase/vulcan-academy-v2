@@ -145,7 +145,7 @@ export default function FeedbackPage() {
                     : 0,
                 skillRelevance:
                   typeof m?.skillRelevance === "number" &&
-                  !isNaN(m.skillRelevance)
+                    !isNaN(m.skillRelevance)
                     ? m.skillRelevance
                     : 0,
                 fluency:
@@ -248,7 +248,7 @@ export default function FeedbackPage() {
       if (!interviewId) {
         throw new Error("Interview ID not found");
       }
-      
+
       console.log("Submitting feedback update for interview:", interviewId);
       console.log("Feedback data:", feedback);
       console.log("All question data length:", allQuestionData.length);
@@ -256,47 +256,47 @@ export default function FeedbackPage() {
       // Calculate metrics - always provide metrics even if empty to ensure report displays
       const metrics = allQuestionData.length > 0
         ? {
-            avgConfidence:
-              allQuestionData.reduce(
-                (sum, q) => sum + (q.metrics?.confidence || 0),
-                0
-              ) / allQuestionData.length,
-            avgBodyLanguage:
-              allQuestionData.reduce(
-                (sum, q) => sum + (q.metrics?.bodyLanguage || 0),
-                0
-              ) / allQuestionData.length,
-            avgKnowledge:
-              allQuestionData.reduce(
-                (sum, q) => sum + (q.metrics?.knowledge || 0),
-                0
-              ) / allQuestionData.length,
-            avgSkillRelevance:
-              allQuestionData.reduce(
-                (sum, q) => sum + (q.metrics?.skillRelevance || 0),
-                0
-              ) / allQuestionData.length,
-            avgFluency:
-              allQuestionData.reduce(
-                (sum, q) => sum + (q.metrics?.fluency || 0),
-                0
-              ) / allQuestionData.length,
-            totalQuestions: allQuestionData.length,
-          }
+          avgConfidence:
+            allQuestionData.reduce(
+              (sum, q) => sum + (q.metrics?.confidence || 0),
+              0
+            ) / allQuestionData.length,
+          avgBodyLanguage:
+            allQuestionData.reduce(
+              (sum, q) => sum + (q.metrics?.bodyLanguage || 0),
+              0
+            ) / allQuestionData.length,
+          avgKnowledge:
+            allQuestionData.reduce(
+              (sum, q) => sum + (q.metrics?.knowledge || 0),
+              0
+            ) / allQuestionData.length,
+          avgSkillRelevance:
+            allQuestionData.reduce(
+              (sum, q) => sum + (q.metrics?.skillRelevance || 0),
+              0
+            ) / allQuestionData.length,
+          avgFluency:
+            allQuestionData.reduce(
+              (sum, q) => sum + (q.metrics?.fluency || 0),
+              0
+            ) / allQuestionData.length,
+          totalQuestions: allQuestionData.length,
+        }
         : {
-            // Provide default metrics if no question data
-            avgConfidence: 0,
-            avgBodyLanguage: 0,
-            avgKnowledge: 0,
-            avgSkillRelevance: 0,
-            avgFluency: 0,
-            totalQuestions: 0,
-          };
+          // Provide default metrics if no question data
+          avgConfidence: 0,
+          avgBodyLanguage: 0,
+          avgKnowledge: 0,
+          avgSkillRelevance: 0,
+          avgFluency: 0,
+          totalQuestions: 0,
+        };
 
       //  Only submit if we have actual feedback content or valid metrics
       const hasValidFeedback = feedback.strengths.length > 0 || feedback.improvements.length > 0 || feedback.tips.length > 0;
       const hasValidMetrics = allQuestionData.length > 0 && allQuestionData.some(q => q.metrics && (q.metrics.confidence || q.metrics.knowledge || q.metrics.fluency));
-      
+
       // Don't save report if no valid data
       if (!hasValidFeedback && !hasValidMetrics) {
         console.log("No valid feedback or metrics to save. Skipping report submission.");
@@ -311,9 +311,8 @@ export default function FeedbackPage() {
           tips: feedback.tips.length > 0 ? feedback.tips : [],
           overallFeedback:
             feedback.strengths.length > 0
-              ? `Strong in: ${feedback.strengths[0]}. Areas to improve: ${
-                  feedback.improvements[0] || "communication skills"
-                }.`
+              ? `Strong in: ${feedback.strengths[0]}. Areas to improve: ${feedback.improvements[0] || "communication skills"
+              }.`
               : hasValidMetrics ? "Interview completed with recorded responses" : "",
           metrics: metrics, // Always include metrics
         },
@@ -322,7 +321,7 @@ export default function FeedbackPage() {
       const backendUrl =
         process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000/api";
       // Ensure we don't double up on /api
-      const apiUrl = backendUrl.endsWith('/api') 
+      const apiUrl = backendUrl.endsWith('/api')
         ? `${backendUrl}/interviews/${interviewId}/feedback`
         : `${backendUrl}/api/interviews/${interviewId}/feedback`;
       const response = await fetch(apiUrl,
@@ -345,16 +344,16 @@ export default function FeedbackPage() {
       console.log("Feedback updated successfully:", result);
       console.log("Interview status after update:", result.interview?.status);
       console.log("Interview completedAt:", result.interview?.completedAt);
-      
+
       if (result.interview?.status === "completed") {
         toast.success("Interview completed and report saved successfully!");
       } else {
         console.warn("Warning: Interview status is not 'completed' after feedback update:", result.interview?.status);
         toast.warning("Report saved, but interview status may not be updated. Please refresh the page.");
       }
-      
+
       setFeedbackSubmitted(true);
-      
+
       return result;
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : "Unknown error";
@@ -420,19 +419,11 @@ export default function FeedbackPage() {
     const totalPossible = 20 * numQuestions;
     const percentageScore = (totalScore / totalPossible) * 100;
 
-    const getThreshold = (x: number) => (x / 500) * totalPossible;
-    const thresholds = {
-      excellent: getThreshold(375),
-      good: getThreshold(340),
-      average: getThreshold(300),
-      belowAverage: getThreshold(250),
-    };
-
-    let grade = "Re-attempt";
-    if (totalScore >= thresholds.excellent) grade = "Excellent";
-    else if (totalScore >= thresholds.good) grade = "Good";
-    else if (totalScore >= thresholds.average) grade = "Average";
-    else if (totalScore >= thresholds.belowAverage) grade = "Below Average";
+    let grade = "Re-take interview"
+    if (percentageScore >= 70) grade = "Excellent"
+    else if (percentageScore >= 60) grade = "Good"
+    else if (percentageScore >= 50) grade = "Average"
+    else if (percentageScore >= 40) grade = "Below Average"
 
     return {
       confidence: Math.round(totalConfidence / numQuestions),
@@ -462,9 +453,8 @@ export default function FeedbackPage() {
         {Array.from({ length: 5 }, (_, i) => (
           <Star
             key={i}
-            className={`h-5 w-5 ${
-              i < value ? "text-blue-500 fill-blue-500" : "text-gray-300"
-            }`}
+            className={`h-5 w-5 ${i < value ? "text-blue-500 fill-blue-500" : "text-gray-300"
+              }`}
           />
         ))}
       </div>
@@ -513,14 +503,14 @@ export default function FeedbackPage() {
 
       // Prepare feedback text from strengths, improvements, and tips
       const feedbackText = [
-        feedback.strengths && feedback.strengths.length > 0 
-          ? `Strengths:\n${feedback.strengths.map((s, i) => `${i + 1}. ${s}`).join('\n')}` 
+        feedback.strengths && feedback.strengths.length > 0
+          ? `Strengths:\n${feedback.strengths.map((s, i) => `${i + 1}. ${s}`).join('\n')}`
           : '',
-        feedback.improvements && feedback.improvements.length > 0 
-          ? `Areas for Improvement:\n${feedback.improvements.map((s, i) => `${i + 1}. ${s}`).join('\n')}` 
+        feedback.improvements && feedback.improvements.length > 0
+          ? `Areas for Improvement:\n${feedback.improvements.map((s, i) => `${i + 1}. ${s}`).join('\n')}`
           : '',
-        feedback.tips && feedback.tips.length > 0 
-          ? `Tips:\n${feedback.tips.map((s, i) => `${i + 1}. ${s}`).join('\n')}` 
+        feedback.tips && feedback.tips.length > 0
+          ? `Tips:\n${feedback.tips.map((s, i) => `${i + 1}. ${s}`).join('\n')}`
           : '',
       ].filter(Boolean).join('\n\n') || 'No feedback available';
 
@@ -754,11 +744,10 @@ export default function FeedbackPage() {
                   <button
                     key={index}
                     onClick={() => handleQuestionSelect(index)}
-                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
-                      selectedQuestion === index
+                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${selectedQuestion === index
                         ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                      }`}
                   >
                     Question {q.questionNumber}
                   </button>
