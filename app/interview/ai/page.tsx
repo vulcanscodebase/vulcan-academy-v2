@@ -148,6 +148,15 @@ export default function InterviewAI() {
     }
 
     setIsLoaded(true)
+    
+    // ✅ Read interviewId from localStorage (set by upload page)
+    // This prevents duplicate license deduction when navigating from upload → instructions → AI page
+    const storedInterviewId = localStorage.getItem("interviewId")
+    if (storedInterviewId) {
+      setInterviewId(storedInterviewId)
+      addDebugLog(`Retrieved interview ID from localStorage: ${storedInterviewId}`)
+    }
+    
     const storedTitle = localStorage.getItem("jobTitle")
     const storedMode = localStorage.getItem("interviewMode") ?? ""
 
