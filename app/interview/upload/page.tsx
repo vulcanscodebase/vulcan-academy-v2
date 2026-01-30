@@ -230,48 +230,68 @@ export default function ResumeUpload() {
       const formData = new FormData();
       formData.append("file", selectedFile);
 
-      const res = await fetch("/api/extract-pdf", {
-        method: "POST",
-        body: formData,
-      });
+      const DUMMY_FOLLOW_UP = "Why do you think you are suitable for this job";
+      const dummyEvaluation = {
+        atsScore: 0,
+        tips: ["Resume couldn't be processed"],
+        followUpQuestion: DUMMY_FOLLOW_UP,
+        followUpQuestions: [] as string[],
+      };
 
-      const result = await res.json();
       let resumeTextValue: string;
       let evaluation: {
         atsScore: number;
         tips: string[];
         followUpQuestion?: string;
+        followUpQuestions?: string[];
       };
+      let usedFallbackEvaluation = false;
 
-      if (!res.ok) {
-        resumeTextValue = "";
-        evaluation = {
-          atsScore: 0,
-          tips: ["Resume couldn't be processed"],
-          followUpQuestion: "Why do you think you are suitable for this job",
-        };
-      } else {
-        resumeTextValue = result.text ?? "";
-
-        const endpoint =
-          jobTitle.toLowerCase() === "general"
-            ? "/api/resumeEvagen"
-            : "/api/resumeEva";
-
-        const evalRes = await fetch(endpoint, {
+      try {
+        const res = await fetch("/api/extract-pdf", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            text: resumeTextValue,
-            jobTitle: jobTitle,
-          }),
+          body: formData,
         });
 
-        const evalResult = await evalRes.json();
-        if (!evalRes.ok)
-          throw new Error(evalResult.error || "Failed to evaluate resume");
+        let result: { text?: string; error?: string };
+        try {
+          result = await res.json();
+        } catch {
+          result = {};
+        }
 
-        evaluation = evalResult.evaluation;
+        if (!res.ok) {
+          usedFallbackEvaluation = true;
+          resumeTextValue = "";
+          evaluation = { ...dummyEvaluation };
+        } else {
+          resumeTextValue = result.text ?? "";
+
+          const endpoint =
+            jobTitle.toLowerCase() === "general"
+              ? "/api/resumeEvagen"
+              : "/api/resumeEva";
+
+          const evalRes = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              text: resumeTextValue,
+              jobTitle: jobTitle,
+            }),
+          });
+
+          const evalResult = await evalRes.json();
+          if (!evalRes.ok)
+            throw new Error(evalResult.error || "Failed to evaluate resume");
+
+          evaluation = evalResult.evaluation;
+        }
+      } catch {
+        // Extract or eval failed (network, 400 with non-JSON body, etc.): use dummy so flow continues
+        usedFallbackEvaluation = true;
+        resumeTextValue = "";
+        evaluation = { ...dummyEvaluation };
       }
 
       localStorage.setItem("atsScore", evaluation.atsScore.toString());
@@ -279,11 +299,8 @@ export default function ResumeUpload() {
       localStorage.setItem("resumeText", resumeTextValue);
       localStorage.setItem("resumeFileName", selectedFile.name);
 
-      if (!res.ok) {
-        localStorage.setItem(
-          "followUpQuestion",
-          "Why do you think you are suitable for this job"
-        );
+      if (usedFallbackEvaluation) {
+        localStorage.setItem("followUpQuestion", DUMMY_FOLLOW_UP);
         localStorage.removeItem("followUpQuestions");
       } else {
         const isGeneral = jobTitle.toLowerCase() === "general";
@@ -312,25 +329,43 @@ export default function ResumeUpload() {
 
       // ✅ Start interview and deduct license when user proceeds after resume upload
       const backendUrl = process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000";
+      // Backend may require non-empty resumeText; send placeholder when using fallback so validation passes
+      const resumeTextForBackend = usedFallbackEvaluation && !resumeTextValue
+        ? "Resume could not be extracted."
+        : resumeTextValue;
+
       const startInterviewRes = await fetch(`${backendUrl}/interviews/start`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
           jobRole: jobTitle,
-          resumeText: resumeTextValue,
+          resumeText: resumeTextForBackend,
           resumeFileName: selectedFile.name,
           resumeEvaluation: evaluation,
         }),
       });
 
       if (!startInterviewRes.ok) {
-        const errorData = await startInterviewRes.json();
-        throw new Error(errorData.message || "Failed to start interview. License may be insufficient.");
+        let errorMessage = "Failed to start interview. License may be insufficient.";
+        try {
+          const errorData = await startInterviewRes.json();
+          errorMessage = errorData.message || errorMessage;
+        } catch {
+          // Response body may not be JSON
+        }
+        throw new Error(errorMessage);
       }
 
-      const startInterviewData = await startInterviewRes.json();
-      localStorage.setItem("interviewId", startInterviewData.interview._id);
+      let startInterviewData: { interview?: { _id?: string } };
+      try {
+        startInterviewData = await startInterviewRes.json();
+      } catch {
+        throw new Error("Invalid response from server.");
+      }
+      const interviewId = startInterviewData?.interview?._id;
+      if (!interviewId) throw new Error("Invalid response from server.");
+      localStorage.setItem("interviewId", interviewId);
 
       setTimeout(() => {
         router.push("/interview/ai/instructions");
