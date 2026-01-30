@@ -93,9 +93,13 @@ export default function MyInterviews() {
   const fetchUserInterviews = async (uid: string) => {
     try {
       const backendUrl =
-        process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000";
+        process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcans.co.in/api";
+      const token = localStorage.getItem("token");
       const response = await fetch(`${backendUrl}/interviews/user/${uid}`, {
         credentials: "include",
+        headers: {
+          ...(token && { "Authorization": `Bearer ${token}` })
+        },
       });
 
       if (!response.ok) {

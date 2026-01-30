@@ -148,7 +148,7 @@ export default function InterviewAI() {
     }
 
     setIsLoaded(true)
-    
+
     // ✅ Read interviewId from localStorage (set by upload page)
     // This prevents duplicate license deduction when navigating from upload → instructions → AI page
     const storedInterviewId = localStorage.getItem("interviewId")
@@ -156,7 +156,7 @@ export default function InterviewAI() {
       setInterviewId(storedInterviewId)
       addDebugLog(`Retrieved interview ID from localStorage: ${storedInterviewId}`)
     }
-    
+
     const storedTitle = localStorage.getItem("jobTitle")
     const storedMode = localStorage.getItem("interviewMode") ?? ""
 
@@ -545,11 +545,13 @@ export default function InterviewAI() {
         resumeFileName: resumeFileName || "resume.pdf",
       }
 
-      const backendUrl = process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000"
+      const backendUrl = process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcans.co.in/api"
+      const token = localStorage.getItem("token")
       const response = await fetch(`${backendUrl}/interviews/start`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...(token && { "Authorization": `Bearer ${token}` })
         },
         credentials: "include",
         body: JSON.stringify(payload),
@@ -600,13 +602,17 @@ export default function InterviewAI() {
         },
       }
       addDebugLog(`Sending completion with ${allQuestionData.length} questions`)
-      const backendUrl = process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000/api"
+      const backendUrl = process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcans.co.in/api"
+      const token = localStorage.getItem("token")
       const apiUrl = backendUrl.endsWith("/api")
         ? `${backendUrl}/interviews/complete`
         : `${backendUrl}/interviews/complete`
       const response = await fetch(apiUrl, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { "Authorization": `Bearer ${token}` })
+        },
         credentials: "include",
         body: JSON.stringify(payload),
       })

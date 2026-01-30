@@ -8,7 +8,7 @@ export const apiClient = axios.create({
 });
 
 // Setup Axios interceptors
-export const setUpInterceptors = (getToken:() => string | null, refreshToken: () =>Promise<string | null>) => {
+export const setUpInterceptors = (getToken: () => string | null, refreshToken: () => Promise<string | null>) => {
   // Request interceptor
   apiClient.interceptors.request.use(
     (config) => {
@@ -55,22 +55,22 @@ export const setUpInterceptors = (getToken:() => string | null, refreshToken: ()
 //http://localhost:5000/api/auth/login
 
 // Auth APIs
-const loginUser = (data:any) => apiClient.post("/auth/login", data);
-const registerUser = (data:any) => apiClient.post("/auth/register", data);
+const loginUser = (data: any) => apiClient.post("/auth/login", data);
+const registerUser = (data: any) => apiClient.post("/auth/register", data);
 const logoutUser = () => apiClient.post("/auth/logout");
 
 // Profile APIs
-const getUserByUserId = (id:string) => apiClient.get(`/users/${id}`);
-const updateUserById = (id:string, data:any) => apiClient.put(`/users/${id}`, data);
+const getUserByUserId = (id: string) => apiClient.get(`/users/${id}`);
+const updateUserById = (id: string, data: any) => apiClient.put(`/users/${id}`, data);
 const getProfileStatus = () => apiClient.get(`/users/profile-status`);
 
 // Password & Email APIs
-const forgotPassword = (data:string) => apiClient.post("/auth/forgot-password", data);
-const resetPassword = (token:string, bodyData:any) =>
+const forgotPassword = (data: string) => apiClient.post("/auth/forgot-password", data);
+const resetPassword = (token: string, bodyData: any) =>
   apiClient.post(`/auth/reset-password/${token}`, bodyData);
-const setupPassword = (bodyData:any) => apiClient.post(`/auth/setup-password`, bodyData);
-const getVerificationEmail = (token:string) => apiClient.get(`/auth/verify-email/${token}`);
-const postResendVerificationEmail = (data:string) =>
+const setupPassword = (bodyData: any) => apiClient.post(`/auth/setup-password`, bodyData);
+const getVerificationEmail = (token: string) => apiClient.get(`/auth/verify-email/${token}`);
+const postResendVerificationEmail = (data: string) =>
   apiClient.post("/auth/resend-verification-email", data);
 
 // Token APIs

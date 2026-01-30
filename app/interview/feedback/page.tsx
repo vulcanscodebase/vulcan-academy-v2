@@ -319,7 +319,8 @@ export default function FeedbackPage() {
       };
 
       const backendUrl =
-        process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000/api";
+        process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcans.co.in/api";
+      const token = localStorage.getItem("token");
       // Ensure we don't double up on /api
       const apiUrl = backendUrl.endsWith('/api')
         ? `${backendUrl}/interviews/${interviewId}/feedback`
@@ -329,6 +330,7 @@ export default function FeedbackPage() {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            ...(token && { "Authorization": `Bearer ${token}` })
           },
           credentials: "include",
           body: JSON.stringify(payload),
@@ -745,8 +747,8 @@ export default function FeedbackPage() {
                     key={index}
                     onClick={() => handleQuestionSelect(index)}
                     className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${selectedQuestion === index
-                        ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                       }`}
                   >
                     Question {q.questionNumber}
