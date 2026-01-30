@@ -236,54 +236,78 @@ export default function ResumeUpload() {
       });
 
       const result = await res.json();
-      if (!res.ok)
-        throw new Error(result.error || "Failed to extract PDF text");
+      let resumeTextValue: string;
+      let evaluation: {
+        atsScore: number;
+        tips: string[];
+        followUpQuestion?: string;
+      };
 
-      const endpoint =
-        jobTitle.toLowerCase() === "general"
-          ? "/api/resumeEvagen"
-          : "/api/resumeEva";
+      if (!res.ok) {
+        resumeTextValue = "";
+        evaluation = {
+          atsScore: 0,
+          tips: ["Resume couldn't be processed"],
+          followUpQuestion: "Why do you think you are suitable for this job",
+        };
+      } else {
+        resumeTextValue = result.text ?? "";
 
-      const evalRes = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          text: result.text,
-          jobTitle: jobTitle,
-        }),
-      });
+        const endpoint =
+          jobTitle.toLowerCase() === "general"
+            ? "/api/resumeEvagen"
+            : "/api/resumeEva";
 
-      const evalResult = await evalRes.json();
-      if (!evalRes.ok)
-        throw new Error(evalResult.error || "Failed to evaluate resume");
+        const evalRes = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: resumeTextValue,
+            jobTitle: jobTitle,
+          }),
+        });
 
-      const evaluation = evalResult.evaluation;
+        const evalResult = await evalRes.json();
+        if (!evalRes.ok)
+          throw new Error(evalResult.error || "Failed to evaluate resume");
+
+        evaluation = evalResult.evaluation;
+      }
+
       localStorage.setItem("atsScore", evaluation.atsScore.toString());
       localStorage.setItem("resumeTips", JSON.stringify(evaluation.tips));
-      localStorage.setItem("resumeText", result.text);
+      localStorage.setItem("resumeText", resumeTextValue);
       localStorage.setItem("resumeFileName", selectedFile.name);
 
-      const isGeneral = jobTitle.toLowerCase() === "general";
-
-      if (isGeneral) {
-        const followUp =
-          typeof evaluation.followUpQuestion === "string" &&
-            evaluation.followUpQuestion.trim() !== "" &&
-            evaluation.followUpQuestion !== "undefined" &&
-            evaluation.followUpQuestion !== "null"
-            ? evaluation.followUpQuestion
-            : null;
-
-        if (followUp) {
-          localStorage.setItem("followUpQuestion", followUp);
-        } else {
-          localStorage.removeItem("followUpQuestion");
-        }
-      } else {
-        if (typeof evaluation.followUpQuestion === "string") {
-          localStorage.setItem("followUpQuestion", evaluation.followUpQuestion);
-        }
+      if (!res.ok) {
+        localStorage.setItem(
+          "followUpQuestion",
+          "Why do you think you are suitable for this job"
+        );
         localStorage.removeItem("followUpQuestions");
+      } else {
+        const isGeneral = jobTitle.toLowerCase() === "general";
+
+        if (isGeneral) {
+          const followUp =
+            typeof evaluation.followUpQuestion === "string" &&
+              evaluation.followUpQuestion.trim() !== "" &&
+              evaluation.followUpQuestion !== "undefined" &&
+              evaluation.followUpQuestion !== "null"
+              ? evaluation.followUpQuestion
+              : null;
+
+          if (followUp) {
+            localStorage.setItem("followUpQuestion", followUp);
+          } else {
+            localStorage.removeItem("followUpQuestion");
+          }
+        } else {
+          if (typeof evaluation.followUpQuestion === "string") {
+            localStorage.setItem("followUpQuestion", evaluation.followUpQuestion);
+          }
+          localStorage.removeItem("followUpQuestions");
+        }
       }
 
       // ✅ Start interview and deduct license when user proceeds after resume upload
@@ -294,7 +318,7 @@ export default function ResumeUpload() {
         credentials: "include",
         body: JSON.stringify({
           jobRole: jobTitle,
-          resumeText: result.text,
+          resumeText: resumeTextValue,
           resumeFileName: selectedFile.name,
           resumeEvaluation: evaluation,
         }),
