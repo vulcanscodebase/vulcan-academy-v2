@@ -56,7 +56,7 @@ export function Signin() {
         toast.success("Login Successful!");
         setFormData({ email: "", password: "" });
       } catch (err: any) {
-        toast.error("Invalid credentials or server error.");
+        toast.error("Invalid credentials");
       } finally {
         setLoading(false);
       }
