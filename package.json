@@ -57,7 +57,7 @@
     "lucide-react": "^0.454.0",
     "microsoft-cognitiveservices-speech-sdk": "^1.47.0",
     "motion": "^12.23.21",
-    "next": "14.2.16",
+    "next": "^14.2.16",
     "next-themes": "latest",
     "pdf-parse": "^1.1.1",
     "react": "^18",

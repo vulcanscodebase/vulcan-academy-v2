@@ -24,7 +24,7 @@ export function TermsAndConditions() {
           {/* Right Image */}
           <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
             <Image
-              src="/terms.png"
+              src="/vulcans-logo.png"
               alt="Terms and Conditions Illustration"
               width={400}
               height={400}

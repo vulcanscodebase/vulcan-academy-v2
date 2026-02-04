@@ -7,7 +7,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider" // Import ThemeProvider
 import { Navbar } from "@/components/(layout-wrapper)/navbar";
 // import { Footer } from "@/components/footer"
-import { useLenis } from "@/hooks/useLenis"
+import useLenis from "@/hooks/useLenis"
 import { Toaster } from "sonner"
 import { AuthProvider } from "@/components/context/authcontext";
 import { CartProvider } from "@/components/context/cartcontext";

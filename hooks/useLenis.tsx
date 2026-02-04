@@ -2,12 +2,19 @@
 import { useEffect } from "react";
 import Lenis from "@studio-freight/lenis";
 
-export const useLenis =() => {
+const useLenis = () => {
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,   // scroll speed
-     
-      lerp: 0.1,       // easing
+      duration: 0.1,   // very fast scroll speed
+      lerp: 0.5,       // faster easing for snapping effect
+      smoothWheel: true,
+      wheelMultiplier: 3, // make wheel scrolling much more aggressive
+      gestureOrientation: "vertical",
+    });
+
+    // Add scroll snapping to major sections
+    lenis.on('scroll', () => {
+      // Optional: Add custom scroll snapping logic here
     });
 
     function raf(time: number) {
@@ -22,3 +29,5 @@ export const useLenis =() => {
     };
   }, []);
 }
+
+export default useLenis;
