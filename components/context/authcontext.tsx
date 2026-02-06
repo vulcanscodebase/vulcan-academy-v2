@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // toast.success("Login successful!");
       router.push("/");
     } catch (err: any) {
-      toast.error(err.message || "Login failed");
+      throw err;
     } finally {
       setIsLoading(false);
     }
