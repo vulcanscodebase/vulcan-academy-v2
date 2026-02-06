@@ -10,8 +10,8 @@ FROM node:20-alpine AS base
 #######################
 FROM base AS deps
 
-# Add compatibility libs
-RUN apk add --no-cache libc6-compat
+# Add compatibility libs and PDF processing tools
+RUN apk add --no-cache libc6-compat graphicsmagick ghostscript
 
 WORKDIR /app
 
@@ -23,6 +23,9 @@ RUN npm ci
 # 3. Builder stage
 #######################
 FROM base AS builder
+
+# Add build dependencies for canvas and PDF processing
+RUN apk add --no-cache libc6-compat python3 make g++ cairo-dev pango-dev jpeg-dev giflib-dev
 
 WORKDIR /app
 
@@ -66,6 +69,9 @@ ENV NEXT_PUBLIC_SERVER_URI=$NEXT_PUBLIC_SERVER_URI
 ENV ASSEMBLYAI_API_KEY=$ASSEMBLYAI_API_KEY
 ENV OPENROUTER_API_KEY=$OPENROUTER_API_KEY
 ENV GOOGLE_GENERATIVE_AI_API_KEY=$GOOGLE_GENERATIVE_AI_API_KEY
+
+# Install PDF processing tools and Tesseract OCR for image-based PDFs
+RUN apk add --no-cache graphicsmagick ghostscript tesseract-ocr tesseract-ocr-data-eng poppler-utils
 
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs \
