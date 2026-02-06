@@ -328,15 +328,14 @@ export default function ResumeUpload() {
       }
 
       // ✅ Start interview and deduct license when user proceeds after resume upload
-      const backendUrl = process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000";
-      // Backend may require non-empty resumeText; send placeholder when using fallback so validation passes
-      const resumeTextForBackend = usedFallbackEvaluation && !resumeTextValue
-        ? "Resume could not be extracted."
-        : resumeTextValue;
-
+      const backendUrl = process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcans.co.in/api";
+      const token = localStorage.getItem("token");
       const startInterviewRes = await fetch(`${backendUrl}/interviews/start`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { "Authorization": `Bearer ${token}` })
+        },
         credentials: "include",
         body: JSON.stringify({
           jobRole: jobTitle,

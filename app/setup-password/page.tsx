@@ -48,7 +48,7 @@ function SetupPasswordForm() {
         token,
         password,
       });
-      
+
       toast.success("Password set successfully! Redirecting to login...");
       setTimeout(() => {
         router.push("/signin");
@@ -69,7 +69,7 @@ function SetupPasswordForm() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-vulcan-dark via-gray-900 to-vulcan-dark p-4">
       <Toaster position="top-center" richColors />
-      
+
       <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
         <div className="flex justify-center mb-6">
           <div className="w-24 h-24 bg-vulcan-accent-blue rounded-full flex items-center justify-center">
@@ -98,8 +98,8 @@ function SetupPasswordForm() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label 
-              htmlFor="password" 
+            <label
+              htmlFor="password"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
             >
               Password
@@ -125,8 +125,8 @@ function SetupPasswordForm() {
           </div>
 
           <div>
-            <label 
-              htmlFor="confirmPassword" 
+            <label
+              htmlFor="confirmPassword"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
             >
               Confirm Password

@@ -108,11 +108,13 @@ export default function InterviewDetails() {
   const fetchInterviewDetails = async () => {
     try {
       const backendUrl =
-        process.env.NEXT_PUBLIC_SERVER_URI || "http://localhost:5000/api";
+        process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcans.co.in/api";
+      const token = localStorage.getItem("token");
       const response = await fetch(`${backendUrl}/interviews/${interviewId}`, {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          ...(token && { "Authorization": `Bearer ${token}` })
         },
       });
 
@@ -125,7 +127,7 @@ export default function InterviewDetails() {
       console.log("Interview status:", data.interview?.status);
       console.log("Interview report:", data.interview?.report);
       console.log("Interview report metrics:", data.interview?.report?.metrics);
-      
+
       if (data.interview) {
         setInterview(data.interview);
       } else {
@@ -178,14 +180,14 @@ export default function InterviewDetails() {
 
       // Prepare feedback text
       const feedbackText = [
-        interview.report.strengths && interview.report.strengths.length > 0 
-          ? `Strengths:\n${interview.report.strengths.map((s, i) => `${i + 1}. ${s}`).join('\n')}` 
+        interview.report.strengths && interview.report.strengths.length > 0
+          ? `Strengths:\n${interview.report.strengths.map((s, i) => `${i + 1}. ${s}`).join('\n')}`
           : '',
-        interview.report.improvements && interview.report.improvements.length > 0 
-          ? `Areas for Improvement:\n${interview.report.improvements.map((s, i) => `${i + 1}. ${s}`).join('\n')}` 
+        interview.report.improvements && interview.report.improvements.length > 0
+          ? `Areas for Improvement:\n${interview.report.improvements.map((s, i) => `${i + 1}. ${s}`).join('\n')}`
           : '',
-        interview.report.tips && interview.report.tips.length > 0 
-          ? `Tips:\n${interview.report.tips.map((s, i) => `${i + 1}. ${s}`).join('\n')}` 
+        interview.report.tips && interview.report.tips.length > 0
+          ? `Tips:\n${interview.report.tips.map((s, i) => `${i + 1}. ${s}`).join('\n')}`
           : '',
         interview.report.overallFeedback ? `\nOverall Feedback:\n${interview.report.overallFeedback}` : '',
       ].filter(Boolean).join('\n\n') || 'No feedback available';
@@ -206,9 +208,9 @@ export default function InterviewDetails() {
       }));
 
       // Prepare resume analysis - check metadata first (from backend), then resume.evaluation
-      const resumeAnalysisText = interview.metadata?.atsScore 
+      const resumeAnalysisText = interview.metadata?.atsScore
         ? `ATS Score: ${interview.metadata.atsScore}/100\n\nImprovement Suggestions:\n${(interview.metadata.resumeTips || []).map((tip: string, i: number) => `${i + 1}. ${tip}`).join('\n')}`
-        : interview.resume?.evaluation 
+        : interview.resume?.evaluation
           ? `ATS Score: ${interview.resume.evaluation.atsScore || 'N/A'}/100\n\nImprovement Suggestions:\n${(interview.resume.evaluation.resumeTips || []).map((tip: string, i: number) => `${i + 1}. ${tip}`).join('\n')}`
           : 'No resume analysis available';
 
@@ -262,9 +264,8 @@ export default function InterviewDetails() {
         {Array.from({ length: 5 }, (_, i) => (
           <Star
             key={i}
-            className={`h-4 w-4 ${
-              i < value ? "text-blue-500 fill-blue-500" : "text-gray-300"
-            }`}
+            className={`h-4 w-4 ${i < value ? "text-blue-500 fill-blue-500" : "text-gray-300"
+              }`}
           />
         ))}
       </div>
@@ -339,7 +340,7 @@ export default function InterviewDetails() {
             </div>
 
             {interview.report && interview.report.metrics && (
-              <Button 
+              <Button
                 variant="outline"
                 onClick={handleGeneratePDF}
                 disabled={isGeneratingPDF}
@@ -405,11 +406,10 @@ export default function InterviewDetails() {
                       : "This interview has not been completed yet. Complete the interview to view detailed feedback and metrics."}
                   </p>
                   <div className="mt-6">
-                    <span className={`px-4 py-2 rounded-full text-sm font-medium ${
-                      interview.status === "started" || interview.status === "in_progress"
-                        ? "bg-blue-100 text-blue-800"
-                        : "bg-gray-100 text-gray-800"
-                    }`}>
+                    <span className={`px-4 py-2 rounded-full text-sm font-medium ${interview.status === "started" || interview.status === "in_progress"
+                      ? "bg-blue-100 text-blue-800"
+                      : "bg-gray-100 text-gray-800"
+                      }`}>
                       Status: {interview.status.charAt(0).toUpperCase() + interview.status.slice(1)}
                     </span>
                   </div>
@@ -704,13 +704,12 @@ export default function InterviewDetails() {
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-medium text-gray-900">ATS Score</span>
-                  <span className={`font-bold text-2xl px-4 py-2 rounded-lg ${
-                    interview.metadata.atsScore >= 80
-                      ? "bg-green-100 text-green-800"
-                      : interview.metadata.atsScore >= 60
+                  <span className={`font-bold text-2xl px-4 py-2 rounded-lg ${interview.metadata.atsScore >= 80
+                    ? "bg-green-100 text-green-800"
+                    : interview.metadata.atsScore >= 60
                       ? "bg-yellow-100 text-yellow-800"
                       : "bg-red-100 text-red-800"
-                  }`}>
+                    }`}>
                     {interview.metadata.atsScore}/100
                   </span>
                 </div>
