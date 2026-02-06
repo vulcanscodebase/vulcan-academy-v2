@@ -15,19 +15,19 @@ const reviews: Review[] = [
     name: "Vedanth",
     username: "VEDANTH",
     body: "Vulcan Prep 360 has transformed my interview preparation. The realistic mock interviews and detailed feedback helped me land my dream job!",
-    img: "/avatar-of-a-happy-user.jpg", // replace with real image
+    img: "/placeholder-user.jpg", // using existing placeholder image
   },
   {
     name: "Sumanth",
     username: "SUMANTH",
     body: "The platform is incredibly intuitive and the practice sessions are so realistic. I felt completely prepared and confident going into my interviews.",
-    img: "/avatar-of-a-happy-user.jpg", // replace with real image
+    img: "/placeholder-user.jpg", // using existing placeholder image
   },
   {
     name: "Bhavana",
     username: "BHAVANA",
     body: "The expert-guided sessions and real-time feedback were game-changers. I improved my interview skills significantly and got multiple job offers!",
-    img: "/avatar-of-a-happy-user.jpg", // replace with real image
+    img: "/placeholder-user.jpg", // using existing placeholder image
   },
 ]
 

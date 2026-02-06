@@ -230,60 +230,101 @@ export default function ResumeUpload() {
       const formData = new FormData();
       formData.append("file", selectedFile);
 
-      const res = await fetch("/api/extract-pdf", {
-        method: "POST",
-        body: formData,
-      });
+      const DUMMY_FOLLOW_UP = "Why do you think you are suitable for this job";
+      const dummyEvaluation = {
+        atsScore: 0,
+        tips: ["Resume couldn't be processed"],
+        followUpQuestion: DUMMY_FOLLOW_UP,
+        followUpQuestions: [] as string[],
+      };
 
-      const result = await res.json();
-      if (!res.ok)
-        throw new Error(result.error || "Failed to extract PDF text");
+      let resumeTextValue: string;
+      let evaluation: {
+        atsScore: number;
+        tips: string[];
+        followUpQuestion?: string;
+        followUpQuestions?: string[];
+      };
+      let usedFallbackEvaluation = false;
 
-      const endpoint =
-        jobTitle.toLowerCase() === "general"
-          ? "/api/resumeEvagen"
-          : "/api/resumeEva";
+      try {
+        const res = await fetch("/api/extract-pdf", {
+          method: "POST",
+          body: formData,
+        });
 
-      const evalRes = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          text: result.text,
-          jobTitle: jobTitle,
-        }),
-      });
+        let result: { text?: string; error?: string };
+        try {
+          result = await res.json();
+        } catch {
+          result = {};
+        }
 
-      const evalResult = await evalRes.json();
-      if (!evalRes.ok)
-        throw new Error(evalResult.error || "Failed to evaluate resume");
+        if (!res.ok) {
+          usedFallbackEvaluation = true;
+          resumeTextValue = "";
+          evaluation = { ...dummyEvaluation };
+        } else {
+          resumeTextValue = result.text ?? "";
 
-      const evaluation = evalResult.evaluation;
+          const endpoint =
+            jobTitle.toLowerCase() === "general"
+              ? "/api/resumeEvagen"
+              : "/api/resumeEva";
+
+          const evalRes = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              text: resumeTextValue,
+              jobTitle: jobTitle,
+            }),
+          });
+
+          const evalResult = await evalRes.json();
+          if (!evalRes.ok)
+            throw new Error(evalResult.error || "Failed to evaluate resume");
+
+          evaluation = evalResult.evaluation;
+        }
+      } catch {
+        // Extract or eval failed (network, 400 with non-JSON body, etc.): use dummy so flow continues
+        usedFallbackEvaluation = true;
+        resumeTextValue = "";
+        evaluation = { ...dummyEvaluation };
+      }
+
       localStorage.setItem("atsScore", evaluation.atsScore.toString());
       localStorage.setItem("resumeTips", JSON.stringify(evaluation.tips));
-      localStorage.setItem("resumeText", result.text);
+      localStorage.setItem("resumeText", resumeTextValue);
       localStorage.setItem("resumeFileName", selectedFile.name);
 
-      const isGeneral = jobTitle.toLowerCase() === "general";
-
-      if (isGeneral) {
-        const followUp =
-          typeof evaluation.followUpQuestion === "string" &&
-            evaluation.followUpQuestion.trim() !== "" &&
-            evaluation.followUpQuestion !== "undefined" &&
-            evaluation.followUpQuestion !== "null"
-            ? evaluation.followUpQuestion
-            : null;
-
-        if (followUp) {
-          localStorage.setItem("followUpQuestion", followUp);
-        } else {
-          localStorage.removeItem("followUpQuestion");
-        }
-      } else {
-        if (typeof evaluation.followUpQuestion === "string") {
-          localStorage.setItem("followUpQuestion", evaluation.followUpQuestion);
-        }
+      if (usedFallbackEvaluation) {
+        localStorage.setItem("followUpQuestion", DUMMY_FOLLOW_UP);
         localStorage.removeItem("followUpQuestions");
+      } else {
+        const isGeneral = jobTitle.toLowerCase() === "general";
+
+        if (isGeneral) {
+          const followUp =
+            typeof evaluation.followUpQuestion === "string" &&
+              evaluation.followUpQuestion.trim() !== "" &&
+              evaluation.followUpQuestion !== "undefined" &&
+              evaluation.followUpQuestion !== "null"
+              ? evaluation.followUpQuestion
+              : null;
+
+          if (followUp) {
+            localStorage.setItem("followUpQuestion", followUp);
+          } else {
+            localStorage.removeItem("followUpQuestion");
+          }
+        } else {
+          if (typeof evaluation.followUpQuestion === "string") {
+            localStorage.setItem("followUpQuestion", evaluation.followUpQuestion);
+          }
+          localStorage.removeItem("followUpQuestions");
+        }
       }
 
       // ✅ Start interview and deduct license when user proceeds after resume upload
@@ -298,19 +339,32 @@ export default function ResumeUpload() {
         credentials: "include",
         body: JSON.stringify({
           jobRole: jobTitle,
-          resumeText: result.text,
+          resumeText: resumeTextForBackend,
           resumeFileName: selectedFile.name,
           resumeEvaluation: evaluation,
         }),
       });
 
       if (!startInterviewRes.ok) {
-        const errorData = await startInterviewRes.json();
-        throw new Error(errorData.message || "Failed to start interview. License may be insufficient.");
+        let errorMessage = "Failed to start interview. License may be insufficient.";
+        try {
+          const errorData = await startInterviewRes.json();
+          errorMessage = errorData.message || errorMessage;
+        } catch {
+          // Response body may not be JSON
+        }
+        throw new Error(errorMessage);
       }
 
-      const startInterviewData = await startInterviewRes.json();
-      localStorage.setItem("interviewId", startInterviewData.interview._id);
+      let startInterviewData: { interview?: { _id?: string } };
+      try {
+        startInterviewData = await startInterviewRes.json();
+      } catch {
+        throw new Error("Invalid response from server.");
+      }
+      const interviewId = startInterviewData?.interview?._id;
+      if (!interviewId) throw new Error("Invalid response from server.");
+      localStorage.setItem("interviewId", interviewId);
 
       setTimeout(() => {
         router.push("/interview/ai/instructions");

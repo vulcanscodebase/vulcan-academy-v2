@@ -91,10 +91,6 @@ export function Footer() {
             Customer Care
           </h3>
           <p>+91 6362 014 532</p>
-          <p className="leading-relaxed">
-            Alvas Institute of Engineering and Technology <br />
-            Moodbidri, Mijar, 53545
-          </p>
         </div>
       </div>
 

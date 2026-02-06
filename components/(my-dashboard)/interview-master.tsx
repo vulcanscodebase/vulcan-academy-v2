@@ -10,7 +10,7 @@ export function InterviewMaster() {
         {/* Image */}
         <div className="h-40 bg-gray-100 flex items-center justify-center">
           <img
-            src="/english360logo.png"
+            src="/vulcans-logo.png"
             alt="English 360 logo"
             className="h-32 object-contain"
           />
