@@ -339,7 +339,7 @@ export default function ResumeUpload() {
         credentials: "include",
         body: JSON.stringify({
           jobRole: jobTitle,
-          resumeText: resumeTextForBackend,
+          resumeText: resumeTextValue,
           resumeFileName: selectedFile.name,
           resumeEvaluation: evaluation,
         }),
