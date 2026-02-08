@@ -330,41 +330,43 @@ export default function ResumeUpload() {
       // ✅ Start interview and deduct license when user proceeds after resume upload
       const backendUrl = process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcans.co.in/api";
       const token = localStorage.getItem("token");
-      const startInterviewRes = await fetch(`${backendUrl}/interviews/start`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token && { "Authorization": `Bearer ${token}` })
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          jobRole: jobTitle,
-          resumeText: resumeTextValue,
-          resumeFileName: selectedFile.name,
-          resumeEvaluation: evaluation,
-        }),
-      });
+      let startInterviewData: { interview?: { _id?: string } } = {};
 
-      if (!startInterviewRes.ok) {
-        let errorMessage = "Failed to start interview. License may be insufficient.";
-        try {
-          const errorData = await startInterviewRes.json();
-          errorMessage = errorData.message || errorMessage;
-        } catch {
-          // Response body may not be JSON
-        }
-        throw new Error(errorMessage);
-      }
-
-      let startInterviewData: { interview?: { _id?: string } };
       try {
-        startInterviewData = await startInterviewRes.json();
-      } catch {
-        throw new Error("Invalid response from server.");
+        const startInterviewRes = await fetch(`${backendUrl}/interviews/start`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token && { "Authorization": `Bearer ${token}` })
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            jobRole: jobTitle,
+            resumeText: resumeTextValue,
+            resumeFileName: selectedFile.name,
+            resumeEvaluation: evaluation,
+          }),
+        });
+
+        if (startInterviewRes.ok) {
+          try {
+            startInterviewData = await startInterviewRes.json();
+          } catch {
+          }
+          const interviewId = startInterviewData?.interview?._id;
+          if (interviewId) {
+            localStorage.setItem("interviewId", interviewId);
+          } else {
+            localStorage.removeItem("interviewId");
+          }
+        } else {
+          console.warn("interviews/start failed:", startInterviewRes.status, await startInterviewRes.text().catch(() => ""));
+          localStorage.removeItem("interviewId");
+        }
+      } catch (startErr) {
+        console.warn("interviews/start request failed:", startErr);
+        localStorage.removeItem("interviewId");
       }
-      const interviewId = startInterviewData?.interview?._id;
-      if (!interviewId) throw new Error("Invalid response from server.");
-      localStorage.setItem("interviewId", interviewId);
 
       setTimeout(() => {
         router.push("/interview/ai/instructions");
