@@ -1135,6 +1135,315 @@
       ]
     }
   },
+  "Lawyer": {
+    "Basic": {
+      "Pool1": [
+        "What motivated you to choose law as a profession?",
+        "Which areas of law have you been exposed to during your education or training?",
+        "What was your first real experience with legal work (internship, moot, casework)?",
+        "How did your legal education shape your way of thinking?",
+        "What type of legal work interests you the most and why?",
+        "Describe a law subject you found most engaging during your studies.",
+        "What role did internships or clerkships play in your legal learning?",
+        "How comfortable are you with reading and interpreting statutes or judgments?",
+        "What do you believe is the primary responsibility of a lawyer?",
+        "How has your background influenced your approach to legal practice?"
+      ],
+      "Pool2": [
+        "How do you approach understanding a new legal problem or case?",
+        "What steps do you take to research a legal issue?",
+        "How do you ensure accuracy while drafting legal documents?",
+        "What role does ethics play in your decision-making as a lawyer?",
+        "How do you manage multiple cases or assignments at the same time?",
+        "How do you explain legal concepts to clients with no legal background?",
+        "What do you do when you are unsure about a legal interpretation?",
+        "How do you keep yourself updated with changes in laws or judgments?",
+        "What skills do you think are essential for a lawyer at the beginning of their career?",
+        "How do you handle pressure when deadlines or hearings are close?"
+      ],
+      "Pool3": [
+        "Tell me about a time you struggled to understand a legal concept. How did you overcome it?",
+        "Describe a situation where your legal research initially led you in the wrong direction.",
+        "Tell me about a time you received critical feedback on your drafting or argument.",
+        "Describe a situation where you had to balance academic workload with legal training.",
+        "Tell me about a moment when you observed unethical behaviour. How did you respond?",
+        "Describe a situation where you had to work with someone who disagreed with your legal view.",
+        "Tell me about a time you prepared for a moot, trial, or hearing under time pressure.",
+        "Describe a situation where attention to detail helped you avoid a mistake.",
+        "Tell me about a time you assisted a senior lawyer or professor on a legal task.",
+        "Describe a moment when you realised law requires patience and discipline."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "What areas of law have you practised extensively, and why did you choose them?",
+        "How has your legal practice evolved since you started your career?",
+        "What types of clients or matters have shaped you most as a lawyer?",
+        "Describe how your courtroom or transactional experience has influenced your legal thinking.",
+        "What patterns have you observed in successful legal strategies over time?",
+        "How do you evaluate whether a case or matter is worth pursuing?",
+        "How has your understanding of justice changed with real-world practice?",
+        "What professional values guide your long-term legal career?",
+        "How do you balance client interests with legal and ethical boundaries?",
+        "How has your experience changed your approach to legal risk?"
+      ],
+      "Pool2": [
+        "How do you structure legal arguments for complex cases?",
+        "Describe your approach to interpreting conflicting statutes or precedents.",
+        "How do you assess legal risk for clients before advising them?",
+        "What strategies do you use while drafting contracts, pleadings, or opinions?",
+        "How do you handle situations where law and client expectations conflict?",
+        "Describe how you prepare for high-stakes hearings or negotiations.",
+        "How do you mentor juniors or guide interns in legal reasoning?",
+        "What frameworks do you use for decision-making in legally ambiguous situations?",
+        "How do you manage client relationships during long or difficult cases?",
+        "How do you measure success in your legal practice?"
+      ],
+      "Pool3": [
+        "Tell me about the most challenging case or legal matter you handled.",
+        "Describe a situation where a client insisted on an unethical or illegal course of action.",
+        "Tell me about a time when a case took an unexpected turn. How did you adapt?",
+        "Describe a moment where your legal judgment prevented a serious risk.",
+        "Tell me about a conflict with opposing counsel or within your legal team.",
+        "Describe a situation where you had to make a decision with incomplete legal clarity.",
+        "Tell me about a time when external pressure tried to influence your legal stance.",
+        "Describe how you handled a case loss or unfavourable judgment.",
+        "Tell me about a high-stakes negotiation you were involved in.",
+        "Describe a situation where your legal advice had a significant real-world impact."
+      ]
+    }
+  },"Human Resource Management": {
+    "Basic": {
+      "Pool1": [
+        "What motivated you to choose Human Resource Management as a career?",
+        "Which HR functions have you been exposed to so far (recruitment, payroll, training, etc.)?",
+        "What was your first hands-on experience related to HR work?",
+        "How did your education or training prepare you for an HR role?",
+        "Which area of HR interests you the most and why?",
+        "What do you believe is the primary role of HR in an organisation?",
+        "How comfortable are you working with people-related issues?",
+        "What skills from your background are most useful for HR work?",
+        "How do you see HR contributing to organisational success?",
+        "What expectations do you have from an HR manager role?"
+      ],
+      "Pool2": [
+        "How do you handle confidential employee information?",
+        "What steps do you follow during a recruitment process?",
+        "How do you ensure fairness during interviews or evaluations?",
+        "How do you manage multiple HR tasks at the same time?",
+        "What role does communication play in HR effectiveness?",
+        "How do you explain HR policies to employees clearly?",
+        "What do you understand by employee engagement?",
+        "How do you handle employee queries or concerns?",
+        "What HR tools or systems are you familiar with?",
+        "What qualities are essential for an effective HR manager?"
+      ],
+      "Pool3": [
+        "Tell me about a time you resolved a small conflict between colleagues.",
+        "Describe a situation where an employee approached you with a concern.",
+        "Tell me about a time you had to maintain confidentiality under pressure.",
+        "Describe how you handled an employee who was unhappy with a decision.",
+        "Tell me about a time you had to communicate an unpopular policy.",
+        "Describe a situation where you managed multiple HR priorities at once.",
+        "Tell me about a time you supported a new employee during onboarding.",
+        "Describe how you handled a misunderstanding between management and staff.",
+        "Tell me about a situation where empathy was crucial in your role.",
+        "Describe a moment when you had to remain neutral in a people-related issue."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "How has your HR role evolved as you gained experience?",
+        "What types of organisations or industries have shaped your HR approach?",
+        "How has handling employee relations influenced your leadership style?",
+        "What HR initiatives have you led or significantly contributed to?",
+        "How do you align HR practices with business goals?",
+        "What patterns have you observed in successful HR strategies?",
+        "How do you balance employee advocacy with organisational needs?",
+        "What professional values guide your HR decisions?",
+        "How has your experience changed your approach to workforce planning?",
+        "What long-term impact do you aim to create as an HR manager?"
+      ],
+      "Pool2": [
+        "How do you design and implement an effective performance management system?",
+        "Describe your approach to handling disciplinary issues.",
+        "How do you ensure compliance with labour laws and regulations?",
+        "How do you use HR metrics and analytics for decision-making?",
+        "Describe your strategy for talent retention and succession planning.",
+        "How do you manage change during organisational restructuring?",
+        "How do you address workplace diversity, equity, and inclusion?",
+        "What steps do you take to improve employee engagement and morale?",
+        "How do you handle conflicts between senior management and employees?",
+        "How do you evaluate the effectiveness of HR policies and programs?"
+      ],
+      "Pool3": [
+        "Tell me about a difficult employee relations case you handled.",
+        "Describe a situation where you had to terminate an employee. How did you manage it?",
+        "Tell me about a time when HR had to take an unpopular but necessary decision.",
+        "Describe how you handled a serious workplace conflict or grievance.",
+        "Tell me about a situation where you advised leadership against a risky decision.",
+        "Describe a time when confidentiality and ethics were severely tested.",
+        "Tell me about a major change initiative you supported or led.",
+        "Describe a scenario where HR intervention prevented legal or reputational risk.",
+        "Tell me about a time you balanced compassion with policy enforcement.",
+        "Describe an HR decision that had a significant positive impact on the organisation."
+      ]
+    }
+  }, "Quality Control and Quality Assurance": {
+    "Basic": {
+      "Pool1": [
+        "What motivated you to pursue Quality Control or Quality Assurance?",
+        "Which subjects in your degree are most relevant to QC or QA work? How?",
+        "What kind of laboratory exposure did you have during your studies?",
+        "How were quality, accuracy, and documentation emphasized in your practical classes?",
+        "What do you understand by Quality Control and Quality Assurance?",
+        "What role do you think a chemistry graduate plays in maintaining product quality?",
+        "Have you been exposed to SOPs or standard lab documentation?",
+        "What types of chemical analyses are you familiar with from your coursework?",
+        "How has your academic background prepared you for working in regulated environments?",
+        "Why do you think QC/QA roles require strong attention to detail?"
+      ],
+      "Pool2": [
+        "How do you ensure accuracy and precision while performing laboratory tests?",
+        "What safety practices do you follow while working in a lab?",
+        "How do you document test results and observations?",
+        "What do you understand by Good Laboratory Practices (GLP)?",
+        "How do you handle samples to avoid contamination or mix-ups?",
+        "What basic analytical instruments are you comfortable using?",
+        "How do you prepare and standardize solutions accurately?",
+        "What steps do you follow when an experiment does not give expected results?",
+        "How do you manage multiple samples or tests within a deadline?",
+        "What qualities are essential for someone working in QC or QA?"
+      ],
+      "Pool3": [
+        "Tell me about a time you made an error in the lab. How did you correct it?",
+        "Describe a situation where accuracy was critical in your work.",
+        "Tell me about a time you strictly followed lab rules or protocols.",
+        "Describe how you handled limited time while ensuring quality.",
+        "Tell me about a situation where you had to repeat an analysis.",
+        "Describe a time you noticed a deviation during an experiment.",
+        "Tell me about a moment when documentation was especially important.",
+        "Describe how you handled pressure during practical exams or lab submissions.",
+        "Tell me about a time you worked as part of a quality-focused team.",
+        "Describe how you ensured reliability of results in your practical work."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "How do you differentiate the responsibilities of QC and QA in an organization?",
+        "How does analytical chemistry support quality control decisions?",
+        "What exposure do you have to pharmaceutical or industrial quality systems?",
+        "How do you relate your chemistry knowledge to regulatory compliance?",
+        "What do you understand by GMP and its importance in QC/QA?",
+        "How do quality systems impact product safety and consumer trust?",
+        "What gaps do you see between academic labs and industrial QC labs?",
+        "How have your academic projects prepared you for QC/QA roles?",
+        "What long-term role do you see for yourself in quality management?",
+        "How does quality assurance contribute to continuous improvement?"
+      ],
+      "Pool2": [
+        "Explain the importance of SOPs in QC and QA.",
+        "How do you handle out-of-specification (OOS) results?",
+        "What is the role of documentation in ensuring data integrity?",
+        "How do you ensure traceability of samples and results?",
+        "Explain the difference between validation and calibration.",
+        "How do audits support quality assurance?",
+        "What steps would you take to investigate a deviation?",
+        "How does risk assessment apply to QC/QA decisions?",
+        "What role does chemistry play in stability testing?",
+        "How do you ensure compliance without compromising efficiency?"
+      ],
+      "Pool3": [
+        "Tell me about a situation where you identified a potential quality issue early.",
+        "Describe how you would handle an OOS result under time pressure.",
+        "Tell me about a time you had to strictly follow documentation despite delays.",
+        "Describe a situation where someone asked you to ignore a minor deviation.",
+        "Tell me about a moment where quality rules conflicted with speed.",
+        "Describe how you would respond during a regulatory audit.",
+        "Tell me about a time data accuracy was more important than convenience.",
+        "Describe a scenario where poor documentation caused issues.",
+        "Tell me about a time you learned from a quality failure.",
+        "Describe how you handle pressure in a highly regulated QC/QA environment."
+      ]
+    }
+  },"Pharmaceuticals": {
+    "Basic": {
+      "Pool1": [
+        "What motivated you to consider a career in pharmaceuticals?",
+        "Which chemistry subjects from your degree are most relevant to the pharma industry?",
+        "What laboratory techniques did you frequently use during your coursework?",
+        "Describe a chemistry experiment you found particularly interesting or challenging.",
+        "How did your academic curriculum introduce you to pharmaceutical applications of chemistry?",
+        "What kind of practical or industrial exposure have you had so far (projects, internships, visits)?",
+        "Which area of pharma work interests you the most—QA, QC, R&D, or production—and why?",
+        "How comfortable are you with handling chemicals, instruments, and lab documentation?",
+        "What role do you think a chemistry graduate plays in the pharmaceutical industry?",
+        "How has your education prepared you for working in a regulated industry like pharma?"
+      ],
+      "Pool2": [
+        "How do you ensure accuracy while performing chemical experiments or analyses?",
+        "What steps do you follow to maintain safety in a laboratory environment?",
+        "How do you record observations and results during experiments?",
+        "What do you understand by Good Laboratory Practices (GLP)?",
+        "How do you handle situations where experimental results do not match expectations?",
+        "What basic analytical instruments are you familiar with (e.g., UV–Vis, pH meter, balance)?",
+        "How do you prepare solutions, reagents, or buffers accurately?",
+        "What is your approach to learning a new analytical method or SOP?",
+        "How do you manage time when multiple experiments or tasks are assigned?",
+        "What basic quality checks are important in pharmaceutical laboratories?"
+      ],
+      "Pool3": [
+        "Tell me about a time an experiment failed. What did you do next?",
+        "Describe a situation where you had to repeat an experiment due to an error.",
+        "Tell me about a time you followed strict lab rules or protocols.",
+        "Describe how you handled limited resources or equipment in a lab.",
+        "Tell me about a situation where accuracy was critical in your work.",
+        "Describe a moment when you had to work long hours in the lab.",
+        "Tell me about a time you learned a new instrument or technique quickly.",
+        "Describe a situation where you identified a mistake before it caused a problem.",
+        "Tell me about a time you worked as part of a lab team.",
+        "Describe how you handled academic pressure during practical examinations or projects."
+      ]
+    },
+    "Advanced": {
+      "Pool1": [
+        "How do you see your chemistry background fitting into pharmaceutical manufacturing or R&D?",
+        "What exposure do you have to pharmaceutical formulations or drug analysis?",
+        "How has your understanding of organic/inorganic/physical chemistry evolved toward applications?",
+        "What pharmaceutical processes are you most curious to learn in depth?",
+        "How do you relate reaction mechanisms to drug synthesis or impurity formation?",
+        "What role does analytical chemistry play in ensuring drug quality and safety?",
+        "How familiar are you with regulatory concepts like GMP or validation?",
+        "What gaps do you see between academic chemistry and pharma industry requirements?",
+        "How have your projects or dissertations prepared you for pharma roles?",
+        "What long-term role do you envision for yourself in the pharmaceutical sector?"
+      ],
+      "Pool2": [
+        "Explain the importance of documentation in pharmaceutical laboratories.",
+        "How do you ensure compliance with SOPs and regulatory requirements?",
+        "Describe how analytical chemistry supports quality control in pharma.",
+        "What steps would you take to investigate out-of-specification (OOS) results?",
+        "How do you differentiate between accuracy, precision, and reproducibility?",
+        "What role does chemistry play in stability studies of drugs?",
+        "How do you ensure contamination control in pharmaceutical environments?",
+        "Explain how method validation is important in drug analysis.",
+        "How do you approach problem-solving when results are inconsistent?",
+        "What quality mindset should a chemistry graduate develop for pharma work?"
+      ],
+      "Pool3": [
+        "Tell me about a situation where your attention to detail prevented a major issue.",
+        "Describe a time you had to strictly follow documentation or SOPs.",
+        "Tell me about a scenario where an experiment result was out of specification. What would you do?",
+        "Describe a situation where safety rules slowed work. How did you handle it?",
+        "Tell me about a time you had to report a mistake or deviation.",
+        "Describe how you would respond if a senior asked you to ignore a minor protocol.",
+        "Tell me about a time you worked under strict deadlines with high accuracy expectations.",
+        "Describe a situation where data integrity was critical.",
+        "Tell me about a time you learned from a quality failure.",
+        "Describe how you would handle pressure in a regulated pharmaceutical environment."
+      ]
+    }
+  },
   "General": {
     "Basic": {
       "Pool1": [
