@@ -73,6 +73,11 @@ export default function ResumeUpload() {
     "Electronics and Communication (Embedded Systems and IoT)",
     "Work From Home Jobs",
     "Entrepreneur",
+    "Lawyer",
+    "Human Resource Management",
+    "Cabin Crew",
+    "Quality Control and Quality Assurance",
+    "Pharmaceuticals",
   ];
 
   const degreeOptions: Array<{ key: string; label: string }> = [
@@ -91,6 +96,7 @@ export default function ResumeUpload() {
     "Digital Marketing",
     "Accountant",
     "Customer Service",
+    "Human Resource Management",
   ]
 
   const DEGREE_ROLE_MAP: Record<string, string[]> = {
@@ -98,9 +104,9 @@ export default function ResumeUpload() {
       "Mechanical Engineering", "Electrical Engineering", "Electronics and Communication (Embedded Systems and IoT)"],
     BBA_MBA: BBA_MBA_AND_BCOM_MCOM_ROLES,
     BCOM_MCOM: BBA_MBA_AND_BCOM_MCOM_ROLES,
-    BA_MA: ["Teacher", "Marketing", "Customer Service"],
-    BSC_MSC: ["Business Analyst", "Accountant"],
-    OTHERS: ["Work From Home Jobs", "Entrepreneur", "Customer Service", "Sales Executive", "Marketing", "Project Management"],
+    BA_MA: ["Teacher", "Marketing", "Customer Service", "Lawyer"],
+    BSC_MSC: ["Business Analyst", "Accountant","Pharmaceuticals","Quality Control and Quality Assurance"],
+    OTHERS: ["Work From Home Jobs","Cabin Crew","Entrepreneur", "Customer Service", "Sales Executive", "Marketing", "Project Management"],
   }
 
   const unique = (arr: string[]) => Array.from(new Set(arr))
