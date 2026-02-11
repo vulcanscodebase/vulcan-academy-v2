@@ -18,6 +18,7 @@ interface User {
   name: string;
   email: string;
   isProfileComplete?: boolean;
+  licenses?: number;
 }
 
 interface AuthContextType {
