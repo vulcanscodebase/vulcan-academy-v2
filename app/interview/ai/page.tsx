@@ -187,9 +187,14 @@ export default function InterviewAI() {
           return res.json()
         })
         .then((data) => {
-          const modifiedQuestions = [...data.questions]
-          modifiedQuestions.splice(1, 0, sanitizedSingleFollowUp)
-          setQuestions(modifiedQuestions)
+          // For Cabin Crew, use the 4 questions as-is (one from each pool, provided by the API).
+          if (storedTitle.toLowerCase() === "cabin crew") {
+            setQuestions(data.questions)
+          } else {
+            const modifiedQuestions = [...data.questions]
+            modifiedQuestions.splice(1, 0, sanitizedSingleFollowUp)
+            setQuestions(modifiedQuestions)
+          }
         })
         .catch((error) => {
           console.error("Error fetching questions:", error)
