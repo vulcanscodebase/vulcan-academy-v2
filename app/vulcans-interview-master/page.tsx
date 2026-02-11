@@ -54,7 +54,7 @@ export default function InterviewPage() {
               <div className="flex flex-wrap items-center gap-3 pt-4">
                 <Button
                   variant="outline"
-                  onClick={() => router.push("/interview")}
+                  onClick={() => router.push("/signin")}
                   className={cn(
                     "bg-vulcan-accent-blue text-vulcan-white hover:bg-vulcan-accent-blue/90 hover:text-vulcan-white",
                     "shadow-md hover:shadow-lg transition-all duration-300 border-vulcan-accent-blue"
@@ -348,7 +348,7 @@ export default function InterviewPage() {
         <div className="mt-16 pt-12 border-t border-border/60">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button
-              onClick={() => router.push("/interview")}
+              onClick={() => router.push("/signin")}
               className={cn(
                 "bg-vulcan-accent-blue text-vulcan-white hover:bg-vulcan-accent-blue/90",
                 "shadow-md hover:shadow-lg transition-all duration-300 min-w-[200px]"
