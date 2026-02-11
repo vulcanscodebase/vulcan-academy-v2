@@ -1,10 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Facebook, Twitter, Instagram } from "lucide-react";
+import { Linkedin, Instagram } from "lucide-react";
 
 const navItems = [
   { name: "Home", path: "/" },
-  { name: "Vulcan Prep 360", path:"/interview"},
+  { name: "Vulcan Prep 360", path: "/interview" },
   // { name: "Tests", path: "/tests" },
   // { name: "Courses", path: "/courses" },
   { name: "About Us", path: "/about" },
@@ -19,12 +19,11 @@ const policyLinks = [
 ];
 
 const socials = [
-  { Icon: Facebook, label: "Facebook", href: "https://facebook.com/yourpage" },
-  { Icon: Twitter, label: "Twitter", href: "https://twitter.com/yourhandle" },
+  { Icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/company/vulcansin/" },
   {
     Icon: Instagram,
     label: "Instagram",
-    href: "https://instagram.com/yourprofile",
+    href: "https://www.instagram.com/vulcan.prep?igsh=MW9jbmcwems5anlo",
   },
 ];
 
