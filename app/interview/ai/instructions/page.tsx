@@ -50,7 +50,7 @@ export default function InterviewInstructions() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 flex flex-col">
       <Navbar />
 
-      <div className="flex-1 px-4 sm:px-6 py-4 overflow-y-auto pt-24">
+      <div className="flex-1 px-4 sm:px-6 py-4 overflow-y-auto pt-20">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
