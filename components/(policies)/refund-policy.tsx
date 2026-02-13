@@ -10,14 +10,15 @@ export function RefundPolicy() {
           {/* Left Content */}
           <div className="w-full lg:w-1/2 text-left md:py-16">
             <h1 className="mb-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-vulcan-accent-blue">
-              Refund and Return Policy
+              Payment and Refund Policy
             </h1>
             <p className="mb-8 text-base sm:text-lg md:text-xl text-foreground/80 leading-relaxed">
-              Our return and refund policy ensures transparency and trust. 
-              Please read carefully to understand how we handle cancellations, returns, and refunds. 
+              Thank you for choosing Vulcans. We are committed to providing the best experience possible. 
+              Please read this Refunds and Cancellation Policy carefully before making any purchase or booking on our website 
+              <a href="https://vulcans.co.in/" className="text-vulcan-bright-cyan underline hover:text-vulcan-accent-blue transition-colors">https://vulcans.co.in/</a>
             </p>
             <p className="text-sm text-foreground/70">
-              Last updated: <span className="font-medium">March 23, 2024</span>
+              Last updated: <span className="font-medium">February 13, 2025</span>
             </p>
           </div>
 
@@ -25,7 +26,7 @@ export function RefundPolicy() {
           <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
             <Image
               src="/Privacy & Policy.png"
-              alt="Refund Policy Illustration"
+              alt="Payment and Refund Policy Illustration"
               width={400}
               height={400}
               className="rounded-xl shadow-lg"
@@ -36,120 +37,137 @@ export function RefundPolicy() {
         {/* Content Sections */}
         <div className="space-y-16">
           
-          {/* Section 1 */}
+          {/* Section 1 - Refunds */}
           <div>
             <h2 className="mb-4 text-2xl md:text-3xl font-light tracking-tight text-vulcan-accent-blue">
-              Interpretation
+              1. Refunds
             </h2>
-            <p className="text-base md:text-lg leading-relaxed text-foreground/80">
-              The words of which the initial letter is capitalized 
-              have meanings defined under the following conditions. 
-              The following definitions shall have the same meaning 
-              regardless of whether they appear in singular or in plural.
-            </p>
+            
+            <div className="space-y-6">
+              <div>
+                <h3 className="mb-2 text-lg md:text-xl font-medium text-vulcan-accent-blue">
+                  1.1. Eligibility for Refunds
+                </h3>
+                <p className="text-base md:text-lg leading-relaxed text-foreground/80">
+                  Refunds are issued under specific circumstances and are subject to the terms and conditions outlined in this policy. 
+                  Refund is issued only in the case of website failure, server crash etc. That involves technical error from VULCANS. 
+                  Refund will not be issued in the case of internet, power issues or anything doesn't involve direct involvement of Vulcans.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="mb-2 text-lg md:text-xl font-medium text-vulcan-accent-blue">
+                  1.2. Product/Service Dependent Refund Policies
+                </h3>
+                <p className="text-base md:text-lg leading-relaxed text-foreground/80">
+                  Each product or service offered on Vulcans may have its own refund policy. Please refer to the specific product or service page for details.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="mb-2 text-lg md:text-xl font-medium text-vulcan-accent-blue">
+                  1.3. Refund Requests
+                </h3>
+                <p className="text-base md:text-lg leading-relaxed text-foreground/80">
+                  Refund requests must be made within the specified refund period mentioned for each product or service. 
+                  Requests made after this period may not be entertained.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="mb-2 text-lg md:text-xl font-medium text-vulcan-accent-blue">
+                  1.4. Refund Processing Time
+                </h3>
+                <p className="text-base md:text-lg leading-relaxed text-foreground/80">
+                  Refunds will be processed within 7 business days from the date of approval. 
+                  The processing time may vary depending on the payment method and banking institution.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="mb-2 text-lg md:text-xl font-medium text-vulcan-accent-blue">
+                  1.5. Refund Method
+                </h3>
+                <p className="text-base md:text-lg leading-relaxed text-foreground/80">
+                  Refunds will be issued using the same method of payment used for the original transaction unless otherwise specified.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="mb-2 text-lg md:text-xl font-medium text-vulcan-accent-blue">
+                  1.6. Non-Refundable Items/Services
+                </h3>
+                <p className="text-base md:text-lg leading-relaxed text-foreground/80">
+                  Certain items or services may not be eligible for refunds. These include but are not limited to digital downloads, 
+                  customized products/services, and non-cancellable bookings.
+                </p>
+              </div>
+            </div>
           </div>
 
-          {/* Section 2 */}
+          {/* Section 2 - Payment Policy */}
           <div>
             <h2 className="mb-4 text-2xl md:text-3xl font-light tracking-tight text-vulcan-accent-blue">
-              Definitions
+              2. Payment Policy
             </h2>
-            <p className="mb-4 text-base md:text-lg leading-relaxed text-foreground/80">
-              For the purposes of this Return and Refund Policy:
-            </p>
-            <ul className="list-disc pl-6 space-y-3 text-base md:text-lg leading-relaxed text-foreground/80">
-              <li><strong>Company:</strong> VULCAN LEARNING COLLECTIVE LLP, 13 VASISTA KALLODI, KALUR HOSANAGARA, Shimoga, 57741.</li>
-              <li><strong>Goods:</strong> Items offered for sale on the Service.</li>
-              <li><strong>Orders:</strong> Requests by You to purchase Goods from Us.</li>
-              <li><strong>Service:</strong> The Website.</li>
-              <li><strong>Website:</strong> Vulcans, accessible from <a href="https://vulcans.in" className="text-vulcan-bright-cyan underline hover:text-vulcan-accent-blue transition-colors">https://vulcans.in</a>.</li>
-              <li><strong>You:</strong> The individual accessing or using the Service, or the company or other legal entity on behalf of which such individual is accessing or using the Service.</li>
-            </ul>
+            
+            <div className="space-y-6">
+              <div>
+                <h3 className="mb-2 text-lg md:text-xl font-medium text-vulcan-accent-blue">
+                  2.1. Payment Methods
+                </h3>
+                <p className="text-base md:text-lg leading-relaxed text-foreground/80 mb-4">
+                  VULCAN accepts the following methods of payment for its services:
+                </p>
+                <ul className="list-disc pl-6 space-y-2 text-base md:text-lg leading-relaxed text-foreground/80">
+                  <li>Credit and Debit Cards (Visa, MasterCard, etc.)</li>
+                  <li>Net Banking</li>
+                  <li>Direct Bank Transfers</li>
+                  <li>UPI</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="mb-2 text-lg md:text-xl font-medium text-vulcan-accent-blue">
+                  2.2. Billing and Invoicing
+                </h3>
+                <ul className="list-disc pl-6 space-y-2 text-base md:text-lg leading-relaxed text-foreground/80">
+                  <li>Upon enrollment in any of VULCAN's services, clients will receive an invoice detailing the service charges.</li>
+                  <li>Most services are pre-payment driven.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="mb-2 text-lg md:text-xl font-medium text-vulcan-accent-blue">
+                  2.3. Security
+                </h3>
+                <p className="text-base md:text-lg leading-relaxed text-foreground/80">
+                  VULCAN employs robust security measures to protect the integrity and confidentiality of your personal and payment information. 
+                  These include SSL encryption for data transmission and compliance with PCI DSS standards and our policies align with DPDPR - 2025.
+                </p>
+              </div>
+            </div>
           </div>
 
-          {/* Section 3 - Cancellation Rights */}
+          {/* Section 3 - Contact Information */}
           <div>
             <h2 className="mb-4 text-2xl md:text-3xl font-light tracking-tight text-vulcan-accent-blue">
-              Your Order Cancellation Rights
+              3. Contact Information
             </h2>
             <p className="text-base md:text-lg leading-relaxed text-foreground/80 mb-4">
-              You are entitled to cancel Your Order within 7 days without giving any reason for doing so. 
-              The deadline for cancelling an Order is 7 days from the date on which You received the Goods or 
-              on which a third party you have appointed, who is not the carrier, takes possession of the product delivered.
+              If you have any questions or concerns regarding our Refunds Policy, please contact us at:
             </p>
-            <p className="text-base md:text-lg leading-relaxed text-foreground/80 mb-4">
-              To exercise Your right of cancellation, You must inform Us of your decision by means of a clear statement. 
-              You can inform us via:
-            </p>
-            <p className="text-base md:text-lg leading-relaxed text-foreground/80">
-              Email: <a href="mailto:info@vulcans.in" className="text-vulcan-bright-cyan underline hover:text-vulcan-accent-blue transition-colors">info@vulcans.in</a>
-            </p>
-            <p className="text-base md:text-lg leading-relaxed text-foreground/80 mt-4">
-              We will reimburse You no later than 14 days from the day on which We receive the returned Goods. 
-              The reimbursement will use the same payment method as You used for the Order, and You will not incur any fees for such reimbursement.
-            </p>
-          </div>
-
-          {/* Section 4 - Conditions for Returns */}
-          <div>
-            <h2 className="mb-4 text-2xl md:text-3xl font-light tracking-tight text-vulcan-accent-blue">
-              Conditions for Returns
-            </h2>
-            <ul className="list-disc pl-6 space-y-3 text-base md:text-lg leading-relaxed text-foreground/80">
-              <li>The Goods were purchased in the last 7 days.</li>
-              <li>The Goods are in the original packaging.</li>
-            </ul>
-            <p className="mt-4 mb-2 text-base md:text-lg text-foreground/80">
-              The following Goods cannot be returned:
-            </p>
-            <ul className="list-disc pl-6 space-y-2 text-base md:text-lg leading-relaxed text-foreground/80">
-              <li>Goods made to Your specifications or clearly personalized.</li>
-              <li>Goods which deteriorate rapidly or have expired.</li>
-              <li>Goods unsealed after delivery for hygiene reasons.</li>
-              <li>Goods that are inseparably mixed with other items after delivery.</li>
-            </ul>
-          </div>
-
-          {/* Section 5 - Returning Goods */}
-          <div>
-            <h2 className="mb-4 text-2xl md:text-3xl font-light tracking-tight text-vulcan-accent-blue">
-              Returning Goods
-            </h2>
-            <p className="text-base md:text-lg leading-relaxed text-foreground/80 mb-4">
-              You are responsible for the cost and risk of returning the Goods to Us. Send them to:
-            </p>
-            <p className="text-base md:text-lg leading-relaxed text-foreground/80 font-semibold">
-              13 VASISTA KALLODI, KALUR HOSANAGARA, Shimoga, 57741
-            </p>
-            <p className="text-base md:text-lg leading-relaxed text-foreground/80 mt-4">
-              We recommend using an insured and trackable mail service. 
-              We cannot process refunds without receiving the Goods or proof of return delivery.
-            </p>
-          </div>
-
-          {/* Section 6 - Gifts */}
-          <div>
-            <h2 className="mb-4 text-2xl md:text-3xl font-light tracking-tight text-vulcan-accent-blue">
-              Gifts
-            </h2>
-            <p className="text-base md:text-lg leading-relaxed text-foreground/80">
-              If the Goods were marked as a gift when purchased and then shipped directly to you, 
-              You will receive a gift credit for the value of your return. 
-              Once the returned product is received, a gift certificate will be mailed to You.
-            </p>
-          </div>
-
-          {/* Section 7 - Contact */}
-          <div>
-            <h2 className="mb-4 text-2xl md:text-3xl font-light tracking-tight text-vulcan-accent-blue">
-              Contact Us
-            </h2>
-            <p className="text-base md:text-lg leading-relaxed text-foreground/80">
-              If you have any questions about our Return and Refund Policy, please contact us:
-            </p>
-            <p className="text-base md:text-lg leading-relaxed text-foreground/80">
-              Email: <a href="mailto:info@vulcans.in" className="text-vulcan-bright-cyan underline hover:text-vulcan-accent-blue transition-colors">info@vulcans.in</a>
-            </p>
+            <div className="space-y-3 text-base md:text-lg leading-relaxed text-foreground/80">
+              <p><strong>Email:</strong> <a href="mailto:info@vulcans.in" className="text-vulcan-bright-cyan underline hover:text-vulcan-accent-blue transition-colors">info@vulcans.in</a></p>
+              <p><strong>Phone:</strong> 6362014532</p>
+              <p><strong>Address:</strong> 008, mechanical block, Alva's Institute of Engineering and technology, Mijar - 574227</p>
+            </div>
+            
+            <div className="mt-6 p-4 bg-vulcan-accent-blue/10 rounded-lg">
+              <p className="text-base md:text-lg leading-relaxed text-foreground/80">
+                <strong>By using our website and/or purchasing our products/services, you acknowledge that you have read, understood, and agree to abide by the terms and conditions of this Refunds and Cancellation Policy.</strong>
+              </p>
+            </div>
           </div>
 
         </div>

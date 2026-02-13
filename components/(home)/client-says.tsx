@@ -126,6 +126,36 @@ export function ClientSays() {
         <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background"></div>
         <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background"></div>
       </div>
+
+      {/* Incubated At Section */}
+      <div className="w-full mt-20 md:mt-32">
+        <ScrollReveal>
+          <div className="text-center mb-12">
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-light tracking-tight text-foreground mb-4">
+              Incubated At:
+            </h3>
+          </div>
+        </ScrollReveal>
+        
+        <ScrollReveal delay={0.2}>
+           <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 px-4">
+             <div className="w-64 h-48 md:w-80 md:h-64 flex items-center justify-center">
+               <img
+                 src="/incubated-left.jpeg"
+                 alt="Incubated at left partner"
+                 className="max-w-full max-h-full object-contain rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+               />
+             </div>
+             <div className="w-64 h-48 md:w-80 md:h-64 flex items-center justify-center">
+               <img
+                 src="/incubated-right.png"
+                 alt="Incubated at right partner"
+                 className="max-w-full max-h-full object-contain rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+               />
+             </div>
+           </div>
+         </ScrollReveal>
+      </div>
     </SectionExpand>
   )
 }
