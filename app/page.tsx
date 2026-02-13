@@ -14,11 +14,11 @@ import { InterviewMasterSection } from "@/components/(home)/interview-master-sec
 export default function Home() {
   return (
     <div className="w-full bg-white text-foreground scroll-smooth">
-      <main className="min-h-screen snap-y snap-mandatory overflow-y-scroll">
+      <main className="min-h-screen">
         <Navbar />
 
         {/* Vulcan Prep 360 Hero Section */}
-        <section className="relative flex-1 w-full h-screen flex items-center overflow-hidden bg-white pt-16 md:pt-20 snap-start">
+        <section className="relative flex-1 w-full min-h-screen flex items-center overflow-hidden bg-white pt-16 md:pt-20">
           {/* Background with gradient */}
           <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-muted/30" />
 
