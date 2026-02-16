@@ -1,7 +1,7 @@
 export const runtime = "nodejs";
 
 import { NextRequest, NextResponse } from "next/server";
-import { Document, Page, Text, View, StyleSheet, pdf, Image } from "@react-pdf/renderer";
+import { Document, Page, Text, View, StyleSheet, pdf, Image, renderToBuffer } from "@react-pdf/renderer";
 import React from "react";
 import { join } from "path";
 import { readFileSync } from "fs";
@@ -231,12 +231,13 @@ export async function POST(req: NextRequest) {
       performanceSummary: data.performanceSummary ?? null,
     });
 
-    const pdfBuffer = (await pdf(doc).toBuffer()) as unknown as Buffer;
+    const pdfBuffer = await renderToBuffer(doc);
 
-    return new NextResponse(new Uint8Array(pdfBuffer), {
+    return new Response(new Uint8Array(pdfBuffer), {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": "attachment; filename=Vulcan_Prep_Report.pdf",
+        "Content-Disposition": `attachment; filename="Vulcan_Prep_Report.pdf"`,
+        "Content-Length": pdfBuffer.length.toString(),
       },
     });
   } catch (error) {
