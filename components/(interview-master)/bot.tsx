@@ -19,12 +19,17 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
   const lastQuestionRef = useRef<string>('');
   const lastQuestionNumberRef = useRef<number>(-1);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const synth = useRef<SpeechSynthesis | null>(null);
-  const utterance = useRef<SpeechSynthesisUtterance | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      synth.current = window.speechSynthesis;
+      // Cleanup function to stop audio when component unmounts
+      return () => {
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current = null;
+        }
+      };
     }
   }, []);
 
@@ -32,6 +37,7 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
     if (isInterviewStarted && videoRef.current) {
       const video = videoRef.current;
       video.load();
+      // Attempt to play and pause to "prime" the video element for mobile browsers
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise
@@ -50,57 +56,84 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
       setHasSpoken(false);
       lastQuestionRef.current = question;
       lastQuestionNumberRef.current = currentQuestionNumber;
+
+      // Stop any currently playing audio when question changes
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
     }
   }, [question, currentQuestionNumber]);
 
   useEffect(() => {
-    if (!question || hasSpoken || isRecording || !synth.current || !isInterviewStarted) return;
+    if (!question || hasSpoken || isRecording || !isInterviewStarted) return;
 
-    synth.current.cancel();
+    const fetchAndPlayAudio = async () => {
+      try {
+        const response = await fetch('/api/tts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ text: question }),
+        });
 
-    utterance.current = new SpeechSynthesisUtterance(question);
-    utterance.current.rate = 0.9;
-    utterance.current.pitch = 1.0;
-    utterance.current.volume = 1.0;
+        if (!response.ok) {
+          throw new Error('TTS API request failed');
+        }
 
-    const voices = synth.current.getVoices();
-    const preferredVoice = voices.find(
-      voice =>
-        voice.name.includes('Sarah') ||
-        voice.name.includes('Google UK English Female') ||
-        voice.name.includes('Microsoft Sarah')
-    );
-    if (preferredVoice) {
-      utterance.current.voice = preferredVoice;
-    }
+        const audioBlob = await response.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+        const audio = new Audio(audioUrl);
+        audioRef.current = audio;
 
-    utterance.current.onstart = () => {
-      setHasSpoken(false);
-      if (videoRef.current) {
-        videoRef.current.currentTime = 0;
-        videoRef.current.play().catch(err => console.warn('Avatar video failed to play:', err));
+        audio.onplay = () => {
+          setHasSpoken(false);
+          if (videoRef.current) {
+            videoRef.current.currentTime = 0;
+            videoRef.current.play().catch(err => console.warn('Avatar video failed to play:', err));
+          }
+        };
+
+        audio.onended = () => {
+          videoRef.current?.pause();
+          setHasSpoken(true);
+          onSpeechEnd?.();
+          URL.revokeObjectURL(audioUrl); // Cleanup
+        };
+
+        audio.onerror = (e) => {
+          console.error('Audio playback error', e);
+          videoRef.current?.pause();
+          setHasSpoken(true);
+          onSpeechEnd?.();
+        };
+
+        // Add a small delay to ensure UI is ready, similar to original code
+        setTimeout(() => {
+          audio.play().catch(e => {
+            console.error("Audio autoplay failed:", e);
+            // If autoplay fails, we should essentially skip to "end" state so the app doesn't hang
+            setHasSpoken(true);
+            onSpeechEnd?.();
+          });
+        }, 500);
+
+      } catch (error) {
+        console.error('Error fetching/playing TTS:', error);
+        // Fallback or just mark as spoken so the flow continues
+        setHasSpoken(true);
+        onSpeechEnd?.();
       }
     };
 
-    utterance.current.onend = () => {
-      videoRef.current?.pause();
-      setHasSpoken(true);
-      onSpeechEnd?.();
-    };
-
-    utterance.current.onerror = () => {
-      videoRef.current?.pause();
-      setHasSpoken(true);
-      onSpeechEnd?.();
-    };
-
-    const timer = setTimeout(() => {
-      synth.current!.speak(utterance.current!);
-    }, 800);
+    fetchAndPlayAudio();
 
     return () => {
-      clearTimeout(timer);
-      synth.current!.cancel();
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
     };
   }, [question, hasSpoken, isRecording, onSpeechEnd, isInterviewStarted]);
 
