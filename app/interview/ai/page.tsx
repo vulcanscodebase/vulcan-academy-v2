@@ -899,7 +899,7 @@ export default function InterviewAI() {
         </p>
       </motion.div>
 
-      <div className="flex-1 px-4 sm:px-6 pb-4 min-h-0 overflow-hidden">
+      <div className="flex-1 px-4 sm:px-6 pb-4 min-h-0 overflow-y-auto">
         <div className="max-w-7xl mx-auto h-full">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 sm:gap-6 h-full">
             <motion.div

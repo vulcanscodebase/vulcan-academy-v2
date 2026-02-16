@@ -402,7 +402,7 @@ export default function ResumeUpload() {
     <div className="min-h-screen pt-20 bg-gradient-to-br from-gray-50 via-white to-blue-50">
       <Navbar />
 
-      <div className="pt-16 sm:pt-24 pb-8 sm:pb-12 px-4 sm:px-6">
+      <div className="pt-8 sm:pt-12 pb-8 sm:pb-12 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
