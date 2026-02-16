@@ -143,14 +143,14 @@ export function ClientSays() {
                <img
                  src="/incubated-left.jpeg"
                  alt="Incubated at left partner"
-                 className="max-w-full max-h-full object-contain rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                 className="w-full h-full object-contain rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
                />
              </div>
              <div className="w-64 h-48 md:w-80 md:h-64 flex items-center justify-center">
                <img
                  src="/incubated-right.png"
                  alt="Incubated at right partner"
-                 className="max-w-full max-h-full object-contain rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                 className="w-full h-full object-contain rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
                />
              </div>
            </div>
