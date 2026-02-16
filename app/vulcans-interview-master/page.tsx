@@ -17,9 +17,21 @@ import {
   ArrowDown,
   Zap,
 } from "lucide-react";
+import { useAuth } from "@/components/context/authcontext";
 
 export default function InterviewPage() {
   const router = useRouter();
+  const { user } = useAuth();
+
+  const handleTakeInterview = () => {
+    if (user) {
+      // User is authenticated, redirect to interview upload page
+      router.push("/interview/upload");
+    } else {
+      // User is not authenticated, redirect to sign-in page
+      router.push("/signin");
+    }
+  };
   return (
     <main className="pt-20 pb-16 bg-background text-foreground">
       {/* Hero Section */}
@@ -54,7 +66,7 @@ export default function InterviewPage() {
               <div className="flex flex-wrap items-center gap-3 pt-4">
                 <Button
                   variant="outline"
-                  onClick={() => router.push("/signin")}
+                  onClick={handleTakeInterview}
                   className={cn(
                     "bg-vulcan-accent-blue text-vulcan-white hover:bg-vulcan-accent-blue/90 hover:text-vulcan-white",
                     "shadow-md hover:shadow-lg transition-all duration-300 border-vulcan-accent-blue"
@@ -348,7 +360,7 @@ export default function InterviewPage() {
         <div className="mt-16 pt-12 border-t border-border/60">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button
-              onClick={() => router.push("/signin")}
+              onClick={handleTakeInterview}
               className={cn(
                 "bg-vulcan-accent-blue text-vulcan-white hover:bg-vulcan-accent-blue/90",
                 "shadow-md hover:shadow-lg transition-all duration-300 min-w-[200px]"
