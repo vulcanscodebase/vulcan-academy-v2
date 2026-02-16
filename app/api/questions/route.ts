@@ -56,6 +56,36 @@ export async function GET(req: Request) {
       )
     }
 
+    // Special handling for CABIN CREW role
+    const isCabinCrew = roleName.toLowerCase() === "cabin crew"
+    if (isCabinCrew) {
+      const modeQuestions = roleData[normalizedMode] || roleData["Basic"]
+
+      const cabinPools = ["Pool1", "Pool2", "Pool3", "Pool4"]
+      const selectedCabinQuestions: string[] = ["Tell me about yourself"]
+
+      cabinPools.forEach((pool) => {
+        const poolQuestions = modeQuestions?.[pool]
+
+        if (poolQuestions && poolQuestions.length > 0) {
+          const randomIndex = Math.floor(Math.random() * poolQuestions.length)
+          selectedCabinQuestions.push(poolQuestions[randomIndex])
+        } else {
+          selectedCabinQuestions.push("No question available")
+        }
+      })
+
+      return new Response(
+        JSON.stringify({
+          questions: selectedCabinQuestions,
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }
+      )
+    }
+
 
     const modeQuestions = roleData[normalizedMode]
     const generalRole = questionsMap["General"]

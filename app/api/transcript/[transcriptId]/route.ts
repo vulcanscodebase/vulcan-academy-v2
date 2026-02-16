@@ -94,12 +94,12 @@ Transcript of the answer:
 ${transcript}
 """
 
-Evaluate the response with the following metrics:
-- "confidence": 1 to 5 (how self-assured the speaker sounds)
-- "bodyLanguage": 1 to 5 (inferred from tone, pauses, and delivery—how engaged and expressive they sound)
-- "knowledge": 1 to 5 (how well the candidate understands the topic)
-- "skillRelevance": 1 to 5 (how relevant the answer is to job-related skills)
-- "fluency": 1 to 5 (how smoothly and clearly the candidate speaks, including grammar, pacing, and coherence)
+Evaluate the response with the following metrics (each from 1 to 10):
+- "confidence": 1 to 10 (how self-assured the speaker sounds)
+- "bodyLanguage": 1 to 10 (inferred from tone, pauses, and delivery—how engaged and expressive they sound)
+- "knowledge": 1 to 10 (how well the candidate understands the topic)
+- "skillRelevance": 1 to 10 (how relevant the answer is to job-related skills)
+- "fluency": 1 to 10 (how smoothly and clearly the candidate speaks, including grammar, pacing, and coherence)
 - "feedback": A sentence or two validating the answer, mentioning improvement areas, praising correctness, or identifying missing skills.
 
 Respond ONLY in the following JSON format:

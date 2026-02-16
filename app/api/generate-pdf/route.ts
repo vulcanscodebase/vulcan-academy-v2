@@ -17,7 +17,8 @@ const InterviewReportPDF = ({
   allQuestionData, 
   feedback, 
   resumeAnalysis,
-  reportType = 'user'
+  reportType = 'user',
+  performanceSummary = null,
 }: any) => {
   const styles = StyleSheet.create({
     page: { padding: 30, fontSize: 12, fontFamily: 'Helvetica' },
@@ -40,6 +41,10 @@ const InterviewReportPDF = ({
     metricItem: { width: '18%', marginRight: '2%', padding: 5, backgroundColor: '#fff', borderRadius: 3 },
     metricLabel: { fontSize: 8, color: '#666', marginBottom: 2 },
     metricValue: { fontSize: 10, fontWeight: 'bold' },
+    performanceSummaryBox: { marginBottom: 15, padding: 12, backgroundColor: '#eff6ff', borderRadius: 5, borderWidth: 1, borderColor: '#2563eb' },
+    performanceSummaryRow: { flexDirection: 'row', marginTop: 4 },
+    performanceSummaryLabel: { fontSize: 10, color: '#1e40af', marginRight: 8, fontWeight: 'bold' },
+    performanceSummaryValue: { fontSize: 12, fontWeight: 'bold', color: '#1e3a8a' },
     feedbackBox: { marginTop: 8, padding: 8, backgroundColor: '#f3f4f6', borderRadius: 3 },
     timestamp: { fontSize: 9, color: '#999', textAlign: 'center', marginTop: 5 },
   });
@@ -62,7 +67,7 @@ const InterviewReportPDF = ({
   const headerSection = React.createElement(View, { style: styles.header },
     logoElement,
     React.createElement(Text, { style: styles.companyName }, 'VULCANS'),
-    React.createElement(Text, { style: styles.title }, 'Interview Feedback Report'),
+    React.createElement(Text, { style: styles.title }, 'Vulcan Prep Report'),
     React.createElement(Text, { style: styles.subtitle }, 
       reportType === 'admin' ? 'Admin Dashboard Export' : 'User Report Export'
     )
@@ -83,6 +88,27 @@ const InterviewReportPDF = ({
     )
   );
 
+  const performanceSummarySection = performanceSummary
+    ? React.createElement(View, { style: styles.performanceSummaryBox },
+        React.createElement(Text, { style: styles.heading }, 'Performance Summary (4 factors: Confidence, Knowledge, Fluency, Skill Relevance)'),
+        React.createElement(View, { style: styles.performanceSummaryRow },
+          React.createElement(Text, { style: styles.performanceSummaryLabel }, 'Average Score:'),
+          React.createElement(Text, { style: styles.performanceSummaryValue }, `${performanceSummary.score}/${performanceSummary.outOf} (${performanceSummary.percentage}%)`)
+        ),
+        React.createElement(View, { style: styles.performanceSummaryRow },
+          React.createElement(Text, { style: styles.performanceSummaryLabel }, 'Grade:'),
+          React.createElement(Text, { style: styles.performanceSummaryValue }, performanceSummary.grade || 'N/A')
+        )
+      )
+    : null;
+
+  const MAX_STARS = 10;
+  const toTenStars = (val: number) => {
+    if (typeof val !== 'number' || isNaN(val)) return 0;
+    if (val <= 5 && val >= 0) return Math.min(10, Math.round(val * 2));
+    return Math.min(10, Math.max(0, Math.round(val)));
+  };
+
   // Enhanced questions section with metrics and feedback
   const questionsSection = allQuestionData && allQuestionData.length > 0 
     ? React.createElement(View, { style: styles.section },
@@ -97,29 +123,29 @@ const InterviewReportPDF = ({
             ),
           ];
 
-          // Add metrics if available
+          // Add metrics if available (display on 0-10 scale)
           if (q.metrics) {
             const metricsElements = [
               React.createElement(View, { key: 'metrics-row', style: styles.metricsRow },
                 React.createElement(View, { style: styles.metricItem },
                   React.createElement(Text, { style: styles.metricLabel }, 'Confidence'),
-                  React.createElement(Text, { style: styles.metricValue }, `${Math.round(q.metrics.confidence || 0)}/5`)
+                  React.createElement(Text, { style: styles.metricValue }, `${toTenStars(q.metrics.confidence || 0)}/${MAX_STARS}`)
                 ),
                 React.createElement(View, { style: styles.metricItem },
                   React.createElement(Text, { style: styles.metricLabel }, 'Body Language'),
-                  React.createElement(Text, { style: styles.metricValue }, `${Math.round(q.metrics.bodyLanguage || 0)}/5`)
+                  React.createElement(Text, { style: styles.metricValue }, `${toTenStars(q.metrics.bodyLanguage || 0)}/${MAX_STARS}`)
                 ),
                 React.createElement(View, { style: styles.metricItem },
                   React.createElement(Text, { style: styles.metricLabel }, 'Knowledge'),
-                  React.createElement(Text, { style: styles.metricValue }, `${Math.round(q.metrics.knowledge || 0)}/5`)
+                  React.createElement(Text, { style: styles.metricValue }, `${toTenStars(q.metrics.knowledge || 0)}/${MAX_STARS}`)
                 ),
                 React.createElement(View, { style: styles.metricItem },
                   React.createElement(Text, { style: styles.metricLabel }, 'Fluency'),
-                  React.createElement(Text, { style: styles.metricValue }, `${Math.round(q.metrics.fluency || 0)}/5`)
+                  React.createElement(Text, { style: styles.metricValue }, `${toTenStars(q.metrics.fluency || 0)}/${MAX_STARS}`)
                 ),
                 React.createElement(View, { style: styles.metricItem },
                   React.createElement(Text, { style: styles.metricLabel }, 'Skill Relevance'),
-                  React.createElement(Text, { style: styles.metricValue }, `${Math.round(q.metrics.skillRelevance || 0)}/5`)
+                  React.createElement(Text, { style: styles.metricValue }, `${toTenStars(q.metrics.skillRelevance || 0)}/${MAX_STARS}`)
                 ),
               )
             ];
@@ -162,6 +188,8 @@ const InterviewReportPDF = ({
 
       candidateSection,
 
+      performanceSummarySection,
+
       React.createElement(View, { style: styles.section },
         React.createElement(Text, { style: styles.heading }, 'Overall Feedback'),
         React.createElement(Text, { style: styles.text }, feedback || 'No feedback available')
@@ -200,14 +228,15 @@ export async function POST(req: NextRequest) {
       feedback,
       resumeAnalysis,
       reportType,
+      performanceSummary: data.performanceSummary ?? null,
     });
 
-    const pdfBuffer = await pdf(doc).toBuffer();
+    const pdfBuffer = (await pdf(doc).toBuffer()) as unknown as Buffer;
 
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": "attachment; filename=Interview_Feedback_Report.pdf",
+        "Content-Disposition": "attachment; filename=Vulcan_Prep_Report.pdf",
       },
     });
   } catch (error) {
