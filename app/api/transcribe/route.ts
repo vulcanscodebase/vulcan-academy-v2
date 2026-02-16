@@ -56,6 +56,7 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         audio_url: audioUrl, // Pass the URL of the uploaded audio file
         language_detection: true, // Optional: Enable language detection
+        speech_models: ["universal-2"],
       }),
     });
 

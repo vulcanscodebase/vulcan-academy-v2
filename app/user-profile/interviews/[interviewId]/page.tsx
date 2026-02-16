@@ -21,6 +21,13 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+const MAX_STARS = 10;
+function toTenStars(val: number): number {
+  if (typeof val !== "number" || isNaN(val)) return 0;
+  if (val <= 5 && val >= 0) return Math.min(10, Math.round(val * 2));
+  return Math.min(10, Math.max(0, Math.round(val)));
+}
+
 interface InterviewMetrics {
   confidence: number;
   bodyLanguage: number;
@@ -259,13 +266,14 @@ export default function InterviewDetails() {
   };
 
   function StarRating({ value }: { value: number }) {
+    const scaled = toTenStars(value);
+    const clamped = Math.min(MAX_STARS, Math.max(0, scaled));
     return (
-      <div className="flex space-x-1">
-        {Array.from({ length: 5 }, (_, i) => (
+      <div className="flex space-x-0.5">
+        {Array.from({ length: MAX_STARS }, (_, i) => (
           <Star
             key={i}
-            className={`h-4 w-4 ${i < value ? "text-blue-500 fill-blue-500" : "text-gray-300"
-              }`}
+            className={`h-4 w-4 ${i < clamped ? "text-blue-500 fill-blue-500" : "text-gray-300"}`}
           />
         ))}
       </div>
@@ -470,27 +478,27 @@ export default function InterviewDetails() {
               {[
                 {
                   label: "Confidence",
-                  value: Math.round(interview.report.metrics.avgConfidence || 0),
+                  value: toTenStars(interview.report.metrics.avgConfidence || 0),
                   icon: <TrendingUp className="w-5 h-5" />,
                 },
                 {
                   label: "Body Language",
-                  value: Math.round(interview.report.metrics.avgBodyLanguage || 0),
+                  value: toTenStars(interview.report.metrics.avgBodyLanguage || 0),
                   icon: <User className="w-5 h-5" />,
                 },
                 {
                   label: "Knowledge",
-                  value: Math.round(interview.report.metrics.avgKnowledge || 0),
+                  value: toTenStars(interview.report.metrics.avgKnowledge || 0),
                   icon: <Lightbulb className="w-5 h-5" />,
                 },
                 {
                   label: "Fluency",
-                  value: Math.round(interview.report.metrics.avgFluency || 0),
+                  value: toTenStars(interview.report.metrics.avgFluency || 0),
                   icon: <MessageSquare className="w-5 h-5" />,
                 },
                 {
                   label: "Skill Relevance",
-                  value: Math.round(interview.report.metrics.avgSkillRelevance || 0),
+                  value: toTenStars(interview.report.metrics.avgSkillRelevance || 0),
                   icon: <Target className="w-5 h-5" />,
                 },
               ].map((metric) => (
@@ -500,7 +508,7 @@ export default function InterviewDetails() {
                     <span className="font-medium text-sm">{metric.label}</span>
                   </div>
                   <StarRating value={metric.value} />
-                  <p className="text-sm text-gray-500 mt-1">{metric.value}/5</p>
+                  <p className="text-sm text-gray-500 mt-1">{metric.value}/{MAX_STARS}</p>
                 </div>
               ))}
             </div>
@@ -645,28 +653,28 @@ export default function InterviewDetails() {
                     </div>
                   )}
 
-                  {/* Metrics */}
+                  {/* Metrics (0–10 scale) */}
                   {q.metrics && (
                     <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-3">
                       <div className="text-center p-2 rounded-lg border bg-gray-50">
                         <p className="text-xs text-gray-600 mb-1">Confidence</p>
-                        <StarRating value={q.metrics.confidence || 0} />
+                        <StarRating value={toTenStars(q.metrics.confidence || 0)} />
                       </div>
                       <div className="text-center p-2 rounded-lg border bg-gray-50">
                         <p className="text-xs text-gray-600 mb-1">Body Language</p>
-                        <StarRating value={q.metrics.bodyLanguage || 0} />
+                        <StarRating value={toTenStars(q.metrics.bodyLanguage || 0)} />
                       </div>
                       <div className="text-center p-2 rounded-lg border bg-gray-50">
                         <p className="text-xs text-gray-600 mb-1">Knowledge</p>
-                        <StarRating value={q.metrics.knowledge || 0} />
+                        <StarRating value={toTenStars(q.metrics.knowledge || 0)} />
                       </div>
                       <div className="text-center p-2 rounded-lg border bg-gray-50">
                         <p className="text-xs text-gray-600 mb-1">Fluency</p>
-                        <StarRating value={q.metrics.fluency || 0} />
+                        <StarRating value={toTenStars(q.metrics.fluency || 0)} />
                       </div>
                       <div className="text-center p-2 rounded-lg border bg-gray-50">
                         <p className="text-xs text-gray-600 mb-1">Skill Relevance</p>
-                        <StarRating value={q.metrics.skillRelevance || 0} />
+                        <StarRating value={toTenStars(q.metrics.skillRelevance || 0)} />
                       </div>
                     </div>
                   )}
