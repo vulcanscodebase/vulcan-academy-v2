@@ -25,6 +25,15 @@ import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/(layout-wrapper)/navbar";
 import { toast } from "sonner";
 
+const MAX_STARS = 10;
+
+/** Normalize metric to 0–10 scale (backend may send 0–5 or 0–10). */
+function toTenStars(val: number): number {
+  if (typeof val !== "number" || isNaN(val)) return 0;
+  if (val <= 5 && val >= 0) return Math.min(10, Math.round(val * 2));
+  return Math.min(10, Math.max(0, Math.round(val)));
+}
+
 interface InterviewMetrics {
   confidence: number;
   bodyLanguage: number;
@@ -126,32 +135,15 @@ export default function FeedbackPage() {
               return undefined;
             };
 
-            // Normalize metrics and transcript for display stability
             const normalizeMetrics = (
               m: InterviewMetrics | undefined | null
             ): InterviewMetrics => {
               return {
-                confidence:
-                  typeof m?.confidence === "number" && !isNaN(m.confidence)
-                    ? m.confidence
-                    : 0,
-                bodyLanguage:
-                  typeof m?.bodyLanguage === "number" && !isNaN(m.bodyLanguage)
-                    ? m.bodyLanguage
-                    : 0,
-                knowledge:
-                  typeof m?.knowledge === "number" && !isNaN(m.knowledge)
-                    ? m.knowledge
-                    : 0,
-                skillRelevance:
-                  typeof m?.skillRelevance === "number" &&
-                    !isNaN(m.skillRelevance)
-                    ? m.skillRelevance
-                    : 0,
-                fluency:
-                  typeof m?.fluency === "number" && !isNaN(m.fluency)
-                    ? m.fluency
-                    : 0,
+                confidence: toTenStars(m?.confidence ?? 0),
+                bodyLanguage: toTenStars(m?.bodyLanguage ?? 0),
+                knowledge: toTenStars(m?.knowledge ?? 0),
+                skillRelevance: toTenStars(m?.skillRelevance ?? 0),
+                fluency: toTenStars(m?.fluency ?? 0),
                 feedback:
                   typeof m?.feedback === "string" && m.feedback.trim() !== ""
                     ? m.feedback
@@ -418,7 +410,7 @@ export default function FeedbackPage() {
       totalKnowledge +
       totalFluency +
       totalSkillRelevance;
-    const totalPossible = 20 * numQuestions;
+    const totalPossible = MAX_STARS * 4 * numQuestions; // 5 factors, each out of MAX_STARS
     const percentageScore = (totalScore / totalPossible) * 100;
 
     let grade = "Re-take interview"
@@ -448,15 +440,15 @@ export default function FeedbackPage() {
     setInterviewMetrics(allQuestionData[index].metrics);
   };
 
-  // StarRating component
+  // StarRating component (0–MAX_STARS)
   function StarRating({ value }: { value: number }) {
+    const clamped = Math.min(MAX_STARS, Math.max(0, Math.round(value)));
     return (
-      <div className="flex space-x-1">
-        {Array.from({ length: 5 }, (_, i) => (
+      <div className="flex space-x-0.5">
+        {Array.from({ length: MAX_STARS }, (_, i) => (
           <Star
             key={i}
-            className={`h-5 w-5 ${i < value ? "text-blue-500 fill-blue-500" : "text-gray-300"
-              }`}
+            className={`h-4 w-4 ${i < clamped ? "text-blue-500 fill-blue-500" : "text-gray-300"}`}
           />
         ))}
       </div>
@@ -544,6 +536,14 @@ export default function FeedbackPage() {
         feedback: feedbackText,
         resumeAnalysis: resumeAnalysisText,
         reportType: 'user',
+        performanceSummary: averageSentiment
+          ? {
+              score: averageSentiment.score,
+              outOf: averageSentiment.outOf,
+              percentage: averageSentiment.percentage,
+              grade: averageSentiment.grade,
+            }
+          : null,
       };
 
       const response = await fetch("/api/generate-pdf", {
@@ -564,7 +564,7 @@ export default function FeedbackPage() {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = "Interview_Feedback_Report.pdf";
+      link.download = "Vulcan_Prep_Report.pdf";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -722,7 +722,7 @@ export default function FeedbackPage() {
                     </div>
                     <StarRating value={metric.value} />
                     <p className="text-sm text-gray-500 mt-1">
-                      {metric.value}/5
+                      {metric.value}/{MAX_STARS}
                     </p>
                   </motion.div>
                 ))}
@@ -864,7 +864,7 @@ export default function FeedbackPage() {
                           </p>
                           <StarRating value={metric.value} />
                           <p className="text-sm text-gray-500 mt-1">
-                            {metric.value}/5
+                            {metric.value}/{MAX_STARS}
                           </p>
                         </div>
                       ))}
