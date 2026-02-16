@@ -1,7 +1,7 @@
 "use client";
 import type React from "react"
 import { Inter } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
+// import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider" // Import ThemeProvider
@@ -52,7 +52,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
             
           </ThemeProvider>
         </Suspense>
-        <Analytics />
+        {/* <Analytics /> */}
       </body>
     </html>
   )

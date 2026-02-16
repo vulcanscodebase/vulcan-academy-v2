@@ -12,10 +12,10 @@ const navItems = [
 ];
 
 const policyLinks = [
+  { name: "Terms and Conditions", path: "/terms-and-conditions" },
   { name: "Privacy Policy", path: "/privacy-policy" },
   // { name: "Shipping Policy", path: "/shipping-policy" },
-  { name: "Refund Policy", path: "/refund-policy" },
-  { name: "Terms and Conditions", path: "/terms-and-conditions" },
+  { name: "Payment and Refund Policy", path: "/refund-policy" },
 ];
 
 const socials = [
