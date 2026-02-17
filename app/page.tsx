@@ -119,7 +119,7 @@ export default function Home() {
 
                   {/* CTA Button */}
                   <div className="mt-4 md:mt-6">
-                    <Link href="/interview">
+                    <Link href="/vulcans-interview-master">
                       <Button
                         variant="default"
                         className={cn(

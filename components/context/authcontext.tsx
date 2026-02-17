@@ -2,13 +2,13 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { 
-  loginUser, 
-  registerUser, 
-  logoutUser, 
-  getUserByToken, 
-  getRefreshToken, 
-  getProfileStatus 
+import {
+  loginUser,
+  registerUser,
+  logoutUser,
+  getUserByToken,
+  getRefreshToken,
+  getProfileStatus
 } from "../api";
 import { toast } from "react-toastify";
 import { requestHandler } from "@/utils/auth";
@@ -26,7 +26,7 @@ interface AuthContextType {
   token: string | null;
   isProfileComplete: boolean;
   isMenuOpen: boolean;
-  setIsMenuOpen: ( value:boolean ) => void;
+  setIsMenuOpen: (value: boolean) => void;
   isLoading: boolean;
   login: (data: any) => Promise<void>;
   register: (data: any) => Promise<void>;
@@ -43,14 +43,14 @@ const AuthContext = createContext<AuthContextType>({
   isProfileComplete: false,
   isMenuOpen: false,
   isLoading: false,
-  login: async () => {},
-  register: async () => {},
-  logout: () => {},
+  login: async () => { },
+  register: async () => { },
+  logout: () => { },
   refreshToken: async () => null,
-  getUserProfileStatus: async () => {},
-  getUser: async () => {},
-  handleModal: () => {},
-  setIsMenuOpen:() => {}
+  getUserProfileStatus: async () => { },
+  getUser: async () => { },
+  handleModal: () => { },
+  setIsMenuOpen: () => { }
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -84,7 +84,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.setItem("token", accessToken);
       localStorage.setItem("user", JSON.stringify(user));
       // toast.success("Login successful!");
-      router.push("/");
+
+      if (user.isProfileComplete) {
+        router.push("/");
+      } else {
+        router.push("/user-profile");
+      }
     } catch (err: any) {
       throw err;
     } finally {
@@ -100,6 +105,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // toast.success("Registration successful!");
     } catch (err: any) {
       toast.error(err.message || "Registration failed");
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -107,29 +113,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // ----------------- LOGOUT -----------------
   const logout = async () => {
-  try {
-    await requestHandler(
-      async () => await logoutUser(),
-      setIsLoading,
-      () => {
-        // Optional: redirect after logoutUser
-        // router.push("/");
-      }
-    );
+    try {
+      await requestHandler(
+        async () => await logoutUser(),
+        setIsLoading,
+        () => {
+          // Optional: redirect after logoutUser
+          // router.push("/");
+        }
+      );
 
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    toast.success("Logged out!");
-    router.push("/"); // final redirect
-  } catch (error) {
-    console.error(error);
-    toast.error("Logout failed!");
-  }
-};
+      setUser(null);
+      setToken(null);
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      toast.success("Logged out!");
+      router.push("/"); // final redirect
+    } catch (error) {
+      console.error(error);
+      toast.error("Logout failed!");
+    }
+  };
 
-const getToken = () => token;
+  const getToken = () => token;
 
   // ----------------- REFRESH TOKEN -----------------
   const refreshToken = async () => {

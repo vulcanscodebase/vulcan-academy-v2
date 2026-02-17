@@ -6,9 +6,9 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { handleGoogleCallback, handleGoogleSignIn } from "@/utils/auth";
+import { handleGoogleCallback } from "@/utils/auth";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "sonner";
 import { useAuth } from "../context/authcontext";
@@ -20,7 +20,7 @@ export function Signin() {
   const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useAuth();
-  // const router = useRouter();
+  const router = useRouter();
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -35,7 +35,7 @@ export function Signin() {
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.location.pathname.includes("/google/callback")) {
-      handleGoogleCallback();
+      handleGoogleCallback(window.location.search);
     }
   }, []);
 
@@ -54,7 +54,6 @@ export function Signin() {
         setLoading(true);
         await login(formData);
         toast.success("Login Successful!");
-        setFormData({ email: "", password: "" });
       } catch (err: any) {
         toast.error("Invalid credentials");
       } finally {
