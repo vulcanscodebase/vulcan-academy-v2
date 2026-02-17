@@ -141,13 +141,13 @@ export default function Home() {
                   delay={0.2}
                   className="w-full lg:w-1/2 relative z-10 flex items-center justify-center lg:justify-end"
                 >
-                  <div className="relative w-full max-w-md lg:max-w-lg mx-auto lg:mx-0">
+                  <div className="relative w-full max-w-md lg:max-w-md xl:max-w-lg mx-auto lg:mx-0">
                     <div className="relative w-full aspect-[4/3] lg:aspect-[4/5] rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-vulcan-accent-blue/20 to-vulcan-deep-navy/20 border border-border/50">
                       <Image
                         src="/interview-report.jpg"
                         alt="Vulcan Prep 360"
                         fill
-                        className="object-cover object-center"
+                        className="object-contain object-center"
                         priority
                         sizes="(max-width: 1024px) 100vw, 50vw"
                       />
