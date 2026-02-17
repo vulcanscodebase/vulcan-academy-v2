@@ -27,10 +27,8 @@ import { toast } from "sonner";
 
 const MAX_STARS = 10;
 
-/** Normalize metric to 0–10 scale (backend may send 0–5 or 0–10). */
 function toTenStars(val: number): number {
-  if (typeof val !== "number" || isNaN(val)) return 0;
-  if (val <= 5 && val >= 0) return Math.min(10, Math.round(val * 2));
+  if (typeof val !== "number" || Number.isNaN(val)) return 0;
   return Math.min(10, Math.max(0, Math.round(val)));
 }
 
