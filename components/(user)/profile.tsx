@@ -21,8 +21,9 @@ import {
 import { toast } from "sonner";
 import { useAuth } from "../context/authcontext";
 import { updateUserById, changePassword } from "../api";
-import { Lock, ShieldCheck, Eye, EyeOff } from "lucide-react";
+import { Lock, ShieldCheck, Eye, EyeOff, CheckCircle2, Home, LayoutDashboard } from "lucide-react";
 import { requestHandler } from "@/utils/auth";
+import { motion, AnimatePresence } from "framer-motion";
 
 
 interface FormDataType {
@@ -80,6 +81,16 @@ export function ProfileSetup() {
 
 
   const initialFormData = useRef<FormDataType>({ ...formData });
+
+  const [isProfileRecentlyCompleted, setIsProfileRecentlyCompleted] = useState(false);
+  const [wasInitiallyIncomplete, setWasInitiallyIncomplete] = useState<boolean | null>(null);
+
+  // Set initial profile completion status
+  useEffect(() => {
+    if (user && wasInitiallyIncomplete === null) {
+      setWasInitiallyIncomplete(!user.isProfileComplete);
+    }
+  }, [user, wasInitiallyIncomplete]);
 
   // ✅ Update formData whenever user is loaded
   useEffect(() => {
@@ -205,7 +216,12 @@ export function ProfileSetup() {
           initialFormData.current = { ...formData };
           handleModal("Profile updated successfully!");
           toast.success("Profile saved!");
-          router.push("/user-dash");
+
+          if (wasInitiallyIncomplete) {
+            setIsProfileRecentlyCompleted(true);
+          } else {
+            router.push("/user-dash");
+          }
         },
         () => {
           setApiErrorMsg("Error updating profile!");
@@ -260,324 +276,376 @@ export function ProfileSetup() {
 
 
   return (
-    <main className="pt-28 pb-16 bg-vulcan-bg min-h-screen px-4">
-      <div className="max-w-2xl mx-auto">
-        <Card className="border border-vulcan-border shadow-lg bg-white/90 backdrop-blur-md rounded-2xl overflow-hidden">
-          <CardHeader className="flex flex-col items-center text-center">
-            <div className="mt-4 text-2xl font-semibold text-vulcan-dark">
-              My Profile
-            </div>
-            <CardTitle className="mt-4 text-2xl font-semibold text-vulcan-dark">
-              {formData.name}
-            </CardTitle>
+    <main className="pt-28 pb-16 bg-vulcan-bg min-h-screen px-4 flex items-center justify-center">
+      <div className="max-w-2xl w-full mx-auto">
+        <AnimatePresence mode="wait">
+          {isProfileRecentlyCompleted ? (
+            <motion.div
+              key="success-view"
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              <Card className="border border-vulcan-border shadow-2xl bg-white/95 backdrop-blur-xl rounded-3xl overflow-hidden p-8 text-center">
+                <div className="flex flex-col items-center justify-center space-y-6">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 20,
+                      delay: 0.2
+                    }}
+                    className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center"
+                  >
+                    <CheckCircle2 className="w-16 h-16 text-green-600" />
+                  </motion.div>
 
-            {/* Interview Stats Section */}
-            <div className="mt-6 w-full max-w-md">
-              <div className="grid grid-cols-2 gap-4">
-                {/* Remaining Interviews Badge */}
-                <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-3 rounded-xl shadow-lg">
-                  <div className="flex items-center space-x-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
+                  <div className="space-y-2">
+                    <h2 className="text-3xl font-bold text-vulcan-dark">Profile Completed!</h2>
+                    <p className="text-gray-600 max-w-sm mx-auto">
+                      Your profile has been set up successfully. Welcome to Vulcan Academy!
+                    </p>
+                  </div>
+
+                  <div className="flex justify-center w-full pt-4">
+                    <Button
+                      onClick={() => router.push("/")}
+                      className="w-full max-w-xs bg-vulcan-accent-blue text-white hover:bg-vulcan-accent-blue/90 h-12 rounded-xl text-lg font-semibold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 transition-all active:scale-95"
                     >
-                      <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <div className="text-left">
-                      <div className="text-xs font-medium opacity-90">Available</div>
-                      <div className="text-2xl font-bold">{remainingInterviews}</div>
-                    </div>
+                      <Home className="w-5 h-5" />
+                      Go to Home
+                    </Button>
                   </div>
                 </div>
-
-                {/* View Past Interviews Button */}
-                <button
-                  onClick={() => router.push("/user-profile/interviews")}
-                  className="bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-50 px-4 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
-                >
-                  <div className="flex flex-col items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 mb-1"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                    <div className="text-xs font-semibold">My Interviews</div>
+              </Card>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="profile-form"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <Card className="border border-vulcan-border shadow-lg bg-white/90 backdrop-blur-md rounded-2xl overflow-hidden">
+                <CardHeader className="flex flex-col items-center text-center">
+                  <div className="mt-4 text-2xl font-semibold text-vulcan-dark">
+                    My Profile
                   </div>
-                </button>
-              </div>
-            </div>
+                  <CardTitle className="mt-4 text-2xl font-semibold text-vulcan-dark">
+                    {formData.name}
+                  </CardTitle>
 
-            {!isEditMode && (
-              <Button
-                variant="outline"
-                className="mt-4"
-                onClick={() => setIsEditMode(true)}
-              >
-                Update Profile
-              </Button>
-            )}
-          </CardHeader>
+                  {/* Interview Stats Section */}
+                  <div className="mt-6 w-full max-w-md">
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Remaining Interviews Badge */}
+                      <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-3 rounded-xl shadow-lg">
+                        <div className="flex items-center space-x-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                            <path
+                              fillRule="evenodd"
+                              d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          <div className="text-left">
+                            <div className="text-xs font-medium opacity-90">Available</div>
+                            <div className="text-2xl font-bold">{remainingInterviews}</div>
+                          </div>
+                        </div>
+                      </div>
 
-          {apiErrorMsg && (
-            <p className="text-red-600 text-center text-sm font-medium">
-              {apiErrorMsg}
-            </p>
-          )}
-
-          <CardContent className="space-y-6 px-6">
-            {/* Name */}
-            <div>
-              <label className="text-sm font-medium mb-1 block text-vulcan-dark">
-                Name
-              </label>
-              <Input
-                name="name"
-                value={formData.name}
-                disabled
-                className="bg-white/70 w-full"
-              />
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="text-sm font-medium mb-1 block text-vulcan-dark">
-                Email
-              </label>
-              <Input
-                name="email"
-                value={formData.email}
-                disabled
-                className="bg-white/70 w-full"
-              />
-            </div>
-
-            {/* DOB */}
-            <div>
-              <label className="text-sm font-medium mb-1 block text-vulcan-dark">
-                Date of Birth
-              </label>
-              <Input
-                type="date"
-                name="dob"
-                value={formData.dob}
-                disabled
-                className="bg-white/70 w-full"
-              />
-            </div>
-
-            {/* Editable fields */}
-            <div>
-              <label className="text-sm font-medium mb-1 block text-vulcan-dark">
-                Profession
-              </label>
-              <Select
-                disabled={!isEditMode}
-                onValueChange={(value) => handleSelectChange("profession", value)}
-                value={formData.profession}
-              >
-                <SelectTrigger className="bg-white/70 w-full">
-                  <SelectValue placeholder="Select Profession" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Student">Student</SelectItem>
-                  <SelectItem value="Job Seeker">Job Seeker</SelectItem>
-                  <SelectItem value="IT Profession">IT Profession</SelectItem>
-                  <SelectItem value="Aspirant Studying Abroad">
-                    Aspirant Studying Abroad
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium mb-1 block text-vulcan-dark">
-                Education Status
-              </label>
-              <Select
-                disabled={!isEditMode}
-                onValueChange={(value) => handleSelectChange("educationStatus", value)}
-                value={formData.educationStatus}
-              >
-                <SelectTrigger className="bg-white/70 w-full">
-                  <SelectValue placeholder="Select Education Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="10th or below">10th or below</SelectItem>
-                  <SelectItem value="11th-12th or diploma">11th–12th / Diploma</SelectItem>
-                  <SelectItem value="Undergrad">Undergrad</SelectItem>
-                  <SelectItem value="Grad">Grad</SelectItem>
-                  <SelectItem value="Post Grad">Post Grad</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium mb-1 block text-vulcan-dark">
-                School / College
-              </label>
-              <Input
-                name="schoolOrCollege"
-                value={formData.schoolOrCollege}
-                disabled={!isEditMode}
-                onChange={handleInputChange}
-                className="bg-white/70 w-full"
-              />
-            </div>
-
-            <div>
-              <label className="text-sm font-medium mb-1 block text-vulcan-dark">
-                Qualification
-              </label>
-              <Input
-                name="qualification"
-                value={formData.qualification}
-                disabled={!isEditMode}
-                onChange={handleInputChange}
-                className="bg-white/70 w-full"
-              />
-            </div>
-
-            {formData.profession === "IT Profession" && (
-              <div>
-                <label className="text-sm font-medium mb-1 block text-vulcan-dark">
-                  Organization
-                </label>
-                <Input
-                  name="organization"
-                  value={formData.organization}
-                  disabled={!isEditMode}
-                  onChange={handleInputChange}
-                  className="bg-white/70 w-full"
-                />
-              </div>
-            )}
-
-            {/* Change Password Section */}
-            <div className="pt-6 border-t border-gray-100">
-              {!showPasswordUpdate ? (
-                <Button
-                  variant="ghost"
-                  onClick={() => setShowPasswordUpdate(true)}
-                  className="flex items-center gap-2 text-vulcan-accent-blue hover:text-vulcan-accent-blue/80 hover:bg-vulcan-accent-blue/5 transition-all text-sm font-semibold"
-                >
-                  <Lock className="w-4 h-4" />
-                  Change Password
-                </Button>
-              ) : (
-                <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-vulcan-dark font-semibold">
-                      <ShieldCheck className="w-5 h-5 text-green-600" />
-                      Update Password
+                      {/* View Past Interviews Button */}
+                      <button
+                        onClick={() => router.push("/user-profile/interviews")}
+                        className="bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-50 px-4 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
+                      >
+                        <div className="flex flex-col items-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 mb-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            />
+                          </svg>
+                          <div className="text-xs font-semibold">My Interviews</div>
+                        </div>
+                      </button>
                     </div>
+                  </div>
+
+                  {!isEditMode && (
                     <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowPasswordUpdate(false)}
-                      className="h-8 text-xs text-gray-500"
+                      variant="outline"
+                      className="mt-4"
+                      onClick={() => setIsEditMode(true)}
+                    >
+                      Update Profile
+                    </Button>
+                  )}
+                </CardHeader>
+
+                {apiErrorMsg && (
+                  <p className="text-red-600 text-center text-sm font-medium">
+                    {apiErrorMsg}
+                  </p>
+                )}
+
+                <CardContent className="space-y-6 px-6">
+                  {/* Name */}
+                  <div>
+                    <label className="text-sm font-medium mb-1 block text-vulcan-dark">
+                      Name
+                    </label>
+                    <Input
+                      name="name"
+                      value={formData.name}
+                      disabled
+                      className="bg-white/70 w-full"
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div>
+                    <label className="text-sm font-medium mb-1 block text-vulcan-dark">
+                      Email
+                    </label>
+                    <Input
+                      name="email"
+                      value={formData.email}
+                      disabled
+                      className="bg-white/70 w-full"
+                    />
+                  </div>
+
+                  {/* DOB */}
+                  <div>
+                    <label className="text-sm font-medium mb-1 block text-vulcan-dark">
+                      Date of Birth
+                    </label>
+                    <Input
+                      type="date"
+                      name="dob"
+                      value={formData.dob}
+                      disabled
+                      className="bg-white/70 w-full"
+                    />
+                  </div>
+
+                  {/* Editable fields */}
+                  <div>
+                    <label className="text-sm font-medium mb-1 block text-vulcan-dark">
+                      Profession
+                    </label>
+                    <Select
+                      disabled={!isEditMode}
+                      onValueChange={(value) => handleSelectChange("profession", value)}
+                      value={formData.profession}
+                    >
+                      <SelectTrigger className="bg-white/70 w-full">
+                        <SelectValue placeholder="Select Profession" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Student">Student</SelectItem>
+                        <SelectItem value="Job Seeker">Job Seeker</SelectItem>
+                        <SelectItem value="IT Profession">IT Profession</SelectItem>
+                        <SelectItem value="Aspirant Studying Abroad">
+                          Aspirant Studying Abroad
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium mb-1 block text-vulcan-dark">
+                      Education Status
+                    </label>
+                    <Select
+                      disabled={!isEditMode}
+                      onValueChange={(value) => handleSelectChange("educationStatus", value)}
+                      value={formData.educationStatus}
+                    >
+                      <SelectTrigger className="bg-white/70 w-full">
+                        <SelectValue placeholder="Select Education Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="10th or below">10th or below</SelectItem>
+                        <SelectItem value="11th-12th or diploma">11th–12th / Diploma</SelectItem>
+                        <SelectItem value="Undergrad">Undergrad</SelectItem>
+                        <SelectItem value="Grad">Grad</SelectItem>
+                        <SelectItem value="Post Grad">Post Grad</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium mb-1 block text-vulcan-dark">
+                      School / College
+                    </label>
+                    <Input
+                      name="schoolOrCollege"
+                      value={formData.schoolOrCollege}
+                      disabled={!isEditMode}
+                      onChange={handleInputChange}
+                      className="bg-white/70 w-full"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium mb-1 block text-vulcan-dark">
+                      Qualification
+                    </label>
+                    <Input
+                      name="qualification"
+                      value={formData.qualification}
+                      disabled={!isEditMode}
+                      onChange={handleInputChange}
+                      className="bg-white/70 w-full"
+                    />
+                  </div>
+
+                  {formData.profession === "IT Profession" && (
+                    <div>
+                      <label className="text-sm font-medium mb-1 block text-vulcan-dark">
+                        Organization
+                      </label>
+                      <Input
+                        name="organization"
+                        value={formData.organization}
+                        disabled={!isEditMode}
+                        onChange={handleInputChange}
+                        className="bg-white/70 w-full"
+                      />
+                    </div>
+                  )}
+
+                  {/* Change Password Section */}
+                  <div className="pt-6 border-t border-gray-100">
+                    {!showPasswordUpdate ? (
+                      <Button
+                        variant="ghost"
+                        onClick={() => setShowPasswordUpdate(true)}
+                        className="flex items-center gap-2 text-vulcan-accent-blue hover:text-vulcan-accent-blue/80 hover:bg-vulcan-accent-blue/5 transition-all text-sm font-semibold"
+                      >
+                        <Lock className="w-4 h-4" />
+                        Change Password
+                      </Button>
+                    ) : (
+                      <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2 text-vulcan-dark font-semibold">
+                            <ShieldCheck className="w-5 h-5 text-green-600" />
+                            Update Password
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setShowPasswordUpdate(false)}
+                            className="h-8 text-xs text-gray-500"
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+
+                        <div className="space-y-4">
+                          <div className="relative">
+                            <label className="text-xs font-medium mb-1 block text-gray-600">Current Password</label>
+                            <Input
+                              type={showCurrentPassword ? "text" : "password"}
+                              placeholder="••••••••"
+                              value={passwordData.currentPassword}
+                              onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                              className="bg-white pr-10"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                              className="absolute right-3 top-8 text-gray-400 hover:text-gray-600"
+                            >
+                              {showCurrentPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            </button>
+                          </div>
+
+                          <div className="relative">
+                            <label className="text-xs font-medium mb-1 block text-gray-600">New Password</label>
+                            <Input
+                              type={showNewPassword ? "text" : "password"}
+                              placeholder="••••••••"
+                              value={passwordData.newPassword}
+                              onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                              className="bg-white pr-10"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowNewPassword(!showNewPassword)}
+                              className="absolute right-3 top-8 text-gray-400 hover:text-gray-600"
+                            >
+                              {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            </button>
+                          </div>
+
+                          <div>
+                            <label className="text-xs font-medium mb-1 block text-gray-600">Confirm New Password</label>
+                            <Input
+                              type="password"
+                              placeholder="••••••••"
+                              value={passwordData.confirmPassword}
+                              onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                              className="bg-white"
+                            />
+                          </div>
+
+                          <Button
+                            onClick={handlePasswordUpdate}
+                            disabled={isPasswordLoading}
+                            className="w-full bg-vulcan-accent-blue text-white hover:bg-vulcan-accent-blue/90 h-10 shadow-md transition-all duration-200 active:scale-[0.98]"
+                          >
+                            {isPasswordLoading ? "Updating..." : "Confirm Update"}
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+
+
+                {isEditMode && (
+                  <CardFooter className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 px-6 pb-6">
+                    <Button
+                      variant="outline"
+                      disabled={isLoading}
+                      onClick={handleCancel}
+                      className="w-full sm:w-auto border border-gray-300 text-gray-700 hover:bg-gray-100"
                     >
                       Cancel
                     </Button>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="relative">
-                      <label className="text-xs font-medium mb-1 block text-gray-600">Current Password</label>
-                      <Input
-                        type={showCurrentPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        value={passwordData.currentPassword}
-                        onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-                        className="bg-white pr-10"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                        className="absolute right-3 top-8 text-gray-400 hover:text-gray-600"
-                      >
-                        {showCurrentPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    </div>
-
-                    <div className="relative">
-                      <label className="text-xs font-medium mb-1 block text-gray-600">New Password</label>
-                      <Input
-                        type={showNewPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        value={passwordData.newPassword}
-                        onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                        className="bg-white pr-10"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowNewPassword(!showNewPassword)}
-                        className="absolute right-3 top-8 text-gray-400 hover:text-gray-600"
-                      >
-                        {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    </div>
-
-                    <div>
-                      <label className="text-xs font-medium mb-1 block text-gray-600">Confirm New Password</label>
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        value={passwordData.confirmPassword}
-                        onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                        className="bg-white"
-                      />
-                    </div>
-
                     <Button
-                      onClick={handlePasswordUpdate}
-                      disabled={isPasswordLoading}
-                      className="w-full bg-vulcan-accent-blue text-white hover:bg-vulcan-accent-blue/90 h-10 shadow-md transition-all duration-200 active:scale-[0.98]"
+                      onClick={handleSave}
+                      disabled={isLoading}
+                      className="w-full sm:w-auto bg-vulcan-accent-blue text-white hover:bg-vulcan-accent-blue/90"
                     >
-                      {isPasswordLoading ? "Updating..." : "Confirm Update"}
+                      {isLoading ? "Saving..." : "Save"}
                     </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </CardContent>
-
-
-          {isEditMode && (
-            <CardFooter className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 px-6 pb-6">
-              <Button
-                variant="outline"
-                disabled={isLoading}
-                onClick={handleCancel}
-                className="w-full sm:w-auto border border-gray-300 text-gray-700 hover:bg-gray-100"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleSave}
-                disabled={isLoading}
-                className="w-full sm:w-auto bg-vulcan-accent-blue text-white hover:bg-vulcan-accent-blue/90"
-              >
-                {isLoading ? "Saving..." : "Save"}
-              </Button>
-            </CardFooter>
+                  </CardFooter>
+                )}
+              </Card>
+            </motion.div>
           )}
-        </Card>
+        </AnimatePresence>
       </div>
     </main>
   );
