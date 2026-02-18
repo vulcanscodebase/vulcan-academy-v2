@@ -75,6 +75,7 @@ const setupPassword = (bodyData: any) => apiClient.post(`/auth/setup-password`, 
 const getVerificationEmail = (token: string) => apiClient.get(`/auth/verify-email/${token}`);
 const postResendVerificationEmail = (data: string) =>
   apiClient.post("/auth/resend-verification-email", data);
+const changePassword = (data: any) => apiClient.post("/auth/change-password", data);
 
 // Token APIs
 const getRefreshToken = () => apiClient.post(`/auth/refresh-token`);
@@ -96,4 +97,5 @@ export {
   getUserByToken,
   setupPassword,
   checkUserExists,
+  changePassword,
 };
