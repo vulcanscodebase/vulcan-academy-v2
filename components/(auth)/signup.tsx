@@ -14,19 +14,29 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { handleGoogleCallback, handleGoogleSignIn } from "@/utils/auth";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "sonner";
 import { useAuth } from "../context/authcontext";
 
 export function Signup() {
+  const searchParams = useSearchParams();
+  const prefilledEmail = searchParams.get("email") || "";
+
   const [formData, setFormData] = useState({
     name: "",
     dob: "",
-    email: "",
+    email: prefilledEmail,
     password: "",
   });
+
+  // Update email if query param changes
+  useEffect(() => {
+    if (prefilledEmail) {
+      setFormData(prev => ({ ...prev, email: prefilledEmail }));
+    }
+  }, [prefilledEmail]);
 
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,7 +46,7 @@ export function Signup() {
     confirmPassword: false,
   });
 
-  const { register } = useAuth();
+  const { register, login } = useAuth();
   const router = useRouter();
 
   // ✅ Validate all fields
@@ -60,7 +70,7 @@ export function Signup() {
   // Google callback handling
   useEffect(() => {
     if (window.location.href.includes("google/callback")) {
-      handleGoogleCallback();
+      handleGoogleCallback(window.location.search);
     }
   }, []);
 
@@ -93,10 +103,10 @@ export function Signup() {
 
     try {
       await register(formData);
+      await login({ email: formData.email, password: formData.password });
       toast.success("Registered successfully! Please check your email for verification link. ");
       setFormData({ name: "", dob: "", email: "", password: "" });
       setConfirmPassword("");
-      // router.push("/");
     } catch (err) {
       toast.error("Something went wrong during signup");
       console.error(err);

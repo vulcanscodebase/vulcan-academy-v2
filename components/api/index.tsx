@@ -12,7 +12,10 @@ export const setUpInterceptors = (getToken: () => string | null, refreshToken: (
   // Request interceptor
   apiClient.interceptors.request.use(
     (config) => {
-      // Add token here if needed
+      const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
       return config;
     },
     (error) => Promise.reject(error)
@@ -76,8 +79,7 @@ const postResendVerificationEmail = (data: string) =>
 // Token APIs
 const getRefreshToken = () => apiClient.post(`/auth/refresh-token`);
 const getUserByToken = () => apiClient.get(`/auth/user`);
-const changePassword = (data: any) => apiClient.post("/auth/change-password", data);
-
+const checkUserExists = (data: { email: string }) => apiClient.post("/auth/check-email", data);
 
 export {
   loginUser,
@@ -93,6 +95,5 @@ export {
   getRefreshToken,
   getUserByToken,
   setupPassword,
-  changePassword,
-
+  checkUserExists,
 };
