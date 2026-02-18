@@ -83,12 +83,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setToken(accessToken);
       localStorage.setItem("token", accessToken);
       localStorage.setItem("user", JSON.stringify(user));
-      // toast.success("Login successful!");
 
-      if (user.isProfileComplete) {
-        router.push("/");
-      } else {
+      // REDIRECTION LOGIC:
+      // 1. If it's a new user (from Signup) and profile is incomplete -> Profile Setup
+      // 2. Otherwise (Existing users or completed profiles) -> Home Screen
+      if (data.isNewUser && !user.isProfileComplete) {
         router.push("/user-profile");
+      } else {
+        router.push("/");
       }
     } catch (err: any) {
       throw err;
