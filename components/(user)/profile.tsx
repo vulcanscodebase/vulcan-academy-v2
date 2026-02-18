@@ -20,10 +20,8 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useAuth } from "../context/authcontext";
-import { updateUserById, changePassword } from "../api";
-import { Lock, ShieldCheck, Eye, EyeOff } from "lucide-react";
+import { updateUserById } from "../api";
 import { requestHandler } from "@/utils/auth";
-
 
 interface FormDataType {
   name: string;
@@ -67,18 +65,6 @@ export function ProfileSetup() {
   const [apiErrorMsg, setApiErrorMsg] = useState("");
   const [remainingInterviews, setRemainingInterviews] = useState<number>(0);
 
-  // Password update states
-  const [showPasswordUpdate, setShowPasswordUpdate] = useState(false);
-  const [isPasswordLoading, setIsPasswordLoading] = useState(false);
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [passwordData, setPasswordData] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
-
-
   const initialFormData = useRef<FormDataType>({ ...formData });
 
   // ✅ Update formData whenever user is loaded
@@ -97,7 +83,7 @@ export function ProfileSetup() {
       };
       setFormData(updatedForm);
       initialFormData.current = updatedForm;
-
+      
       // Get remaining interviews (licenses) count - ensure it's fetched properly
       const userLicenses = (user as any).licenses;
       if (userLicenses !== undefined && userLicenses !== null) {
@@ -218,46 +204,6 @@ export function ProfileSetup() {
       setIsLoading(false);
     }
   };
-
-  const handlePasswordUpdate = async () => {
-    if (!passwordData.currentPassword || !passwordData.newPassword) {
-      return toast.error("Please fill in all password fields");
-    }
-
-    if (passwordData.newPassword.length < 8) {
-      return toast.error("New password must be at least 8 characters");
-    }
-
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      return toast.error("New passwords do not match");
-    }
-
-    setIsPasswordLoading(true);
-    try {
-      await requestHandler(
-        async () => await changePassword({
-          currentPassword: passwordData.currentPassword,
-          newPassword: passwordData.newPassword
-        }),
-        setIsPasswordLoading,
-        () => {
-          toast.success("Password updated successfully!");
-          setShowPasswordUpdate(false);
-          setPasswordData({
-            currentPassword: "",
-            newPassword: "",
-            confirmPassword: "",
-          });
-        },
-        (error) => {
-          toast.error(error || "Failed to update password");
-        }
-      );
-    } catch (error) {
-      toast.error("An unexpected error occurred");
-    }
-  };
-
 
   return (
     <main className="pt-28 pb-16 bg-vulcan-bg min-h-screen px-4">
@@ -467,96 +413,7 @@ export function ProfileSetup() {
                 />
               </div>
             )}
-
-            {/* Change Password Section */}
-            <div className="pt-6 border-t border-gray-100">
-              {!showPasswordUpdate ? (
-                <Button
-                  variant="ghost"
-                  onClick={() => setShowPasswordUpdate(true)}
-                  className="flex items-center gap-2 text-vulcan-accent-blue hover:text-vulcan-accent-blue/80 hover:bg-vulcan-accent-blue/5 transition-all text-sm font-semibold"
-                >
-                  <Lock className="w-4 h-4" />
-                  Change Password
-                </Button>
-              ) : (
-                <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-vulcan-dark font-semibold">
-                      <ShieldCheck className="w-5 h-5 text-green-600" />
-                      Update Password
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowPasswordUpdate(false)}
-                      className="h-8 text-xs text-gray-500"
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="relative">
-                      <label className="text-xs font-medium mb-1 block text-gray-600">Current Password</label>
-                      <Input
-                        type={showCurrentPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        value={passwordData.currentPassword}
-                        onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-                        className="bg-white pr-10"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                        className="absolute right-3 top-8 text-gray-400 hover:text-gray-600"
-                      >
-                        {showCurrentPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    </div>
-
-                    <div className="relative">
-                      <label className="text-xs font-medium mb-1 block text-gray-600">New Password</label>
-                      <Input
-                        type={showNewPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        value={passwordData.newPassword}
-                        onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                        className="bg-white pr-10"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowNewPassword(!showNewPassword)}
-                        className="absolute right-3 top-8 text-gray-400 hover:text-gray-600"
-                      >
-                        {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    </div>
-
-                    <div>
-                      <label className="text-xs font-medium mb-1 block text-gray-600">Confirm New Password</label>
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        value={passwordData.confirmPassword}
-                        onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                        className="bg-white"
-                      />
-                    </div>
-
-                    <Button
-                      onClick={handlePasswordUpdate}
-                      disabled={isPasswordLoading}
-                      className="w-full bg-vulcan-accent-blue text-white hover:bg-vulcan-accent-blue/90 h-10 shadow-md transition-all duration-200 active:scale-[0.98]"
-                    >
-                      {isPasswordLoading ? "Updating..." : "Confirm Update"}
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
           </CardContent>
-
 
           {isEditMode && (
             <CardFooter className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 px-6 pb-6">
