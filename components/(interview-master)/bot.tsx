@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 interface BotInterviewerProps {
   question: string;
@@ -20,6 +20,55 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
   const lastQuestionNumberRef = useRef<number>(-1);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioUnlockedRef = useRef<boolean>(false);
+
+  // Create a persistent Audio element and unlock it on first user interaction
+  // This is critical for mobile browsers which block audio.play() unless
+  // it originates from a user gesture (tap/click)
+  const unlockAudio = useCallback(() => {
+    if (audioUnlockedRef.current) return;
+
+    const audio = new Audio();
+    // Play a tiny silent audio to "unlock" the Audio element on mobile
+    audio.src = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoRBqSAAAAAAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoRBqSAAAAAAAAAAAAAAAAAAAA';
+    audio.volume = 0.01;
+    const playPromise = audio.play();
+    if (playPromise) {
+      playPromise
+        .then(() => {
+          audio.pause();
+          audio.currentTime = 0;
+          audioUnlockedRef.current = true;
+          console.log('Audio unlocked for mobile playback');
+        })
+        .catch(() => {
+          // Silent fail - will retry on next interaction
+          console.warn('Audio unlock failed, will retry');
+        });
+    }
+  }, []);
+
+  // Unlock audio when interview starts (triggered by user tap on "Start Interview")
+  useEffect(() => {
+    if (isInterviewStarted) {
+      unlockAudio();
+    }
+  }, [isInterviewStarted, unlockAudio]);
+
+  // Also try to unlock on any user click/touch as a fallback
+  useEffect(() => {
+    const handleInteraction = () => {
+      unlockAudio();
+    };
+
+    document.addEventListener('click', handleInteraction, { once: true });
+    document.addEventListener('touchstart', handleInteraction, { once: true });
+
+    return () => {
+      document.removeEventListener('click', handleInteraction);
+      document.removeEventListener('touchstart', handleInteraction);
+    };
+  }, [unlockAudio]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -85,6 +134,11 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
         const audioBlob = await response.blob();
         const audioUrl = URL.createObjectURL(audioBlob);
         const audio = new Audio(audioUrl);
+
+        // Mobile Safari requires these attributes
+        audio.setAttribute('playsinline', '');
+        audio.preload = 'auto';
+
         audioRef.current = audio;
 
         audio.onplay = () => {
@@ -109,14 +163,19 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
           onSpeechEnd?.();
         };
 
-        // Add a small delay to ensure UI is ready
-        setTimeout(() => {
+        // Load the audio first, then play
+        audio.load();
+
+        // Use canplaythrough event for more reliable playback on mobile
+        audio.oncanplaythrough = () => {
           audio.play().catch(e => {
             console.error("Audio autoplay failed:", e);
+            // On mobile, if autoplay still fails, show the question anyway
+            // and mark as spoken so the flow continues
             setHasSpoken(true);
             onSpeechEnd?.();
           });
-        }, 500);
+        };
 
       } catch (error) {
         console.error('Error fetching/playing TTS:', error);
@@ -125,9 +184,13 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
       }
     };
 
-    fetchAndPlayAudio();
+    // Small delay to ensure the component is ready
+    const timer = setTimeout(() => {
+      fetchAndPlayAudio();
+    }, 300);
 
     return () => {
+      clearTimeout(timer);
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
@@ -159,4 +222,3 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
 };
 
 export default BotInterviewer;
-
