@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,48 +9,41 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid or missing text' }, { status: 400 });
     }
 
-    const speechKey = process.env.AZURE_SPEECH_KEY;
-    const speechRegion = process.env.AZURE_SPEECH_REGION;
+    const speechConfig = sdk.SpeechConfig.fromSubscription(
+      process.env.AZURE_SPEECH_KEY!,
+      process.env.AZURE_SPEECH_REGION!
+    );
 
-    if (!speechKey || !speechRegion) {
-      console.error('Missing AZURE_SPEECH_KEY or AZURE_SPEECH_REGION');
-      return NextResponse.json({ error: 'TTS not configured' }, { status: 500 });
-    }
+    // Using the specific neural voice requested
+    speechConfig.speechSynthesisVoiceName = 'en-IN-Aarti:DragonHDLatestNeural';
 
-    // Use Azure REST API directly (no native SDK dependencies)
-    const endpoint = `https://${speechRegion}.tts.speech.microsoft.com/cognitiveservices/v1`;
+    // Set output format to MP3
+    speechConfig.speechSynthesisOutputFormat =
+      sdk.SpeechSynthesisOutputFormat.Audio16Khz128KBitRateMonoMp3;
 
-    const ssml = `
-      <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-IN'>
-        <voice name='en-IN-AartiNeural'>
-          ${text}
-        </voice>
-      </speak>
-    `;
+    const synthesizer = new sdk.SpeechSynthesizer(speechConfig);
 
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Ocp-Apim-Subscription-Key': speechKey,
-        'Content-Type': 'application/ssml+xml',
-        'X-Microsoft-OutputFormat': 'audio-16khz-128kbitrate-mono-mp3',
-        'User-Agent': 'VulcanAcademy',
-      },
-      body: ssml,
+    // Wrap the callback-based SDK in a Promise to use with async/await
+    const audioData = await new Promise<ArrayBuffer>((resolve, reject) => {
+      synthesizer.speakTextAsync(
+        text,
+        result => {
+          synthesizer.close();
+          if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
+            resolve(result.audioData);
+          } else {
+            reject(new Error(`Speech synthesis failed: ${result.errorDetails}`));
+          }
+        },
+        error => {
+          synthesizer.close();
+          reject(error);
+        }
+      );
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Azure TTS API Error:', response.status, errorText);
-      return NextResponse.json(
-        { error: `Azure TTS failed: ${response.status}` },
-        { status: 500 }
-      );
-    }
-
-    const audioBuffer = await response.arrayBuffer();
-
-    return new Response(audioBuffer, {
+    // Return the audio as binary data with correct content type
+    return new Response(audioData, {
       headers: {
         'Content-Type': 'audio/mpeg',
         'Cache-Control': 'no-store, no-cache, must-revalidate',
