@@ -27,12 +27,18 @@ export async function POST(req: NextRequest) {
     }
 
     // Step 3: Upload the audio file to AssemblyAI
+    // Get the audio data as ArrayBuffer for reliable upload
+    const audioBlob = audioFile as Blob;
+    const audioArrayBuffer = await audioBlob.arrayBuffer();
+
     const uploadResponse = await fetch("https://api.assemblyai.com/v2/upload", {
-      method: "POST", // Sending a POST request
+      method: "POST",
       headers: {
-        authorization: process.env.ASSEMBLYAI_API_KEY!, // Use AssemblyAI API key from environment variables
+        authorization: process.env.ASSEMBLYAI_API_KEY!,
+        "Content-Type": audioBlob.type || "application/octet-stream",
+        "Transfer-Encoding": "chunked",
       },
-      body: audioFile, // Send the actual audio file
+      body: audioArrayBuffer,
     });
 
     // Check if the upload was successful
