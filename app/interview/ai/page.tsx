@@ -382,7 +382,17 @@ export default function InterviewAI() {
         const audioURL = URL.createObjectURL(audioBlob)
 
         const formData = new FormData()
-        formData.append("audio", audioBlob)
+        // Include filename with correct extension so AssemblyAI can detect the format
+        const mimeToExt: Record<string, string> = {
+          'audio/webm;codecs=opus': 'webm',
+          'audio/webm': 'webm',
+          'audio/mp4': 'mp4',
+          'audio/ogg;codecs=opus': 'ogg',
+          'audio/ogg': 'ogg',
+          'audio/wav': 'wav',
+        }
+        const ext = mimeToExt[recordingMimeTypeRef.current] || 'webm'
+        formData.append("audio", audioBlob, `recording.${ext}`)
 
         setIsProcessingAnswer(true)
         processingTimeoutRef.current = setTimeout(() => {
