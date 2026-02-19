@@ -47,26 +47,6 @@ export default function InterviewAI() {
   const [autoStopCountdown, setAutoStopCountdown] = useState<number | null>(null)
 
   const [interviewId, setInterviewId] = useState<string | null>(null)
-  const recordingMimeTypeRef = useRef<string>("audio/webm")
-
-  // Detect the best supported audio format for MediaRecorder (cross-device)
-  const getSupportedMimeType = (): string => {
-    const types = [
-      'audio/webm;codecs=opus',
-      'audio/webm',
-      'audio/mp4',
-      'audio/ogg;codecs=opus',
-      'audio/ogg',
-      'audio/wav',
-      '',  // empty string = browser default
-    ]
-    for (const type of types) {
-      if (type === '' || MediaRecorder.isTypeSupported(type)) {
-        return type
-      }
-    }
-    return ''
-  }
 
   const addDebugLog = (message: string) => {
     console.log(message)
@@ -325,18 +305,7 @@ export default function InterviewAI() {
         const audioTracks = mediaStream.getAudioTracks()
         if (audioTracks.length > 0) {
           const audioStream = new MediaStream([audioTracks[0]])
-
-          // Detect supported audio format for this device
-          const mimeType = getSupportedMimeType()
-          recordingMimeTypeRef.current = mimeType || 'audio/webm'
-          addDebugLog(`Using audio format: ${mimeType || 'browser default'}`)
-
-          const recorderOptions: MediaRecorderOptions = {}
-          if (mimeType) {
-            recorderOptions.mimeType = mimeType
-          }
-
-          const audioRecorder = new MediaRecorder(audioStream, recorderOptions)
+          const audioRecorder = new MediaRecorder(audioStream)
           mediaRecorderRef.current = audioRecorder
           audioChunksRef.current = []
 
@@ -346,8 +315,7 @@ export default function InterviewAI() {
             }
           }
 
-          // Use timeslice to get data periodically (more reliable on mobile)
-          audioRecorder.start(1000)
+          audioRecorder.start()
           addDebugLog(`Question audio recording started for question ${currentQuestion + 1}`)
         }
       }
@@ -377,7 +345,7 @@ export default function InterviewAI() {
       audioRecorder.onstop = async () => {
         addDebugLog(`Audio recording stopped for question ${currentQuestion + 1}`)
         const audioBlob = new Blob(audioChunksRef.current, {
-          type: recordingMimeTypeRef.current,
+          type: "audio/webm",
         })
         const audioURL = URL.createObjectURL(audioBlob)
 
