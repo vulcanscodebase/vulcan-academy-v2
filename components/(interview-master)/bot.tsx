@@ -19,73 +19,74 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
   const lastQuestionRef = useRef<string>('');
   const lastQuestionNumberRef = useRef<number>(-1);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
-  const isPlayingRef = useRef<boolean>(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioUnlockedRef = useRef<boolean>(false);
 
-  // Initialize and unlock AudioContext on user interaction
-  // AudioContext is more reliable than HTML5 Audio on mobile browsers
-  const getAudioContext = useCallback((): AudioContext => {
-    if (!audioContextRef.current) {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-      audioContextRef.current = new AudioCtx();
+  // Create a persistent Audio element and unlock it on first user interaction
+  // This is critical for mobile browsers which block audio.play() unless
+  // it originates from a user gesture (tap/click)
+  const unlockAudio = useCallback(() => {
+    if (audioUnlockedRef.current) return;
+
+    const audio = new Audio();
+    // Play a tiny silent audio to "unlock" the Audio element on mobile
+    audio.src = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoRBqSAAAAAAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoRBqSAAAAAAAAAAAAAAAAAAAA';
+    audio.volume = 0.01;
+    const playPromise = audio.play();
+    if (playPromise) {
+      playPromise
+        .then(() => {
+          audio.pause();
+          audio.currentTime = 0;
+          audioUnlockedRef.current = true;
+          console.log('Audio unlocked for mobile playback');
+        })
+        .catch(() => {
+          // Silent fail - will retry on next interaction
+          console.warn('Audio unlock failed, will retry');
+        });
     }
-    // Resume if suspended (happens on mobile until user gesture)
-    if (audioContextRef.current.state === 'suspended') {
-      audioContextRef.current.resume();
-    }
-    return audioContextRef.current;
   }, []);
 
-  // Unlock AudioContext on user interaction (click/touch)
+  // Unlock audio when interview starts (triggered by user tap on "Start Interview")
+  useEffect(() => {
+    if (isInterviewStarted) {
+      unlockAudio();
+    }
+  }, [isInterviewStarted, unlockAudio]);
+
+  // Also try to unlock on any user click/touch as a fallback
   useEffect(() => {
     const handleInteraction = () => {
-      const ctx = getAudioContext();
-      if (ctx.state === 'suspended') {
-        ctx.resume().then(() => {
-          console.log('AudioContext resumed on user interaction');
-        });
-      }
+      unlockAudio();
     };
 
-    document.addEventListener('click', handleInteraction);
-    document.addEventListener('touchstart', handleInteraction);
+    document.addEventListener('click', handleInteraction, { once: true });
+    document.addEventListener('touchstart', handleInteraction, { once: true });
 
     return () => {
       document.removeEventListener('click', handleInteraction);
       document.removeEventListener('touchstart', handleInteraction);
     };
-  }, [getAudioContext]);
+  }, [unlockAudio]);
 
-  // When interview starts (user taps button), ensure AudioContext is ready
   useEffect(() => {
-    if (isInterviewStarted) {
-      const ctx = getAudioContext();
-      if (ctx.state === 'suspended') {
-        ctx.resume();
-      }
+    if (typeof window !== 'undefined') {
+      // Cleanup function to stop audio when component unmounts
+      return () => {
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current = null;
+        }
+      };
     }
-  }, [isInterviewStarted, getAudioContext]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (sourceNodeRef.current) {
-        try { sourceNodeRef.current.stop(); } catch { }
-        sourceNodeRef.current = null;
-      }
-      if (audioContextRef.current) {
-        audioContextRef.current.close();
-        audioContextRef.current = null;
-      }
-    };
   }, []);
 
-  // Prime video for mobile
   useEffect(() => {
     if (isInterviewStarted && videoRef.current) {
       const video = videoRef.current;
       video.load();
+      // Attempt to play and pause to "prime" the video element for mobile browsers
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise
@@ -99,27 +100,22 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
     }
   }, [isInterviewStarted]);
 
-  // Reset when question changes
   useEffect(() => {
     if (question && (question !== lastQuestionRef.current || currentQuestionNumber !== lastQuestionNumberRef.current)) {
       setHasSpoken(false);
       lastQuestionRef.current = question;
       lastQuestionNumberRef.current = currentQuestionNumber;
 
-      // Stop any currently playing audio
-      if (sourceNodeRef.current && isPlayingRef.current) {
-        try { sourceNodeRef.current.stop(); } catch { }
-        sourceNodeRef.current = null;
-        isPlayingRef.current = false;
+      // Stop any currently playing audio when question changes
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
       }
     }
   }, [question, currentQuestionNumber]);
 
-  // Fetch and play TTS audio using AudioContext (works on mobile)
   useEffect(() => {
     if (!question || hasSpoken || isRecording || !isInterviewStarted) return;
-
-    let cancelled = false;
 
     const fetchAndPlayAudio = async () => {
       try {
@@ -135,81 +131,76 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
           throw new Error('TTS API request failed');
         }
 
-        if (cancelled) return;
+        const audioBlob = await response.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+        const audio = new Audio(audioUrl);
 
-        const arrayBuffer = await response.arrayBuffer();
-        if (cancelled) return;
+        // Mobile Safari requires these attributes
+        audio.setAttribute('playsinline', '');
+        audio.preload = 'auto';
 
-        const ctx = getAudioContext();
+        audioRef.current = audio;
 
-        // Decode the MP3 audio data
-        const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
-        if (cancelled) return;
+        audio.onplay = () => {
+          setHasSpoken(false);
+          if (videoRef.current) {
+            videoRef.current.currentTime = 0;
+            videoRef.current.play().catch(err => console.warn('Avatar video failed to play:', err));
+          }
+        };
 
-        // Stop any previous audio
-        if (sourceNodeRef.current && isPlayingRef.current) {
-          try { sourceNodeRef.current.stop(); } catch { }
-        }
+        audio.onended = () => {
+          videoRef.current?.pause();
+          setHasSpoken(true);
+          onSpeechEnd?.();
+          URL.revokeObjectURL(audioUrl); // Cleanup
+        };
 
-        // Create and play the audio source
-        const source = ctx.createBufferSource();
-        source.buffer = audioBuffer;
-        source.connect(ctx.destination);
-        sourceNodeRef.current = source;
-
-        // When audio starts, animate the avatar
-        isPlayingRef.current = true;
-        setHasSpoken(false);
-        if (videoRef.current) {
-          videoRef.current.currentTime = 0;
-          videoRef.current.play().catch(err => console.warn('Avatar video failed to play:', err));
-        }
-
-        // When audio ends
-        source.onended = () => {
-          if (cancelled) return;
-          isPlayingRef.current = false;
+        audio.onerror = (e) => {
+          console.error('Audio playback error', e);
           videoRef.current?.pause();
           setHasSpoken(true);
           onSpeechEnd?.();
         };
 
-        source.start(0);
+        // Load the audio first, then play
+        audio.load();
+
+        // Use canplaythrough event for more reliable playback on mobile
+        audio.oncanplaythrough = () => {
+          audio.play().catch(e => {
+            console.error("Audio autoplay failed:", e);
+            // On mobile, if autoplay still fails, show the question anyway
+            // and mark as spoken so the flow continues
+            setHasSpoken(true);
+            onSpeechEnd?.();
+          });
+        };
 
       } catch (error) {
         console.error('Error fetching/playing TTS:', error);
-        if (!cancelled) {
-          setHasSpoken(true);
-          onSpeechEnd?.();
-        }
+        setHasSpoken(true);
+        onSpeechEnd?.();
       }
     };
 
-    // Small delay to ensure component is ready
+    // Small delay to ensure the component is ready
     const timer = setTimeout(() => {
       fetchAndPlayAudio();
     }, 300);
 
     return () => {
-      cancelled = true;
       clearTimeout(timer);
-      if (sourceNodeRef.current && isPlayingRef.current) {
-        try { sourceNodeRef.current.stop(); } catch { }
-        sourceNodeRef.current = null;
-        isPlayingRef.current = false;
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
       }
     };
-  }, [question, hasSpoken, isRecording, onSpeechEnd, isInterviewStarted, getAudioContext]);
+  }, [question, hasSpoken, isRecording, onSpeechEnd, isInterviewStarted]);
 
   useEffect(() => {
     if (isRecording) {
       videoRef.current?.pause();
-      // Stop TTS audio when user starts recording
-      if (sourceNodeRef.current && isPlayingRef.current) {
-        try { sourceNodeRef.current.stop(); } catch { }
-        sourceNodeRef.current = null;
-        isPlayingRef.current = false;
-      }
     }
   }, [isRecording]);
 
