@@ -134,17 +134,7 @@ export function Signin() {
             </Button>
           </form>
         </CardContent>
-
-        <CardFooter className="flex-col gap-3">
-          <div className="text-center mt-4">
-            <p className="text-sm text-gray-600">
-              Don't have an account?{" "}
-              <Link href="/signup" className="text-vulcan-accent-blue font-medium hover:underline">
-                Sign up
-              </Link>
-            </p>
-          </div>
-        </CardFooter>
+      
       </Card>
     </div>
   );
