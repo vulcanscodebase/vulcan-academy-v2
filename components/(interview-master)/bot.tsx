@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 interface BotInterviewerProps {
   question: string;
@@ -19,94 +19,176 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
   const lastQuestionRef = useRef<string>('');
   const lastQuestionNumberRef = useRef<number>(-1);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const synth = useRef<SpeechSynthesis | null>(null);
-  const utterance = useRef<SpeechSynthesisUtterance | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
+  const isPlayingRef = useRef<boolean>(false);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      synth.current = window.speechSynthesis;
+  // Initialize and unlock AudioContext on user interaction
+  const getAudioContext = useCallback((): AudioContext => {
+    if (!audioContextRef.current) {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      audioContextRef.current = new AudioCtx();
     }
+    if (audioContextRef.current.state === 'suspended') {
+      audioContextRef.current.resume();
+    }
+    return audioContextRef.current;
   }, []);
 
+  // Unlock AudioContext on user interaction (click/touch)
+  useEffect(() => {
+    const handleInteraction = () => {
+      const ctx = getAudioContext();
+      if (ctx.state === 'suspended') {
+        ctx.resume().then(() => {
+          console.log('AudioContext resumed on user interaction');
+        });
+      }
+    };
+
+    document.addEventListener('click', handleInteraction);
+    document.addEventListener('touchstart', handleInteraction);
+
+    return () => {
+      document.removeEventListener('click', handleInteraction);
+      document.removeEventListener('touchstart', handleInteraction);
+    };
+  }, [getAudioContext]);
+
+  // When interview starts, ensure AudioContext is ready
+  useEffect(() => {
+    if (isInterviewStarted) {
+      const ctx = getAudioContext();
+      if (ctx.state === 'suspended') {
+        ctx.resume();
+      }
+    }
+  }, [isInterviewStarted, getAudioContext]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (sourceNodeRef.current) {
+        try { sourceNodeRef.current.stop(); } catch { }
+        sourceNodeRef.current = null;
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+        audioContextRef.current = null;
+      }
+    };
+  }, []);
+
+  // Prime video for mobile
   useEffect(() => {
     if (isInterviewStarted && videoRef.current) {
       const video = videoRef.current;
       video.load();
       const playPromise = video.play();
       if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            video.pause();
-          })
-          .catch(error => {
-            console.warn('Video priming failed:', error);
-          });
+        playPromise.then(() => { video.pause(); })
+          .catch(error => { console.warn('Video priming failed:', error); });
       }
     }
   }, [isInterviewStarted]);
 
+  // Reset when question changes
   useEffect(() => {
     if (question && (question !== lastQuestionRef.current || currentQuestionNumber !== lastQuestionNumberRef.current)) {
       setHasSpoken(false);
       lastQuestionRef.current = question;
       lastQuestionNumberRef.current = currentQuestionNumber;
+
+      if (sourceNodeRef.current && isPlayingRef.current) {
+        try { sourceNodeRef.current.stop(); } catch { }
+        sourceNodeRef.current = null;
+        isPlayingRef.current = false;
+      }
     }
   }, [question, currentQuestionNumber]);
 
+  // Fetch and play TTS audio using AudioContext (works on mobile)
   useEffect(() => {
-    if (!question || hasSpoken || isRecording || !synth.current || !isInterviewStarted) return;
+    if (!question || hasSpoken || isRecording || !isInterviewStarted) return;
 
-    synth.current.cancel();
+    let cancelled = false;
 
-    utterance.current = new SpeechSynthesisUtterance(question);
-    utterance.current.rate = 0.9;
-    utterance.current.pitch = 1.0;
-    utterance.current.volume = 1.0;
+    const fetchAndPlayAudio = async () => {
+      try {
+        const response = await fetch('/api/tts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: question }),
+        });
 
-    const voices = synth.current.getVoices();
-    const preferredVoice = voices.find(
-      voice =>
-        voice.name.includes('Sarah') ||
-        voice.name.includes('Google UK English Female') ||
-        voice.name.includes('Microsoft Sarah')
-    );
-    if (preferredVoice) {
-      utterance.current.voice = preferredVoice;
-    }
+        if (!response.ok) throw new Error('TTS API request failed');
+        if (cancelled) return;
 
-    utterance.current.onstart = () => {
-      setHasSpoken(false);
-      if (videoRef.current) {
-        videoRef.current.currentTime = 0;
-        videoRef.current.play().catch(err => console.warn('Avatar video failed to play:', err));
+        const arrayBuffer = await response.arrayBuffer();
+        if (cancelled) return;
+
+        const ctx = getAudioContext();
+        const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+        if (cancelled) return;
+
+        if (sourceNodeRef.current && isPlayingRef.current) {
+          try { sourceNodeRef.current.stop(); } catch { }
+        }
+
+        const source = ctx.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(ctx.destination);
+        sourceNodeRef.current = source;
+
+        isPlayingRef.current = true;
+        setHasSpoken(false);
+        if (videoRef.current) {
+          videoRef.current.currentTime = 0;
+          videoRef.current.play().catch(err => console.warn('Avatar video failed:', err));
+        }
+
+        source.onended = () => {
+          if (cancelled) return;
+          isPlayingRef.current = false;
+          videoRef.current?.pause();
+          setHasSpoken(true);
+          onSpeechEnd?.();
+        };
+
+        source.start(0);
+      } catch (error) {
+        console.error('Error fetching/playing TTS:', error);
+        if (!cancelled) {
+          setHasSpoken(true);
+          onSpeechEnd?.();
+        }
       }
     };
 
-    utterance.current.onend = () => {
-      videoRef.current?.pause();
-      setHasSpoken(true);
-      onSpeechEnd?.();
-    };
-
-    utterance.current.onerror = () => {
-      videoRef.current?.pause();
-      setHasSpoken(true);
-      onSpeechEnd?.();
-    };
-
-    const timer = setTimeout(() => {
-      synth.current!.speak(utterance.current!);
-    }, 800);
+    const timer = setTimeout(() => { fetchAndPlayAudio(); }, 300);
 
     return () => {
+      cancelled = true;
       clearTimeout(timer);
-      synth.current!.cancel();
+      if (sourceNodeRef.current && isPlayingRef.current) {
+        try { sourceNodeRef.current.stop(); } catch { }
+        sourceNodeRef.current = null;
+        isPlayingRef.current = false;
+      }
     };
-  }, [question, hasSpoken, isRecording, onSpeechEnd, isInterviewStarted]);
+  }, [question, hasSpoken, isRecording, onSpeechEnd, isInterviewStarted, getAudioContext]);
 
+  // When recording starts, stop audio and mark as spoken (prevents question replay)
   useEffect(() => {
     if (isRecording) {
       videoRef.current?.pause();
+      if (sourceNodeRef.current && isPlayingRef.current) {
+        try { sourceNodeRef.current.stop(); } catch { }
+        sourceNodeRef.current = null;
+        isPlayingRef.current = false;
+      }
+      // Mark as spoken so the question doesn't replay after interruption
+      setHasSpoken(true);
     }
   }, [isRecording]);
 
@@ -128,4 +210,3 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
 };
 
 export default BotInterviewer;
-

@@ -305,7 +305,29 @@ export default function InterviewAI() {
         const audioTracks = mediaStream.getAudioTracks()
         if (audioTracks.length > 0) {
           const audioStream = new MediaStream([audioTracks[0]])
-          const audioRecorder = new MediaRecorder(audioStream)
+
+          // Detect best supported audio format for this device
+          let mimeType = ''
+          const formats = [
+            'audio/webm;codecs=opus',
+            'audio/webm',
+            'audio/mp4',
+            'audio/ogg;codecs=opus',
+            'audio/ogg',
+          ]
+          for (const fmt of formats) {
+            if (MediaRecorder.isTypeSupported(fmt)) {
+              mimeType = fmt
+              break
+            }
+          }
+
+          const recorderOptions: MediaRecorderOptions = {}
+          if (mimeType) {
+            recorderOptions.mimeType = mimeType
+          }
+
+          const audioRecorder = new MediaRecorder(audioStream, recorderOptions)
           mediaRecorderRef.current = audioRecorder
           audioChunksRef.current = []
 
@@ -315,8 +337,9 @@ export default function InterviewAI() {
             }
           }
 
-          audioRecorder.start()
-          addDebugLog(`Question audio recording started for question ${currentQuestion + 1}`)
+          // Use timeslice (1s chunks) for reliable mobile recording
+          audioRecorder.start(1000)
+          addDebugLog(`Question audio recording started for question ${currentQuestion + 1} (format: ${mimeType || 'default'})`)
         }
       }
 
@@ -342,15 +365,49 @@ export default function InterviewAI() {
     if (!audioRecorder || audioRecorder.state === "inactive") {
       addDebugLog("Audio recorder not active")
     } else {
+      // Force-flush any remaining buffered audio data (critical for mobile)
+      try {
+        if (audioRecorder.state === "recording") {
+          audioRecorder.requestData()
+        }
+      } catch (e) {
+        addDebugLog(`requestData warning: ${e}`)
+      }
+
       audioRecorder.onstop = async () => {
         addDebugLog(`Audio recording stopped for question ${currentQuestion + 1}`)
+        addDebugLog(`Audio chunks collected: ${audioChunksRef.current.length}`)
+
+        // Use the actual recorded mime type
+        const recordedMimeType = mediaRecorderRef.current?.mimeType || 'audio/webm'
+
         const audioBlob = new Blob(audioChunksRef.current, {
-          type: "audio/webm",
+          type: recordedMimeType,
         })
+        addDebugLog(`Audio blob size: ${audioBlob.size} bytes, type: ${audioBlob.type}`)
+
+        // Validate recording has data
+        if (audioBlob.size === 0 || audioChunksRef.current.length === 0) {
+          addDebugLog("WARNING: No audio data captured!")
+          alert("Could not capture audio. Please check microphone permissions and try again.")
+          setIsProcessingAnswer(false)
+          return
+        }
+
         const audioURL = URL.createObjectURL(audioBlob)
 
         const formData = new FormData()
-        formData.append("audio", audioBlob)
+        // Add filename with correct extension for proper format detection
+        const mimeToExt: Record<string, string> = {
+          'audio/webm;codecs=opus': 'webm',
+          'audio/webm': 'webm',
+          'audio/mp4': 'mp4',
+          'audio/ogg;codecs=opus': 'ogg',
+          'audio/ogg': 'ogg',
+          'audio/wav': 'wav',
+        }
+        const ext = mimeToExt[recordedMimeType] || 'webm'
+        formData.append("audio", audioBlob, `recording.${ext}`)
 
         setIsProcessingAnswer(true)
         processingTimeoutRef.current = setTimeout(() => {
