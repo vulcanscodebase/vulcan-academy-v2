@@ -19,30 +19,14 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
   const lastQuestionRef = useRef<string>('');
   const lastQuestionNumberRef = useRef<number>(-1);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const isFetchingAudio = useRef<boolean>(false);
+  const synth = useRef<SpeechSynthesis | null>(null);
+  const utterance = useRef<SpeechSynthesisUtterance | null>(null);
 
-  const fetchAzureTTS = async (text: string): Promise<string | null> => {
-    try {
-      const response = await fetch('/api/tts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text }),
-      });
-
-      if (!response.ok) {
-        throw new Error('TTS request failed');
-      }
-
-      const audioBlob = await response.blob();
-      return URL.createObjectURL(audioBlob);
-    } catch (error) {
-      console.error('Azure TTS Error:', error);
-      return null;
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      synth.current = window.speechSynthesis;
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (isInterviewStarted && videoRef.current) {
@@ -70,87 +54,54 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
   }, [question, currentQuestionNumber]);
 
   useEffect(() => {
-    if (!question || hasSpoken || isRecording || !isInterviewStarted || isFetchingAudio.current) return;
+    if (!question || hasSpoken || isRecording || !synth.current || !isInterviewStarted) return;
 
-    const speakQuestion = async () => {
-      isFetchingAudio.current = true;
-      
-      try {
-        const audioUrl = await fetchAzureTTS(question);
-        
-        if (audioUrl && audioRef.current) {
-          audioRef.current.src = audioUrl;
-          audioRef.current.load();
-          
-          // Play audio immediately on all devices
-          const playAudioImmediately = () => {
-            audioRef.current!.play().then(() => {
-              console.log('Aarti voice playing successfully');
-              setHasSpoken(false);
-              if (videoRef.current) {
-                videoRef.current.currentTime = 0;
-                videoRef.current.play().catch(err => console.warn('Avatar video failed to play:', err));
-              }
-            }).catch((error) => {
-              console.error('Audio playback failed:', error);
-              // Continue interview flow even if audio fails
-              setHasSpoken(true);
-              onSpeechEnd?.();
-              URL.revokeObjectURL(audioUrl);
-              isFetchingAudio.current = false;
-            });
-          };
+    synth.current.cancel();
 
-          audioRef.current.onplay = () => {
-            setHasSpoken(false);
-            if (videoRef.current) {
-              videoRef.current.currentTime = 0;
-              videoRef.current.play().catch(err => console.warn('Avatar video failed to play:', err));
-            }
-          };
+    utterance.current = new SpeechSynthesisUtterance(question);
+    utterance.current.rate = 0.9;
+    utterance.current.pitch = 1.0;
+    utterance.current.volume = 1.0;
 
-          audioRef.current.onended = () => {
-            videoRef.current?.pause();
-            setHasSpoken(true);
-            onSpeechEnd?.();
-            URL.revokeObjectURL(audioUrl);
-            isFetchingAudio.current = false;
-          };
+    const voices = synth.current.getVoices();
+    const preferredVoice = voices.find(
+      voice =>
+        voice.name.includes('Sarah') ||
+        voice.name.includes('Google UK English Female') ||
+        voice.name.includes('Microsoft Sarah')
+    );
+    if (preferredVoice) {
+      utterance.current.voice = preferredVoice;
+    }
 
-          audioRef.current.onerror = (error) => {
-            console.error('Audio playback error:', error);
-            videoRef.current?.pause();
-            setHasSpoken(true);
-            onSpeechEnd?.();
-            URL.revokeObjectURL(audioUrl);
-            isFetchingAudio.current = false;
-          };
-
-          // Mobile and desktop compatibility
-          (audioRef.current as any).playsInline = true;
-          audioRef.current.muted = false;
-          audioRef.current.volume = 1.0;
-          
-          // Try to play immediately on all devices
-          const timer = setTimeout(() => {
-            playAudioImmediately();
-          }, 800);
-
-          return () => clearTimeout(timer);
-        } else {
-          setHasSpoken(true);
-          onSpeechEnd?.();
-          isFetchingAudio.current = false;
-        }
-      } catch (error) {
-        console.error('Speech synthesis failed:', error);
-        setHasSpoken(true);
-        onSpeechEnd?.();
-        isFetchingAudio.current = false;
+    utterance.current.onstart = () => {
+      setHasSpoken(false);
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play().catch(err => console.warn('Avatar video failed to play:', err));
       }
     };
 
-    speakQuestion();
+    utterance.current.onend = () => {
+      videoRef.current?.pause();
+      setHasSpoken(true);
+      onSpeechEnd?.();
+    };
+
+    utterance.current.onerror = () => {
+      videoRef.current?.pause();
+      setHasSpoken(true);
+      onSpeechEnd?.();
+    };
+
+    const timer = setTimeout(() => {
+      synth.current!.speak(utterance.current!);
+    }, 800);
+
+    return () => {
+      clearTimeout(timer);
+      synth.current!.cancel();
+    };
   }, [question, hasSpoken, isRecording, onSpeechEnd, isInterviewStarted]);
 
   useEffect(() => {
@@ -172,12 +123,6 @@ const BotInterviewer: React.FC<BotInterviewerProps> = ({
           src="https://resource2.heygen.ai/video/transcode/756ce28ce36c415b8ca3414998329b36/720x1280.mp4"
         />
       </div>
-      <audio
-        ref={audioRef}
-        preload="none"
-        playsInline
-        crossOrigin="anonymous"
-      />
     </div>
   );
 };
