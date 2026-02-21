@@ -334,7 +334,7 @@ export default function InterviewAI() {
             }
           }
 
-          audioRecorder.start()
+          audioRecorder.start(1000)
           addDebugLog(`Question audio recording started for question ${currentQuestion + 1} with format: ${mimeType}`)
         }
       }
@@ -361,8 +361,18 @@ export default function InterviewAI() {
     if (!audioRecorder || audioRecorder.state === "inactive") {
       addDebugLog("Audio recorder not active")
     } else {
+      // Force-flush any remaining buffered audio data (critical for mobile)
+      try {
+        if (audioRecorder.state === "recording") {
+          audioRecorder.requestData()
+        }
+      } catch (e) {
+        addDebugLog(`requestData warning: ${e}`)
+      }
+
       audioRecorder.onstop = async () => {
         addDebugLog(`Audio recording stopped for question ${currentQuestion + 1}`)
+        addDebugLog(`Audio chunks collected: ${audioChunksRef.current.length}`)
         
         // Determine the correct MIME type for the audio blob
         let audioMimeType = 'audio/webm'
@@ -376,10 +386,30 @@ export default function InterviewAI() {
         const audioBlob = new Blob(audioChunksRef.current, {
           type: audioMimeType,
         })
+        addDebugLog(`Audio blob size: ${audioBlob.size} bytes, type: ${audioBlob.type}`)
+
+        // Check if we actually have audio data
+        if (audioBlob.size === 0 || audioChunksRef.current.length === 0) {
+          addDebugLog("WARNING: No audio data captured!")
+          alert("Could not capture audio. Please check microphone permissions and try again.")
+          setIsProcessingAnswer(false)
+          return
+        }
+
         const audioURL = URL.createObjectURL(audioBlob)
 
         const formData = new FormData()
-        formData.append("audio", audioBlob)
+        // Include filename with correct extension so server can detect format
+        const mimeToExt: Record<string, string> = {
+          'audio/webm;codecs=opus': 'webm',
+          'audio/webm': 'webm',
+          'audio/mp4': 'mp4',
+          'audio/ogg;codecs=opus': 'ogg',
+          'audio/ogg': 'ogg',
+          'audio/wav': 'wav',
+        }
+        const ext = mimeToExt[audioMimeType] || 'webm'
+        formData.append("audio", audioBlob, `recording.${ext}`)
 
         setIsProcessingAnswer(true)
         processingTimeoutRef.current = setTimeout(() => {
