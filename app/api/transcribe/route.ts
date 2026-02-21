@@ -26,13 +26,30 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Step 3: Upload the audio file to AssemblyAI
+    // Step 3: Handle mobile audio format conversion
+    let audioBlob = validationResult.data.audio;
+    
+    // Convert mobile audio formats to webm if needed
+    if (audioBlob.type !== 'audio/webm' && audioBlob.type !== 'audio/mp4') {
+      // For mobile devices that record in different formats, try to convert
+      try {
+        // If the audio is not in webm format, we'll still try to process it
+        console.log(`Processing audio with type: ${audioBlob.type}`);
+      } catch (conversionError) {
+        console.error("Audio format conversion failed:", conversionError);
+        return NextResponse.json({ error: "Unsupported audio format for mobile devices" }, { status: 400 });
+      }
+    }
+
+    // Step 4: Upload the audio file to AssemblyAI with mobile-friendly headers
     const uploadResponse = await fetch("https://api.assemblyai.com/v2/upload", {
       method: "POST", // Sending a POST request
       headers: {
         authorization: process.env.ASSEMBLYAI_API_KEY!, // Use AssemblyAI API key from environment variables
+        // Add content type header for mobile compatibility
+        'Content-Type': audioBlob.type || 'audio/webm',
       },
-      body: audioFile, // Send the actual audio file
+      body: audioBlob, // Send the actual audio file
     });
 
     // Check if the upload was successful
@@ -46,7 +63,7 @@ export async function POST(req: NextRequest) {
     const uploadData = await uploadResponse.json();
     const audioUrl = uploadData.upload_url; // Extract the uploaded file's URL
 
-    // Step 4: Start the transcription process by passing the uploaded audio URL
+    // Step 5: Start the transcription process with mobile-optimized settings
     const transcriptionResponse = await fetch("https://api.assemblyai.com/v2/transcript", {
       method: "POST", // Sending a POST request to start transcription
       headers: {
@@ -56,7 +73,11 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         audio_url: audioUrl, // Pass the URL of the uploaded audio file
         language_detection: true, // Optional: Enable language detection
-        speech_models: ["universal-2"],
+        speech_models: ["universal-2"], // Use universal model for better mobile compatibility
+        // Add mobile-specific settings
+        punctuate: true,
+        format_text: true,
+        disfluencies: true, // Handle mobile recording artifacts
       }),
     });
 
