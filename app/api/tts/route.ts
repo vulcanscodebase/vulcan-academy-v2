@@ -1,54 +1,66 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  const { text } = req.body;
-
-  if (!text || typeof text !== 'string') {
-    return res.status(400).json({ error: 'Invalid or missing text' });
-  }
-
+export async function POST(req: NextRequest) {
   try {
-    const speechConfig = sdk.SpeechConfig.fromSubscription(
-      process.env.AZURE_SPEECH_KEY!,
-      process.env.AZURE_SPEECH_REGION!
-    );
+    const { text } = await req.json();
 
-    speechConfig.speechSynthesisVoiceName = 'en-IN-Aarti:DragonHDLatestNeural';
+    if (!text || typeof text !== 'string') {
+      return NextResponse.json({ error: 'Invalid or missing text' }, { status: 400 });
+    }
 
-    speechConfig.speechSynthesisOutputFormat =
-      sdk.SpeechSynthesisOutputFormat.Audio16Khz128KBitRateMonoMp3;
+    const speechKey = process.env.AZURE_SPEECH_KEY;
+    const speechRegion = process.env.AZURE_SPEECH_REGION;
 
-    const synthesizer = new sdk.SpeechSynthesizer(speechConfig);
+    if (!speechKey || !speechRegion) {
+      console.error('Missing AZURE_SPEECH_KEY or AZURE_SPEECH_REGION');
+      return NextResponse.json({ error: 'TTS not configured' }, { status: 500 });
+    }
 
-    synthesizer.speakTextAsync(
-      text,
-      result => {
-        synthesizer.close();
+    // Use Azure REST API directly (no native SDK dependencies)
+    const endpoint = `https://${speechRegion}.tts.speech.microsoft.com/cognitiveservices/v1`;
 
-        if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
-          res.setHeader('Content-Type', 'audio/mpeg');
-          res.setHeader('Cache-Control', 'no-store');
-          res.status(200).send(Buffer.from(result.audioData));
-        } else {
-          res.status(500).json({ error: 'Speech synthesis failed' });
-        }
+    const ssml = `
+      <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-IN'>
+        <voice name='en-IN-AartiNeural'>
+          ${text}
+        </voice>
+      </speak>
+    `;
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Ocp-Apim-Subscription-Key': speechKey,
+        'Content-Type': 'application/ssml+xml',
+        'X-Microsoft-OutputFormat': 'audio-16khz-128kbitrate-mono-mp3',
+        'User-Agent': 'VulcanAcademy',
       },
-      error => {
-        synthesizer.close();
-        console.error('Azure TTS Error:', error);
-        res.status(500).json({ error: 'Azure TTS error' });
-      }
+      body: ssml,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Azure TTS API Error:', response.status, errorText);
+      return NextResponse.json(
+        { error: `Azure TTS failed: ${response.status}` },
+        { status: 500 }
+      );
+    }
+
+    const audioBuffer = await response.arrayBuffer();
+
+    return new Response(audioBuffer, {
+      headers: {
+        'Content-Type': 'audio/mpeg',
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+      },
+    });
+
+  } catch (error: any) {
+    console.error('TTS API Error:', error);
+    return NextResponse.json(
+      { error: error.message || 'Error generating speech' },
+      { status: 500 }
     );
-  } catch (err) {
-    console.error('TTS API Fatal Error:', err);
-    res.status(500).json({ error: 'Server error' });
   }
 }
