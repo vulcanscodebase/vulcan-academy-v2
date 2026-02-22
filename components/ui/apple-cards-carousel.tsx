@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState, createContext, useContext } from "react";
-import { IconArrowNarrowLeft, IconArrowNarrowRight, IconX } from "@tabler/icons-react";
+import { ArrowLeft as IconArrowNarrowLeft, ArrowRight as IconArrowNarrowRight, X as IconX } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
 import { useOutsideClick } from "@/hooks/use-outside-click";
@@ -23,7 +23,7 @@ export const CarouselContext = createContext<{
   onCardClose: (index: number) => void;
   currentIndex: number;
 }>({
-  onCardClose: () => {},
+  onCardClose: () => { },
   currentIndex: 0,
 });
 
@@ -161,7 +161,7 @@ export const Card = ({ card, index, layout = false }: { card: CardType; index: n
           <motion.p layoutId={layout ? `title-${card.title}` : undefined} className="text-2xl md:text-3xl font-light tracking-tight text-vulcan-white mb-2 text-left ">
             {card.title}
           </motion.p>
-           {/* ADDED CONTENT */}
+          {/* ADDED CONTENT */}
           <motion.p className="text-base text-vulcan-white text-left">
             {card.content}
           </motion.p>
