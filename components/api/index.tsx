@@ -68,7 +68,7 @@ const updateUserById = (id: string, data: any) => apiClient.put(`/users/${id}`, 
 const getProfileStatus = () => apiClient.get(`/users/profile-status`);
 
 // Password & Email APIs
-const forgotPassword = (data: { email: string }) => apiClient.post("/auth/forgot-password", data);
+const forgotPassword = (data: string) => apiClient.post("/auth/forgot-password", data);
 const resetPassword = (token: string, bodyData: any) =>
   apiClient.post(`/auth/reset-password/${token}`, bodyData);
 const setupPassword = (bodyData: any) => apiClient.post(`/auth/setup-password`, bodyData);
