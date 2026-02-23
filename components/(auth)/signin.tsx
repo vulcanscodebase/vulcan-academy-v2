@@ -7,9 +7,10 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { handleGoogleCallback } from "@/utils/auth";
+import { useState } from "react";
+import { handleGoogleSignIn } from "@/utils/auth";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 import { useAuth } from "../context/authcontext";
 
@@ -32,12 +33,6 @@ export function Signin() {
     if (!formData.password.trim()) newErrors.password = "Password is required.";
     return newErrors;
   };
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.location.pathname.includes("/google/callback")) {
-      handleGoogleCallback(window.location.search);
-    }
-  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -132,9 +127,29 @@ export function Signin() {
             >
               {loading ? "Signing in..." : "Sign In"}
             </Button>
+
+            <div className="relative my-2">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground bg-white">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => handleGoogleSignIn()}
+              className="w-full flex items-center justify-center gap-2"
+            >
+              <FcGoogle className="h-5 w-5" />
+              Sign in with Google
+            </Button>
           </form>
         </CardContent>
-      
       </Card>
     </div>
   );
