@@ -10,11 +10,44 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { toast } from "sonner";
+import { forgotPassword } from "@/components/api";
+import { Loader2 } from "lucide-react";
 
 export function ForgotPassword() {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email.trim()) {
+      toast.error("Please enter your email address.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      // Wait, forgotPassword API in components/api/index.tsx expects a string
+      // But in the backend it's req.body.email
+      // Let's check components/api/index.tsx again
+      await forgotPassword({ email } as any);
+      toast.success("Password reset email sent! Please check your inbox.");
+      setEmail("");
+    } catch (error: any) {
+      console.error("Forgot password error:", error);
+      toast.error(
+        error.response?.data?.message || "Failed to send reset email. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="w-full max-w-sm">
-      <Card className="w-full shadow-xl">
+      <Card className="w-full shadow-xl px-2 py-4">
         <CardHeader className="space-y-3">
           {/* Vulcan logo */}
           <div className="flex justify-center">
@@ -37,7 +70,7 @@ export function ForgotPassword() {
         </CardHeader>
 
         <CardContent>
-          <form className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {/* Email */}
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
@@ -47,20 +80,31 @@ export function ForgotPassword() {
                 placeholder="m@example.com"
                 required
                 className="w-full py-2"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
               />
             </div>
 
             {/* Send Button */}
             <Button
               type="submit"
+              disabled={loading}
               className={cn(
-                "bg-vulcan-accent-blue text-white hover:bg-vulcan-accent-blue/90",
+                "bg-vulcan-accent-blue text-white hover:bg-vulcan-accent-blue/90 font-bold",
                 "rounded-md px-4 py-2 text-sm font-medium transition-colors w-full",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vulcan-accent-blue",
                 "disabled:pointer-events-none disabled:opacity-50"
               )}
             >
-              Send
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Sending...
+                </>
+              ) : (
+                "Send Reset Link"
+              )}
             </Button>
           </form>
 
