@@ -34,7 +34,6 @@ interface AuthContextType {
   refreshToken: () => Promise<string | null>;
   getUserProfileStatus: () => Promise<void>;
   getUser: () => Promise<void>;
-  googleLogin: (data: any) => Promise<void>;
   handleModal: (msg: string) => void;
 }
 
@@ -50,7 +49,6 @@ const AuthContext = createContext<AuthContextType>({
   refreshToken: async () => null,
   getUserProfileStatus: async () => { },
   getUser: async () => { },
-  googleLogin: async () => { },
   handleModal: () => { },
   setIsMenuOpen: () => { }
 });
@@ -96,30 +94,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     } catch (err: any) {
       throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // ----------------- GOOGLE LOGIN -----------------
-  const googleLogin = async (data: any) => {
-    try {
-      setIsLoading(true);
-      const { user, accessToken } = data;
-
-      setUser(user);
-      setToken(accessToken);
-      localStorage.setItem("token", accessToken);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      if (!user.isProfileComplete) {
-        router.push("/user-profile");
-      } else {
-        router.push("/");
-      }
-    } catch (err: any) {
-      console.error("Google login error:", err);
-      toast.error("Google login failed");
     } finally {
       setIsLoading(false);
     }
@@ -205,32 +179,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // ----------------- INITIAL LOAD -----------------
   const fetchUserFromToken = async () => {
     const localToken = localStorage.getItem("token");
-
-    // Check URL for tokens (Google OAuth redirect)
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlToken = urlParams.get("token");
-    const urlRefreshToken = urlParams.get("refreshToken");
-
-    if (urlToken) {
-      setToken(urlToken);
-      localStorage.setItem("token", urlToken);
-      // Clean URL
-      router.replace(window.location.pathname);
-
-      // Fetch user data
-      try {
-        const res = await getUserByToken();
-        const { user } = res.data;
-        setUser(user);
-        localStorage.setItem("user", JSON.stringify(user));
-
-        if (!user.isProfileComplete) {
-          router.push("/user-profile");
-        }
-      } catch {
-        logout();
-      }
-    } else if (localToken) {
+    if (localToken) {
       setToken(localToken);
       try {
         await getUser();
@@ -259,7 +208,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         refreshToken,
         getUserProfileStatus,
         getUser,
-        googleLogin,
         handleModal,
         setIsMenuOpen
       }}
