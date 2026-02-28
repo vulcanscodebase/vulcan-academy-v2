@@ -16,20 +16,50 @@ import {
   Sparkles,
   ArrowDown,
   Zap,
+  Plus,
+  Minus,
 } from "lucide-react";
 import { useAuth } from "@/components/context/authcontext";
+import { useLicenseCart } from "@/components/context/LicenseCartContext";
 
 export default function InterviewPage() {
   const router = useRouter();
   const { user } = useAuth();
+  const { licensesInCart, addLicenses, removeLicenses } = useLicenseCart();
 
-  const handleTakeInterview = () => {
-    if (user) {
-      // User is authenticated, redirect to interview upload page
-      router.push("/interview/upload");
+  const renderCartButton = (extraClass = "") => {
+    if (licensesInCart > 0) {
+      return (
+        <div className={cn("flex items-center space-x-0 rounded-md border border-vulcan-accent-blue bg-white h-11 shadow-sm transition-all duration-300", extraClass)}>
+          <button
+            onClick={() => removeLicenses(1)}
+            className="flex h-full w-10 items-center justify-center text-foreground/70 hover:bg-muted/50 hover:text-vulcan-accent-blue transition-colors rounded-l-md"
+          >
+            <Minus className="h-4 w-4" />
+          </button>
+          <div className="flex h-full min-w-[3rem] items-center justify-center border-x border-border/50 bg-muted/20 px-3 text-sm font-semibold text-vulcan-primary">
+            {licensesInCart}
+          </div>
+          <button
+            onClick={() => addLicenses(1)}
+            className="flex h-full w-10 items-center justify-center text-foreground/70 hover:bg-muted/50 hover:text-vulcan-accent-blue transition-colors rounded-r-md"
+          >
+            <Plus className="h-4 w-4" />
+          </button>
+        </div>
+      );
     } else {
-      // User is not authenticated, redirect to sign-in page
-      router.push("/signin");
+      return (
+        <Button
+          onClick={() => addLicenses(1)}
+          className={cn(
+            "bg-vulcan-accent-blue text-vulcan-white hover:bg-vulcan-accent-blue/90 h-11 px-8 shadow-md hover:shadow-lg transition-all duration-300",
+            extraClass
+          )}
+        >
+          Add to Cart
+        </Button>
+      );
     }
   };
   return (
@@ -64,16 +94,7 @@ export default function InterviewPage() {
                 prepared to impress.
               </p>
               <div className="flex flex-wrap items-center gap-3 pt-4">
-                <Button
-                  variant="outline"
-                  onClick={handleTakeInterview}
-                  className={cn(
-                    "bg-vulcan-accent-blue text-vulcan-white hover:bg-vulcan-accent-blue/90 hover:text-vulcan-white",
-                    "shadow-md hover:shadow-lg transition-all duration-300 border-vulcan-accent-blue"
-                  )}
-                >
-                  Take Interview Now
-                </Button>
+                {renderCartButton()}
                 {/* <a href="#more-info" className="smooth-scroll">
                   <Button
                     variant="outline"
@@ -359,16 +380,7 @@ export default function InterviewPage() {
         {/* CTA Section */}
         <div className="mt-16 pt-12 border-t border-border/60">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button
-              onClick={handleTakeInterview}
-              className={cn(
-                "bg-vulcan-accent-blue text-vulcan-white hover:bg-vulcan-accent-blue/90",
-                "shadow-md hover:shadow-lg transition-all duration-300 min-w-[200px]"
-              )}
-              size="lg"
-            >
-              Take Interview Now
-            </Button>
+            {renderCartButton("min-w-[200px]")}
             <a href="#top" className="smooth-scroll">
               <Button variant="ghost" size="lg" className="min-w-[200px]">
                 Back to top

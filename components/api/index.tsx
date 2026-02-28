@@ -7,55 +7,54 @@ export const apiClient = axios.create({
   timeout: 120000,
 });
 
-// Setup Axios interceptors
-export const setUpInterceptors = (getToken: () => string | null, refreshToken: () => Promise<string | null>) => {
-  // Request interceptor
-  apiClient.interceptors.request.use(
-    (config) => {
-      const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-      return config;
-    },
-    (error) => Promise.reject(error)
-  );
+// Apply Request interceptor globally
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-  // Response interceptor
-  apiClient.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-      const originalRequest = error.config;
+// Apply Response interceptor globally
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-      // Handle 401 unauthorized and refresh token
-      if (
-        error.response?.status === 401 &&
-        !originalRequest._retry &&
-        !originalRequest.url.includes("/refresh-token") &&
-        !originalRequest.url.includes("/logout")
-      ) {
-        originalRequest._retry = true;
-
-        try {
-          const token = await refreshToken();
-          if (token) {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
-            return apiClient(originalRequest);
-          }
-        } catch (refreshError) {
-          console.error("Token refresh failed:", refreshError);
+    // Handle 401 unauthorized
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url?.includes("/refresh-token") &&
+      !originalRequest.url?.includes("/logout") &&
+      !originalRequest.url?.includes("/login")
+    ) {
+      originalRequest._retry = true;
+      try {
+        // Try refreshing the token automatically
+        const refreshResponse = await apiClient.post("/auth/refresh-token");
+        if (refreshResponse.data?.token) {
+          localStorage.setItem("token", refreshResponse.data.token);
+          originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.token}`;
+          return apiClient(originalRequest);
+        }
+      } catch (refreshError) {
+        console.error("Token refresh failed, redirecting to login:", refreshError);
+        if (typeof window !== 'undefined') {
           localStorage.removeItem("token");
           localStorage.removeItem("user");
-          alert("Session expired. Please sign in again!");
           window.location.href = "/signin";
         }
       }
-      return Promise.reject(error);
     }
-  );
-};
+    return Promise.reject(error);
+  }
+);
 
-//http://localhost:5000/api/auth/login
 
 // Auth APIs
 const loginUser = (data: any) => apiClient.post("/auth/login", data);
