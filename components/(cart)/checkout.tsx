@@ -67,7 +67,7 @@ export function Checkout() {
             .post("/orders/razorpay-callback", payload)
             .then(() => {
               toast.success("Payment successful!");
-              router.push("/user-dash");
+              router.push("/user-profile");
             })
             .catch(() => toast.error("Payment verification failed"));
         },

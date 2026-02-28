@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "../context/authcontext";
 import { useCart } from "../context/cartcontext";
+import { useLicenseCart } from "../context/LicenseCartContext";
 import { toast } from "sonner";
 
 export function Navbar() {
@@ -31,6 +32,7 @@ export function Navbar() {
 
   const { token, logout, user } = useAuth();
   const { setIsCartOpen, getTotalItems } = useCart();
+  const { licensesInCart, toggleCart } = useLicenseCart();
 
   const [confirmMsg, setConfirmMsg] = useState("");
   const [availableCredits, setAvailableCredits] = useState<number>(0);
@@ -153,6 +155,19 @@ export function Navbar() {
           {/* Auth Buttons / User Icons */}
           {!token ? (
             <div className="hidden md:flex items-center space-x-3">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleCart}
+                className="relative"
+              >
+                <ShoppingCart className="h-5 w-5" />
+                {licensesInCart > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-vulcan-accent-blue text-[10px] text-white font-medium">
+                    {licensesInCart}
+                  </span>
+                )}
+              </Button>
               <Link href="/signin" prefetch={false}>
                 <Button
                   variant="outline"
@@ -194,17 +209,19 @@ export function Navbar() {
               >
                 <User className="h-5 w-5" />
               </Button>
-              {/* <Button
+                <Button
                 variant="ghost"
                 size="icon"
-                onClick={handleCartIconClick}
+                  onClick={toggleCart}
                 className="relative"
               >
                 <ShoppingCart className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-vulcan-accent-blue text-[10px] text-white font-medium">
-                  {getTotalItems()}
-                </span>
-              </Button> */}
+                  {licensesInCart > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-vulcan-accent-blue text-[10px] text-white font-medium">
+                      {licensesInCart}
+                    </span>
+                  )}
+                </Button>
               <Button variant="ghost" size="icon" onClick={handleLogoutClick}>
                 <LogOut className="h-5 w-5 text-red-500" />
               </Button>
@@ -278,15 +295,21 @@ export function Navbar() {
               })}
 
             {!token ? (
-              <div className="flex flex-col space-y-3 mt-4 w-full max-w-xs">
-                {/* <Link 
-                href="/signup" 
-                prefetch={false}>
-                  <Button className="bg-vulcan-accent-blue text-vulcan-white hover:bg-vulcan-accent-blue/90 w-full">
-                    Sign Up
-                  </Button>
-                </Link> */}
-                <Link href="/signin" prefetch={false}>
+              <div className="flex flex-col space-y-3 mt-4 w-full max-w-xs items-center">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={toggleCart}
+                  className="relative mb-2"
+                >
+                  <ShoppingCart className="h-5 w-5" />
+                  {licensesInCart > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-vulcan-accent-blue text-[10px] text-white font-medium">
+                      {licensesInCart}
+                    </span>
+                  )}
+                </Button>
+                <Link href="/signin" prefetch={false} className="w-full">
                   <Button
                     variant="outline"
                     className="border-vulcan-accent-blue text-vulcan-accent-blue hover:bg-vulcan-accent-blue hover:text-white w-full"
@@ -325,17 +348,19 @@ export function Navbar() {
                   >
                     <User className="h-5 w-5" />
                   </Button>
-                  {/* <Button
+                    <Button
                     variant="ghost"
                     size="icon"
-                    onClick={handleCartIconClick}
+                      onClick={toggleCart}
                     className="relative"
                   >
                     <ShoppingCart className="h-5 w-5" />
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-vulcan-accent-blue text-[10px] text-white font-medium">
-                      {getTotalItems()}
-                    </span>
-                  </Button> */}
+                      {licensesInCart > 0 && (
+                        <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-vulcan-accent-blue text-[10px] text-white font-medium">
+                          {licensesInCart}
+                        </span>
+                      )}
+                    </Button>
                   <Button
                     variant="ghost"
                     size="icon"

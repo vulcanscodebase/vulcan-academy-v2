@@ -13,6 +13,8 @@ import { AuthProvider } from "@/components/context/authcontext";
 import { CartProvider } from "@/components/context/cartcontext";
 import { usePathname } from "next/navigation";
 import Cart from "@/components/(cart)/cart";
+import { LicenseCartProvider } from "@/components/context/LicenseCartContext";
+import { LicenseCartDrawer } from "@/components/(cart)/LicenseCartDrawer";
 
 export const inter = Inter({
   variable: "--font-inter",
@@ -36,15 +38,19 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
             {/*Navbar will visible on all pages*/}
             <AuthProvider >
               <CartProvider>
+                <LicenseCartProvider>
 
-            {!hideNavbar && <Navbar /> }
-            
-            < Cart />
-           
+                  {!hideNavbar && <Navbar />}
 
-            {/*page specific content will be render here*/}
-            {children}
-            </CartProvider>
+                  < Cart />
+                  <LicenseCartDrawer />
+
+
+                  {/*page specific content will be render here*/}
+                  {children}
+
+                </LicenseCartProvider>
+              </CartProvider>
             </AuthProvider>
             <Toaster position="top-center" richColors closeButton />
 

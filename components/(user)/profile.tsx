@@ -220,7 +220,7 @@ export function ProfileSetup() {
           if (wasInitiallyIncomplete) {
             setIsProfileRecentlyCompleted(true);
           } else {
-            router.push("/user-dash");
+            router.push("/user-profile");
           }
         },
         () => {
@@ -338,13 +338,13 @@ export function ProfileSetup() {
 
                   {/* Interview Stats Section */}
                   <div className="mt-6 w-full max-w-md">
-                    <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-3 gap-3">
                       {/* Remaining Interviews Badge */}
-                      <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-3 rounded-xl shadow-lg">
-                        <div className="flex items-center space-x-2">
+                        <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 py-3 rounded-xl shadow-lg">
+                          <div className="flex flex-col items-center text-center">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
+                              className="h-5 w-5 mb-1"
                             viewBox="0 0 20 20"
                             fill="currentColor"
                           >
@@ -354,18 +354,16 @@ export function ProfileSetup() {
                               d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
                               clipRule="evenodd"
                             />
-                          </svg>
-                          <div className="text-left">
+                            </svg>
                             <div className="text-xs font-medium opacity-90">Available</div>
                             <div className="text-2xl font-bold">{remainingInterviews}</div>
                           </div>
                         </div>
-                      </div>
 
                       {/* View Past Interviews Button */}
                       <button
                         onClick={() => router.push("/user-profile/interviews")}
-                        className="bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-50 px-4 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
+                          className="bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-50 px-3 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
                       >
                         <div className="flex flex-col items-center">
                           <svg
@@ -385,6 +383,30 @@ export function ProfileSetup() {
                           <div className="text-xs font-semibold">My Interviews</div>
                         </div>
                       </button>
+
+                        {/* View Transactions Button */}
+                        <button
+                          onClick={() => router.push("/user-profile/transactions")}
+                          className="bg-white border-2 border-emerald-500 text-emerald-600 hover:bg-emerald-50 px-3 py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105"
+                        >
+                          <div className="flex flex-col items-center">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-6 w-6 mb-1"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                              />
+                            </svg>
+                            <div className="text-xs font-semibold">Transactions</div>
+                          </div>
+                        </button>
                     </div>
                   </div>
 
