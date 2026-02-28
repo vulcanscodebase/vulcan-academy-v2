@@ -1,15 +1,16 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { handleGoogleCallback } from "@/utils/auth";
+import { useState } from "react";
+import { handleGoogleSignIn } from "@/utils/auth";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 import { useAuth } from "../context/authcontext";
 
@@ -32,12 +33,6 @@ export function Signin() {
     if (!formData.password.trim()) newErrors.password = "Password is required.";
     return newErrors;
   };
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.location.pathname.includes("/google/callback")) {
-      handleGoogleCallback(window.location.search);
-    }
-  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -133,8 +128,26 @@ export function Signin() {
               {loading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-2 text-gray-500 font-medium whitespace-nowrap">Or continue with</span>
+            </div>
+          </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleGoogleSignIn}
+            className="w-full flex items-center justify-center gap-2 border-gray-300 hover:bg-gray-50 transition-all duration-200 py-6"
+          >
+            <FcGoogle className="h-5 w-5" />
+            <span className="font-semibold text-gray-700">Continue with Google</span>
+          </Button>
         </CardContent>
-      
       </Card>
     </div>
   );

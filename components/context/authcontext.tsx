@@ -8,7 +8,8 @@ import {
   logoutUser,
   getUserByToken,
   getRefreshToken,
-  getProfileStatus
+  getProfileStatus,
+  setUpInterceptors
 } from "../api";
 import { toast } from "react-toastify";
 import { requestHandler } from "@/utils/auth";
@@ -34,6 +35,7 @@ interface AuthContextType {
   refreshToken: () => Promise<string | null>;
   getUserProfileStatus: () => Promise<void>;
   getUser: () => Promise<void>;
+  googleLogin: (token: string, refreshToken?: string) => Promise<void>;
   handleModal: (msg: string) => void;
 }
 
@@ -49,6 +51,7 @@ const AuthContext = createContext<AuthContextType>({
   refreshToken: async () => null,
   getUserProfileStatus: async () => { },
   getUser: async () => { },
+  googleLogin: async () => { },
   handleModal: () => { },
   setIsMenuOpen: () => { }
 });
@@ -84,9 +87,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.setItem("token", accessToken);
       localStorage.setItem("user", JSON.stringify(user));
 
-      // REDIRECTION LOGIC:
-      // 1. If it's a new user (from Signup) and profile is incomplete -> Profile Setup
-      // 2. Otherwise (Existing users or completed profiles) -> Home Screen
       if (data.isNewUser && !user.isProfileComplete) {
         router.push("/user-profile");
       } else {
@@ -104,7 +104,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       setIsLoading(true);
       await registerUser(data);
-      // toast.success("Registration successful!");
     } catch (err: any) {
       toast.error(err.message || "Registration failed");
       throw err;
@@ -119,25 +118,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await requestHandler(
         async () => await logoutUser(),
         setIsLoading,
-        () => {
-          // Optional: redirect after logoutUser
-          // router.push("/");
-        }
+        () => { }
       );
 
       setUser(null);
       setToken(null);
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      localStorage.removeItem("refreshToken");
       toast.success("Logged out!");
-      router.push("/"); // final redirect
+      router.push("/");
     } catch (error) {
       console.error(error);
       toast.error("Logout failed!");
     }
   };
-
-  const getToken = () => token;
 
   // ----------------- REFRESH TOKEN -----------------
   const refreshToken = async () => {
@@ -176,6 +171,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // ----------------- GOOGLE LOGIN -----------------
+  const googleLogin = async (tokenParam: string, refreshTokenParam?: string) => {
+    try {
+      setIsLoading(true);
+      setToken(tokenParam);
+      localStorage.setItem("token", tokenParam);
+      if (refreshTokenParam) {
+        localStorage.setItem("refreshToken", refreshTokenParam);
+      }
+
+      // Fetch user data automatically
+      await getUser();
+
+      toast.success("Signed in with Google!");
+      router.push("/");
+    } catch (error) {
+      console.error("Google login error:", error);
+      toast.error("Google authentication failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // ----------------- INITIAL LOAD -----------------
   const fetchUserFromToken = async () => {
     const localToken = localStorage.getItem("token");
@@ -191,7 +209,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+    setUpInterceptors(() => localStorage.getItem("token"), refreshToken);
     fetchUserFromToken();
+
+    // Check for Google Auth tokens in URL
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tokenParam = params.get("token");
+      const refreshTokenParam = params.get("refreshToken");
+
+      if (tokenParam) {
+        googleLogin(tokenParam, refreshTokenParam || undefined);
+        // Clean URL
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+      }
+    }
   }, []);
 
   return (
@@ -208,6 +241,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         refreshToken,
         getUserProfileStatus,
         getUser,
+        googleLogin,
         handleModal,
         setIsMenuOpen
       }}
