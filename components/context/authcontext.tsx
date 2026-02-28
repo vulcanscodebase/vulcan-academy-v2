@@ -8,8 +8,7 @@ import {
   logoutUser,
   getUserByToken,
   getRefreshToken,
-  getProfileStatus,
-  setUpInterceptors
+  getProfileStatus
 } from "../api";
 import { toast } from "react-toastify";
 import { requestHandler } from "@/utils/auth";
@@ -35,7 +34,6 @@ interface AuthContextType {
   refreshToken: () => Promise<string | null>;
   getUserProfileStatus: () => Promise<void>;
   getUser: () => Promise<void>;
-  googleLogin: (token: string, refreshToken?: string) => Promise<void>;
   handleModal: (msg: string) => void;
 }
 
@@ -51,7 +49,6 @@ const AuthContext = createContext<AuthContextType>({
   refreshToken: async () => null,
   getUserProfileStatus: async () => { },
   getUser: async () => { },
-  googleLogin: async () => { },
   handleModal: () => { },
   setIsMenuOpen: () => { }
 });
@@ -179,26 +176,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // ----------------- GOOGLE LOGIN -----------------
-  const googleLogin = async (tokenParam: string, refreshTokenParam?: string) => {
-    try {
-      setIsLoading(true);
-      setToken(tokenParam);
-      localStorage.setItem("token", tokenParam);
-      if (refreshTokenParam) {
-        localStorage.setItem("refreshToken", refreshTokenParam);
-      }
-      await getUser();
-      toast.success("Signed in with Google!");
-      router.push("/");
-    } catch (error) {
-      console.error("Google login error:", error);
-      toast.error("Google authentication failed");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   // ----------------- INITIAL LOAD -----------------
   const fetchUserFromToken = async () => {
     const localToken = localStorage.getItem("token");
@@ -214,22 +191,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    setUpInterceptors(() => localStorage.getItem("token"), refreshToken);
     fetchUserFromToken();
-
-    // Check for Google Auth tokens in URL
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const tokenParam = params.get("token");
-      const refreshTokenParam = params.get("refreshToken");
-
-      if (tokenParam) {
-        googleLogin(tokenParam, refreshTokenParam || undefined);
-        // Clean URL
-        const newUrl = window.location.pathname;
-        window.history.replaceState({}, document.title, newUrl);
-      }
-    }
   }, []);
 
   return (
@@ -246,7 +208,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         refreshToken,
         getUserProfileStatus,
         getUser,
-        googleLogin,
         handleModal,
         setIsMenuOpen
       }}
