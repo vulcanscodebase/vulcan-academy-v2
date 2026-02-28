@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState, createContext, useContext } from "react";
-import { IconArrowNarrowLeft, IconArrowNarrowRight, IconX } from "@tabler/icons-react";
+import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
 import { useOutsideClick } from "@/hooks/use-outside-click";
@@ -23,7 +23,7 @@ export const CarouselContext = createContext<{
   onCardClose: (index: number) => void;
   currentIndex: number;
 }>({
-  onCardClose: () => {},
+  onCardClose: () => { },
   currentIndex: 0,
 });
 
@@ -85,10 +85,10 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
         </div>
         <div className="mr-10 flex justify-end gap-2 md:py-6">
           <button className="relative z-40 flex h-10 w-10 items-center justify-center rounded-full bg-vulcan-accent-blue hover:bg-vulcan-accent-blue/90 " onClick={scrollLeft} disabled={!canScrollLeft}>
-            <IconArrowNarrowLeft className="h-6 w-6 text-vulcan-white" />
+            <ArrowLeft className="h-6 w-6 text-vulcan-white" />
           </button>
           <button className="relative z-40 flex h-10 w-10 items-center justify-center rounded-full bg-vulcan-accent-blue hover:bg-vulcan-accent-blue/90 disabled:opacity-50" onClick={scrollRight} disabled={!canScrollRight}>
-            <IconArrowNarrowRight className="h-6 w-6 text-vulcan-white" />
+            <ArrowRight className="h-6 w-6 text-vulcan-white" />
           </button>
         </div>
       </div>
@@ -133,7 +133,7 @@ export const Card = ({ card, index, layout = false }: { card: CardType; index: n
               className="relative z-[60] mx-auto my-10 h-fit max-w-5xl rounded-3xl bg-vulcan-white p-4 md:p-10"
             >
               <button className="sticky top-4 right-0 ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-vulcan-accent-blue " onClick={handleClose}>
-                <IconX className="h-6 w-6  text-vulcan-white" />
+                <X className="h-6 w-6  text-vulcan-white" />
               </button>
               <motion.p layoutId={layout ? `category-${card.title}` : undefined} className="text-left font-sans text-sm font-medium text-vulcan-white md:text-base">
                 {card.category}
@@ -161,7 +161,7 @@ export const Card = ({ card, index, layout = false }: { card: CardType; index: n
           <motion.p layoutId={layout ? `title-${card.title}` : undefined} className="text-2xl md:text-3xl font-light tracking-tight text-vulcan-white mb-2 text-left ">
             {card.title}
           </motion.p>
-           {/* ADDED CONTENT */}
+          {/* ADDED CONTENT */}
           <motion.p className="text-base text-vulcan-white text-left">
             {card.content}
           </motion.p>
