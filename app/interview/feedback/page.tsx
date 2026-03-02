@@ -78,6 +78,9 @@ export default function FeedbackPage() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [interviewId, setInterviewId] = useState<string | null>(null);
+  const [candidateName, setCandidateName] = useState<string>("");
+  const [candidateEmail, setCandidateEmail] = useState<string>("");
+  const [jobRole, setJobRole] = useState<string>("");
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
@@ -94,6 +97,23 @@ export default function FeedbackPage() {
         );
         const storedScore = localStorage.getItem("atsScore");
         const storedTips = localStorage.getItem("resumeTips");
+        const storedJobTitle = localStorage.getItem("jobTitle");
+
+        // Get user info from localStorage (set during login)
+        try {
+          const storedUser = localStorage.getItem("user");
+          if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            setCandidateName(parsedUser.name || "");
+            setCandidateEmail(parsedUser.email || "");
+          }
+        } catch (e) {
+          console.error("Error parsing stored user:", e);
+        }
+
+        if (storedJobTitle) {
+          setJobRole(storedJobTitle);
+        }
 
         if (storedInterviewId) {
           setInterviewId(storedInterviewId);
@@ -530,6 +550,9 @@ export default function FeedbackPage() {
         reportDate: new Date().toLocaleDateString(),
         downloadTimestamp: new Date().toLocaleString(),
         reportId,
+        candidateName: candidateName || undefined,
+        candidateEmail: candidateEmail || undefined,
+        jobRole: jobRole || undefined,
         allQuestionData: questionData,
         feedback: feedbackText,
         resumeAnalysis: resumeAnalysisText,

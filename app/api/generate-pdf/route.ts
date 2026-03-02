@@ -105,7 +105,6 @@ const InterviewReportPDF = ({
   const MAX_STARS = 10;
   const toTenStars = (val: number) => {
     if (typeof val !== 'number' || isNaN(val)) return 0;
-    if (val <= 5 && val >= 0) return Math.min(10, Math.round(val * 2));
     return Math.min(10, Math.max(0, Math.round(val)));
   };
 
