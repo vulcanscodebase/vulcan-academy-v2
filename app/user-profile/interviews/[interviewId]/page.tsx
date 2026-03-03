@@ -158,19 +158,59 @@ export default function InterviewDetails() {
     });
   };
 
-  const calculateOverallScore = (metrics?: any) => {
-    if (!metrics) return 0;
-    const {
-      avgConfidence = 0,
-      avgBodyLanguage = 0,
-      avgKnowledge = 0,
-      avgSkillRelevance = 0,
-      avgFluency = 0,
-    } = metrics;
-    const total =
-      avgConfidence + avgBodyLanguage + avgKnowledge + avgSkillRelevance + avgFluency;
-    return Math.round((total / 25) * 100);
+  const computePerformanceSummary = (questionsData?: QuestionData[]) => {
+    if (!questionsData || questionsData.length === 0) return null;
+
+    const numQuestions = questionsData.length;
+    let totalConfidence = 0, totalBodyLanguage = 0, totalKnowledge = 0, totalFluency = 0, totalSkillRelevance = 0;
+
+    questionsData.forEach((q) => {
+      totalConfidence += toTenStars(q.metrics?.confidence || 0);
+      totalBodyLanguage += toTenStars(q.metrics?.bodyLanguage || 0);
+      totalKnowledge += toTenStars(q.metrics?.knowledge || 0);
+      totalFluency += toTenStars(q.metrics?.fluency || 0);
+      totalSkillRelevance += toTenStars(q.metrics?.skillRelevance || 0);
+    });
+
+    const totalScore = totalConfidence + totalKnowledge + totalFluency + totalSkillRelevance;
+    const totalPossible = MAX_STARS * 4 * numQuestions;
+    const percentageScore = (totalScore / totalPossible) * 100;
+
+    let grade = "Re-take interview";
+    if (percentageScore >= 70) grade = "Excellent";
+    else if (percentageScore >= 60) grade = "Good";
+    else if (percentageScore >= 50) grade = "Average";
+    else if (percentageScore >= 40) grade = "Below Average";
+
+    return {
+      confidence: Math.round(totalConfidence / numQuestions),
+      bodyLanguage: Math.round(totalBodyLanguage / numQuestions),
+      knowledge: Math.round(totalKnowledge / numQuestions),
+      fluency: Math.round(totalFluency / numQuestions),
+      skillRelevance: Math.round(totalSkillRelevance / numQuestions),
+      score: totalScore,
+      outOf: totalPossible,
+      percentage: percentageScore.toFixed(2),
+      grade,
+    };
   };
+
+  const getGradeColor = (grade: string) => {
+    switch (grade) {
+      case "Excellent":
+        return "text-green-600";
+      case "Good":
+        return "text-blue-600";
+      case "Average":
+        return "text-yellow-600";
+      case "Below Average":
+        return "text-orange-600";
+      default:
+        return "text-red-600";
+    }
+  };
+
+  const performanceSummary = interview ? computePerformanceSummary(interview.questionsData) : null;
 
   const handleGeneratePDF = async () => {
     if (isGeneratingPDF || !interview || !interview.report) return;
@@ -231,6 +271,19 @@ export default function InterviewDetails() {
         feedback: feedbackText,
         resumeAnalysis: resumeAnalysisText,
         reportType: 'user',
+        performanceSummary: performanceSummary
+          ? {
+            score: performanceSummary.score,
+            outOf: performanceSummary.outOf,
+            percentage: performanceSummary.percentage,
+            grade: performanceSummary.grade,
+          }
+          : null,
+        feedbackSections: {
+          strengths: interview.report?.strengths || [],
+          improvements: interview.report?.improvements || [],
+          tips: interview.report?.tips || [],
+        },
       };
 
       const response = await fetch("/api/generate-pdf", {
@@ -451,169 +504,78 @@ export default function InterviewDetails() {
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50">
-                <div className="text-4xl font-bold text-gray-900 mb-2">
-                  {calculateOverallScore(interview.report.metrics)}%
+            {/* Score Summary */}
+            {performanceSummary && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50">
+                  <div className="text-3xl font-bold text-gray-900 mb-2">
+                    {performanceSummary.score}/{performanceSummary.outOf}
+                  </div>
+                  <p className="text-gray-600">Total Score</p>
                 </div>
-                <p className="text-gray-600">Overall Score</p>
-              </div>
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-green-50 to-emerald-50">
-                <div className="text-4xl font-bold text-gray-900 mb-2">
-                  {interview.report.metrics.totalQuestions || 0}
+                <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-green-50 to-emerald-50">
+                  <div className="text-3xl font-bold text-gray-900 mb-2">
+                    {performanceSummary.percentage}%
+                  </div>
+                  <p className="text-gray-600">Performance</p>
                 </div>
-                <p className="text-gray-600">Questions Answered</p>
-              </div>
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50">
-                <div className="text-4xl font-bold text-gray-900 mb-2">
-                  {interview.status === "completed" ? "✓" : "○"}
+                <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50">
+                  <div
+                    className={`text-3xl font-bold mb-2 ${getGradeColor(
+                      performanceSummary.grade
+                    )}`}
+                  >
+                    {performanceSummary.grade}
+                  </div>
+                  <p className="text-gray-600">Grade</p>
                 </div>
-                <p className="text-gray-600">Status: {interview.status}</p>
               </div>
-            </div>
+            )}
 
             {/* Detailed Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {[
                 {
                   label: "Confidence",
-                  value: toTenStars(interview.report.metrics.avgConfidence || 0),
+                  value: performanceSummary?.confidence ?? toTenStars(interview.report.metrics.avgConfidence || 0),
                   icon: <TrendingUp className="w-5 h-5" />,
                 },
                 {
                   label: "Body Language",
-                  value: toTenStars(interview.report.metrics.avgBodyLanguage || 0),
+                  value: performanceSummary?.bodyLanguage ?? toTenStars(interview.report.metrics.avgBodyLanguage || 0),
                   icon: <User className="w-5 h-5" />,
                 },
                 {
                   label: "Knowledge",
-                  value: toTenStars(interview.report.metrics.avgKnowledge || 0),
+                  value: performanceSummary?.knowledge ?? toTenStars(interview.report.metrics.avgKnowledge || 0),
                   icon: <Lightbulb className="w-5 h-5" />,
                 },
                 {
                   label: "Fluency",
-                  value: toTenStars(interview.report.metrics.avgFluency || 0),
+                  value: performanceSummary?.fluency ?? toTenStars(interview.report.metrics.avgFluency || 0),
                   icon: <MessageSquare className="w-5 h-5" />,
                 },
                 {
                   label: "Skill Relevance",
-                  value: toTenStars(interview.report.metrics.avgSkillRelevance || 0),
+                  value: performanceSummary?.skillRelevance ?? toTenStars(interview.report.metrics.avgSkillRelevance || 0),
                   icon: <Target className="w-5 h-5" />,
                 },
               ].map((metric) => (
-                <div key={metric.label} className="text-center p-4 rounded-2xl bg-gray-50/50">
+                <motion.div
+                  key={metric.label}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="text-center p-4 rounded-2xl bg-gray-50/50"
+                >
                   <div className="flex items-center justify-center space-x-2 mb-2 text-gray-600">
                     {metric.icon}
-                    <span className="font-medium text-sm">{metric.label}</span>
+                    <span className="font-medium">{metric.label}</span>
                   </div>
                   <StarRating value={metric.value} />
                   <p className="text-sm text-gray-500 mt-1">{metric.value}/{MAX_STARS}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </motion.div>
-        )}
-
-        {/* Feedback Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Strengths */}
-          {interview.report?.strengths && interview.report.strengths.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-gray-200/20"
-            >
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center">
-                  <Award className="w-6 h-6 text-white" />
-                </div>
-                <h2 className="text-xl font-semibold text-gray-900">Strengths</h2>
-              </div>
-              <div className="space-y-4">
-                {interview.report.strengths.map((strength, index) => (
-                  <div
-                    key={index}
-                    className="flex items-start space-x-3 p-3 rounded-2xl bg-green-50/50"
-                  >
-                    <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                    <p className="text-gray-700 leading-relaxed">{strength}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {/* Areas for Improvement */}
-          {interview.report?.improvements && interview.report.improvements.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-gray-200/20"
-            >
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center">
-                  <Target className="w-6 h-6 text-white" />
-                </div>
-                <h2 className="text-xl font-semibold text-gray-900">
-                  Areas to Improve
-                </h2>
-              </div>
-              <div className="space-y-4">
-                {interview.report.improvements.map((improvement, index) => (
-                  <div
-                    key={index}
-                    className="flex items-start space-x-3 p-3 rounded-2xl bg-orange-50/50"
-                  >
-                    <div className="w-2 h-2 rounded-full bg-orange-500 mt-2"></div>
-                    <p className="text-gray-700 leading-relaxed">{improvement}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </div>
-
-        {/* Tips */}
-        {interview.report?.tips && interview.report.tips.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-gray-200/20 mb-8"
-          >
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                <Lightbulb className="w-6 h-6 text-white" />
-              </div>
-              <h2 className="text-xl font-semibold text-gray-900">Interview Tips</h2>
-            </div>
-            <div className="space-y-4">
-              {interview.report.tips.map((tip, index) => (
-                <div
-                  key={index}
-                  className="flex items-start space-x-3 p-3 rounded-2xl bg-blue-50/50"
-                >
-                  <div className="w-2 h-2 rounded-full bg-blue-500 mt-2"></div>
-                  <p className="text-gray-700 leading-relaxed">{tip}</p>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        {/* Overall Feedback */}
-        {interview.report?.overallFeedback && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-gray-200/20 mb-8"
-          >
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center">
-                <MessageSquare className="w-6 h-6 text-white" />
-              </div>
-              <h2 className="text-xl font-semibold text-gray-900">Overall Feedback</h2>
-            </div>
-            <p className="text-gray-700 leading-relaxed">{interview.report.overallFeedback}</p>
           </motion.div>
         )}
 
@@ -622,7 +584,7 @@ export default function InterviewDetails() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-gray-200/20 mb-8"
+            className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-lg border border-gray-200/20 mb-8"
           >
             <div className="flex items-center space-x-3 mb-6">
               <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl flex items-center justify-center">
@@ -691,52 +653,158 @@ export default function InterviewDetails() {
           </motion.div>
         )}
 
+        {/* Feedback Sections */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          {/* Strengths */}
+          {interview.report?.strengths && interview.report.strengths.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-lg border border-gray-200/20"
+            >
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center">
+                  <Award className="w-6 h-6 text-white" />
+                </div>
+                <h2 className="text-xl font-semibold text-gray-900">Strengths</h2>
+              </div>
+              <div className="space-y-4">
+                {interview.report.strengths.map((strength, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 * index }}
+                    className="flex items-start space-x-3 p-3 rounded-2xl bg-green-50/50"
+                  >
+                    <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
+                    <p className="text-gray-700 leading-relaxed">{strength}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Areas for Improvement */}
+          {interview.report?.improvements && interview.report.improvements.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-lg border border-gray-200/20"
+            >
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center">
+                  <Target className="w-6 h-6 text-white" />
+                </div>
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Areas to Improve
+                </h2>
+              </div>
+              <div className="space-y-4">
+                {interview.report.improvements.map((improvement, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 * index }}
+                    className="flex items-start space-x-3 p-3 rounded-2xl bg-orange-50/50"
+                  >
+                    <div className="w-2 h-2 rounded-full bg-orange-500 mt-2"></div>
+                    <p className="text-gray-700 leading-relaxed">{improvement}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </div>
+
+        {/* Interview Tips */}
+        {interview.report?.tips && interview.report.tips.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-lg border border-gray-200/20 mb-8"
+          >
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                <Lightbulb className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="text-xl font-semibold text-gray-900">Interview Tips</h2>
+            </div>
+            <div className="space-y-4">
+              {interview.report.tips.map((tip, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * index }}
+                  className="flex items-start space-x-3 p-3 rounded-2xl bg-blue-50/50"
+                >
+                  <div className="w-2 h-2 rounded-full bg-blue-500 mt-2"></div>
+                  <p className="text-gray-700 leading-relaxed">{tip}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
         {/* Resume Analysis */}
         {interview.metadata && (interview.metadata.atsScore || interview.metadata.resumeTips) && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-gray-200/20 mb-8"
+            className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-lg border border-gray-200/20 mb-8"
           >
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center">
-                <Upload className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center">
+                <BarChart3 className="w-6 h-6 text-white" />
               </div>
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900">Resume Analysis</h2>
-                <p className="text-sm text-gray-600 mt-1">ATS compatibility and improvement suggestions</p>
-              </div>
+              <h2 className="text-xl font-semibold text-gray-900">Resume Analysis</h2>
             </div>
             {interview.metadata.atsScore && (
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-medium text-gray-900">ATS Score</span>
-                  <span className={`font-bold text-2xl px-4 py-2 rounded-lg ${interview.metadata.atsScore >= 80
-                    ? "bg-green-100 text-green-800"
+                  <span className={`font-bold text-2xl px-3 py-1 rounded-xl ${interview.metadata.atsScore >= 80
+                    ? "text-green-600 bg-green-50"
                     : interview.metadata.atsScore >= 60
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-red-100 text-red-800"
+                      ? "text-yellow-600 bg-yellow-50"
+                      : "text-red-600 bg-red-50"
                     }`}>
                     {interview.metadata.atsScore}/100
                   </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                  <motion.div
+                    className={`h-full bg-gradient-to-r ${interview.metadata.atsScore >= 80
+                      ? "from-green-500 to-emerald-500"
+                      : interview.metadata.atsScore >= 60
+                        ? "from-yellow-500 to-orange-500"
+                        : "from-red-500 to-pink-500"
+                      } rounded-full`}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${interview.metadata.atsScore}%` }}
+                    transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
+                  />
                 </div>
               </div>
             )}
 
             {interview.metadata.resumeTips && interview.metadata.resumeTips.length > 0 && (
-              <div>
-                <h4 className="font-medium mb-3 text-gray-900">Improvement Suggestions:</h4>
-                <div className="space-y-2">
-                  {interview.metadata.resumeTips.map((tip: string, index: number) => (
-                    <div
-                      key={index}
-                      className="flex items-start space-x-3 p-3 rounded-lg bg-purple-50"
-                    >
-                      <div className="w-2 h-2 rounded-full bg-purple-500 mt-2"></div>
-                      <p className="text-sm text-gray-700">{tip}</p>
-                    </div>
-                  ))}
-                </div>
+              <div className="space-y-4">
+                <h3 className="font-medium text-gray-900">Improvement Suggestions</h3>
+                {interview.metadata.resumeTips.map((tip: string, index: number) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 * index }}
+                    className="flex items-start space-x-3 p-3 rounded-2xl bg-purple-50/50"
+                  >
+                    <div className="w-2 h-2 rounded-full bg-purple-500 mt-2"></div>
+                    <p className="text-gray-700 leading-relaxed">{tip}</p>
+                  </motion.div>
+                ))}
               </div>
             )}
           </motion.div>

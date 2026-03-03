@@ -19,6 +19,7 @@ const InterviewReportPDF = ({
   resumeAnalysis,
   reportType = 'user',
   performanceSummary = null,
+  feedbackSections = null,
 }: any) => {
   const styles = StyleSheet.create({
     page: { padding: 30, fontSize: 12, fontFamily: 'Helvetica' },
@@ -36,7 +37,7 @@ const InterviewReportPDF = ({
     infoItem: { flex: 1, marginRight: 15 },
     infoLabel: { fontSize: 10, color: '#666', marginBottom: 3 },
     infoValue: { fontSize: 12, fontWeight: 'bold' },
-    questionContainer: { marginBottom: 15, padding: 10, backgroundColor: '#f9fafb', borderRadius: 5 },
+    questionContainer: { marginBottom: 10, padding: 10, backgroundColor: '#f9fafb', borderRadius: 5 },
     metricsRow: { flexDirection: 'row', marginTop: 8, marginBottom: 8, flexWrap: 'wrap' },
     metricItem: { width: '18%', marginRight: '2%', padding: 5, backgroundColor: '#fff', borderRadius: 3 },
     metricLabel: { fontSize: 8, color: '#666', marginBottom: 2 },
@@ -46,6 +47,8 @@ const InterviewReportPDF = ({
     performanceSummaryLabel: { fontSize: 10, color: '#1e40af', marginRight: 8, fontWeight: 'bold' },
     performanceSummaryValue: { fontSize: 12, fontWeight: 'bold', color: '#1e3a8a' },
     feedbackBox: { marginTop: 8, padding: 8, backgroundColor: '#f3f4f6', borderRadius: 3 },
+    feedbackSubHeading: { fontSize: 14, fontWeight: 'bold', color: '#1e3a8a', marginBottom: 6, marginTop: 10 },
+    feedbackListItem: { marginBottom: 4, lineHeight: 1.5, fontSize: 11 },
     timestamp: { fontSize: 9, color: '#999', textAlign: 'center', marginTop: 5 },
   });
 
@@ -90,10 +93,14 @@ const InterviewReportPDF = ({
 
   const performanceSummarySection = performanceSummary
     ? React.createElement(View, { style: styles.performanceSummaryBox },
-        React.createElement(Text, { style: styles.heading }, 'Performance Summary (4 factors: Confidence, Knowledge, Fluency, Skill Relevance)'),
+      React.createElement(Text, { style: styles.heading }, 'Performance Summary'),
         React.createElement(View, { style: styles.performanceSummaryRow },
-          React.createElement(Text, { style: styles.performanceSummaryLabel }, 'Average Score:'),
-          React.createElement(Text, { style: styles.performanceSummaryValue }, `${performanceSummary.score}/${performanceSummary.outOf} (${performanceSummary.percentage}%)`)
+          React.createElement(Text, { style: styles.performanceSummaryLabel }, 'Overall Score:'),
+          React.createElement(Text, { style: styles.performanceSummaryValue }, `${performanceSummary.score}/${performanceSummary.outOf}`)
+        ),
+      React.createElement(View, { style: styles.performanceSummaryRow },
+        React.createElement(Text, { style: styles.performanceSummaryLabel }, 'Percentage:'),
+        React.createElement(Text, { style: styles.performanceSummaryValue }, `${performanceSummary.percentage}%`)
         ),
         React.createElement(View, { style: styles.performanceSummaryRow },
           React.createElement(Text, { style: styles.performanceSummaryLabel }, 'Grade:'),
@@ -191,7 +198,35 @@ const InterviewReportPDF = ({
 
       React.createElement(View, { style: styles.section },
         React.createElement(Text, { style: styles.heading }, 'Overall Feedback'),
-        React.createElement(Text, { style: styles.text }, feedback || 'No feedback available')
+        // Render Strengths, Areas for Improvement, Tips as separate styled sections
+        ...(feedbackSections?.strengths && feedbackSections.strengths.length > 0
+          ? [
+            React.createElement(Text, { key: 'str-heading', style: styles.feedbackSubHeading }, 'Strengths:'),
+            ...feedbackSections.strengths.map((s: string, i: number) =>
+              React.createElement(Text, { key: `str-${i}`, style: styles.feedbackListItem }, `${i + 1}. ${s}`)
+            ),
+          ]
+          : []),
+        ...(feedbackSections?.improvements && feedbackSections.improvements.length > 0
+          ? [
+            React.createElement(Text, { key: 'imp-heading', style: styles.feedbackSubHeading }, 'Areas for Improvement:'),
+            ...feedbackSections.improvements.map((s: string, i: number) =>
+              React.createElement(Text, { key: `imp-${i}`, style: styles.feedbackListItem }, `${i + 1}. ${s}`)
+            ),
+          ]
+          : []),
+        ...(feedbackSections?.tips && feedbackSections.tips.length > 0
+          ? [
+            React.createElement(Text, { key: 'tips-heading', style: styles.feedbackSubHeading }, 'Tips:'),
+            ...feedbackSections.tips.map((s: string, i: number) =>
+              React.createElement(Text, { key: `tip-${i}`, style: styles.feedbackListItem }, `${i + 1}. ${s}`)
+            ),
+          ]
+          : []),
+        // Fallback: if no feedbackSections, show the plain feedback text
+        ...(!feedbackSections || (!feedbackSections.strengths?.length && !feedbackSections.improvements?.length && !feedbackSections.tips?.length)
+          ? [React.createElement(Text, { key: 'fb-text', style: styles.text }, feedback || 'No feedback available')]
+          : []),
       ),
 
       questionsSection,
@@ -228,6 +263,7 @@ export async function POST(req: NextRequest) {
       resumeAnalysis,
       reportType,
       performanceSummary: data.performanceSummary ?? null,
+      feedbackSections: data.feedbackSections ?? null,
     });
 
     const pdfBuffer = await renderToBuffer(doc);
