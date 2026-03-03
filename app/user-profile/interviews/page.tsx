@@ -147,18 +147,25 @@ export default function MyInterviews() {
     }
   };
 
-  const calculateOverallScore = (metrics?: any) => {
-    if (!metrics) return 0;
-    const {
-      avgConfidence = 0,
-      avgBodyLanguage = 0,
-      avgKnowledge = 0,
-      avgSkillRelevance = 0,
-      avgFluency = 0,
-    } = metrics;
-    const total =
-      avgConfidence + avgBodyLanguage + avgKnowledge + avgSkillRelevance + avgFluency;
-    return Math.round((total / 25) * 100);
+  const MAX_STARS = 10;
+  const toTenStars = (val: number) => {
+    if (typeof val !== 'number' || isNaN(val)) return 0;
+    return Math.min(10, Math.max(0, Math.round(val)));
+  };
+
+  const computeScoreFromQuestions = (questionsData?: any[]) => {
+    if (!questionsData || questionsData.length === 0) return null;
+    const numQuestions = questionsData.length;
+    let totalConfidence = 0, totalKnowledge = 0, totalFluency = 0, totalSkillRelevance = 0;
+    questionsData.forEach((q: any) => {
+      totalConfidence += toTenStars(q.metrics?.confidence || 0);
+      totalKnowledge += toTenStars(q.metrics?.knowledge || 0);
+      totalFluency += toTenStars(q.metrics?.fluency || 0);
+      totalSkillRelevance += toTenStars(q.metrics?.skillRelevance || 0);
+    });
+    const totalScore = totalConfidence + totalKnowledge + totalFluency + totalSkillRelevance;
+    const totalPossible = MAX_STARS * 4 * numQuestions;
+    return { score: totalScore, outOf: totalPossible, percentage: ((totalScore / totalPossible) * 100).toFixed(2) };
   };
 
   if (isLoading) {
@@ -267,14 +274,18 @@ export default function MyInterviews() {
                       </span>
 
                       {interview.status === "completed" &&
-                        interview.report?.metrics && (
-                          <div className="flex items-center gap-2 text-sm text-gray-600 bg-blue-50 px-3 py-1 rounded-full">
-                            <Award className="w-4 h-4 text-blue-600" />
-                            <span className="font-medium text-blue-700">
-                              Score: {calculateOverallScore(interview.report.metrics)}%
-                            </span>
-                          </div>
-                        )}
+                        interview.questionsData &&
+                        interview.questionsData.length > 0 && (() => {
+                          const perf = computeScoreFromQuestions(interview.questionsData);
+                          return perf ? (
+                            <div className="flex items-center gap-2 text-sm text-gray-600 bg-blue-50 px-3 py-1 rounded-full">
+                              <Award className="w-4 h-4 text-blue-600" />
+                              <span className="font-medium text-blue-700">
+                                Score: {perf.percentage}%
+                              </span>
+                            </div>
+                          ) : null;
+                        })()}
 
                       {interview.completedAt && (
                         <div className="flex items-center gap-2 text-sm text-gray-600">

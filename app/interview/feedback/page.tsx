@@ -378,9 +378,9 @@ export default function FeedbackPage() {
 
   // Auto-submit feedback and report to backend after it's loaded
   useEffect(() => {
-    // Wait a bit for feedback to be fully loaded
+    // Wait longer for AI feedback to be fully generated
     const timer = setTimeout(() => {
-      // Submit if we have interviewId and haven't submitted yet (even if feedback is empty)
+      // Submit if we have interviewId and haven't submitted yet
       if (interviewId && !feedbackSubmitted && isLoaded) {
         console.log("Auto-submitting feedback update...");
         console.log("Feedback strengths length:", feedback.strengths.length);
@@ -388,10 +388,24 @@ export default function FeedbackPage() {
         // Save report to backend automatically
         submitFeedbackUpdate();
       }
-    }, 2000); // Wait 2 seconds for feedback to be fully loaded
+    }, 5000); // Wait 5 seconds for feedback to be fully loaded
 
     return () => clearTimeout(timer);
-  }, [feedback, interviewId, feedbackSubmitted, submitFeedbackUpdate, isLoaded, allQuestionData]);
+  }, [interviewId, feedbackSubmitted, submitFeedbackUpdate, isLoaded, allQuestionData]);
+
+  // Re-submit when AI feedback (strengths/improvements/tips) arrives after initial save
+  useEffect(() => {
+    const hasNewFeedback = feedback.strengths.length > 0 || feedback.improvements.length > 0 || feedback.tips.length > 0;
+    if (hasNewFeedback && interviewId && feedbackSubmitted && isLoaded) {
+      console.log("Re-submitting feedback with AI-generated strengths/improvements/tips...");
+      // Reset submitted flag and resubmit with the complete feedback data
+      setFeedbackSubmitted(false);
+      const timer = setTimeout(() => {
+        submitFeedbackUpdate();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [feedback.strengths, feedback.improvements, feedback.tips]);
 
   // Helper for safe numeric values
   const safeValue = (val: number | undefined) =>
@@ -565,6 +579,11 @@ export default function FeedbackPage() {
               grade: averageSentiment.grade,
             }
           : null,
+        feedbackSections: {
+          strengths: feedback.strengths || [],
+          improvements: feedback.improvements || [],
+          tips: feedback.tips || [],
+        },
       };
 
       const response = await fetch("/api/generate-pdf", {
