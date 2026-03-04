@@ -334,7 +334,7 @@ export default function ResumeUpload() {
       }
 
       // ✅ Start interview and deduct license when user proceeds after resume upload
-      const backendUrl = process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcans.co.in/api";
+      const backendUrl = process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcanprep.com/api";
       const token = localStorage.getItem("token");
       let startInterviewData: { interview?: { _id?: string } } = {};
 

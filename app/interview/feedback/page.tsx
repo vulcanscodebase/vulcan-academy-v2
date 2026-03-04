@@ -329,7 +329,7 @@ export default function FeedbackPage() {
       };
 
       const backendUrl =
-        process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcans.co.in/api";
+        process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcanprep.com/api";
       const token = localStorage.getItem("token");
       // Ensure we don't double up on /api
       const apiUrl = backendUrl.endsWith('/api')

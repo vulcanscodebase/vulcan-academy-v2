@@ -15,7 +15,7 @@ export function RefundPolicy() {
             <p className="mb-8 text-base sm:text-lg md:text-xl text-foreground/80 leading-relaxed">
               Thank you for choosing Vulcans. We are committed to providing the best experience possible. 
               Please read this Refunds and Cancellation Policy carefully before making any purchase or booking on our website 
-              <a href="https://vulcans.co.in/" className="text-vulcan-bright-cyan underline hover:text-vulcan-accent-blue transition-colors">https://vulcans.co.in/</a>
+              <a href="https://vulcanprep.com/" className="text-vulcan-bright-cyan underline hover:text-vulcan-accent-blue transition-colors">https://vulcanprep.com/</a>
             </p>
             <p className="text-sm text-foreground/70">
               Last updated: <span className="font-medium">February 13, 2025</span>

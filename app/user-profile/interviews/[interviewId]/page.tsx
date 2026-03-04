@@ -114,7 +114,7 @@ export default function InterviewDetails() {
   const fetchInterviewDetails = async () => {
     try {
       const backendUrl =
-        process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcans.co.in/api";
+        process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcanprep.com/api";
       const token = localStorage.getItem("token");
       const response = await fetch(`${backendUrl}/interviews/${interviewId}`, {
         credentials: "include",
