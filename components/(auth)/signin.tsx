@@ -8,8 +8,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { handleGoogleCallback } from "@/utils/auth";
+import { handleGoogleCallback, handleGoogleSignIn } from "@/utils/auth";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 import { useAuth } from "../context/authcontext";
 
@@ -132,9 +133,28 @@ export function Signin() {
             >
               {loading ? "Signing in..." : "Sign In"}
             </Button>
+
+            <div className="relative my-2">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-gray-300" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-white px-2 text-gray-500">Or continue with</span>
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleGoogleSignIn}
+              className="w-full flex items-center justify-center gap-3 bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900 shadow-sm transition-all duration-200 rounded-md px-4 py-2 text-sm font-medium"
+            >
+              <FcGoogle className="w-5 h-5" />
+              Sign in with Google
+            </Button>
           </form>
         </CardContent>
-      
+
       </Card>
     </div>
   );
