@@ -19,6 +19,7 @@ interface User {
   email: string;
   isProfileComplete?: boolean;
   licenses?: number;
+  onboardingCompleted?: boolean;
 }
 
 interface AuthContextType {
@@ -86,9 +87,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       // REDIRECTION LOGIC:
       // 1. If it's a new user (from Signup) and profile is incomplete -> Profile Setup
-      // 2. Otherwise (Existing users or completed profiles) -> Home Screen
+      // 2. If onboarding is not completed -> Onboarding Tour
+      // 3. Otherwise (Existing users or completed profiles) -> Home Screen
       if (data.isNewUser && !user.isProfileComplete) {
         router.push("/user-profile");
+      } else if (user.onboardingCompleted === false) {
+        router.push("/onboarding");
       } else {
         router.push("/");
       }
