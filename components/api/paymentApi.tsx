@@ -5,8 +5,8 @@ import { apiClient } from ".";
  * @route POST /api/payments/initiate
  * @access Protected
  */
-export const initiatePaymentApi = (credits: number) => {
-  return apiClient.post("/payments/initiate", { credits });
+export const initiatePaymentApi = (credits: number, couponCode?: string) => {
+  return apiClient.post("/payments/initiate", { credits, couponCode });
 };
 
 /**

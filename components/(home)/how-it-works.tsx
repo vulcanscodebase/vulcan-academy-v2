@@ -9,24 +9,28 @@ export function HowItWorks() {
   const steps = [
     {
       title: "Register & Log In",
+      category: "Getting Started",
       content:
         "Create your account in seconds or log in to your existing profile to get started.",
       src: "/register.png",
     },
     {
       title: "Upload Your Resume",
+      category: "Profile Setup",
       content:
         "Upload your resume so the system can analyze your skills and tailor the interview experience to your profile.",
       src: "/upload-resume.png",
     },
     {
       title: "Start the Interview",
+      category: "Practice",
       content:
         "Begin an AI-powered interview designed to simulate real-world scenarios, improve your responses, and boost your confidence.",
       src: "/practice.png",
     },
     {
       title: "Track Progress",
+      category: "Results",
       content:
         "Review detailed performance reports, identify strengths and weaknesses, and monitor your improvement over time.",
       src: "/track.png",

@@ -22,7 +22,7 @@ export function Coupon() {
     // console.log("Order Details before applying coupon:", orderDetails);
 
     await requestHandler(
-      async () => await applyCouponApi(orderDetails._id, couponCode),
+      async () => await applyCouponApi(orderDetails._id as string, couponCode),
       setCouponBtnLoading,
       (res: any) => {
         setAppliedCoupon(true);
