@@ -80,6 +80,7 @@ const changePassword = (data: any) => apiClient.post("/auth/change-password", da
 const getRefreshToken = () => apiClient.post(`/auth/refresh-token`);
 const getUserByToken = () => apiClient.get(`/auth/user`);
 const checkUserExists = (data: { email: string }) => apiClient.post("/auth/check-email", data);
+const completeOnboarding = () => apiClient.post("/auth/complete-onboarding");
 
 export {
   loginUser,
@@ -97,4 +98,5 @@ export {
   setupPassword,
   checkUserExists,
   changePassword,
+  completeOnboarding,
 };
