@@ -5,11 +5,12 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { Loader2, Plus, Minus, Trash2 } from "lucide-react";
+import { Loader2, Plus, Minus, Trash2, Tag } from "lucide-react";
 import Image from "next/image";
 import { useAuth } from "../context/authcontext";
 import { useRouter } from "next/navigation";
 import { initiatePaymentApi, verifyPaymentApi } from "@/components/api/paymentApi";
+import { apiClient } from "../api";
 
 export const LicenseCartDrawer = () => {
   const { isLicenseCartOpen, toggleCart, licensesInCart, addLicenses, removeLicenses, clearCart } = useLicenseCart();
@@ -18,6 +19,16 @@ export const LicenseCartDrawer = () => {
 
   const [loadingCheckout, setLoadingCheckout] = useState(false);
   const PRICE_PER_LICENSE = 349; // Simplified fixed price for now
+
+  // Coupon state
+  const [couponCode, setCouponCode] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    discountAmount: number;
+    discountType: string;
+    discountValue: number;
+  } | null>(null);
 
   // Mount Razorpay Checkout SDK
   useEffect(() => {
@@ -47,13 +58,24 @@ export const LicenseCartDrawer = () => {
     setLoadingCheckout(true);
     try {
       // Step 1: Initiate payment via backend
-      const res = await initiatePaymentApi(licensesInCart);
+      const res = await initiatePaymentApi(licensesInCart, appliedCoupon?.code);
       
       if (!res.data.success) {
         throw new Error("Failed to initiate checkout");
       }
 
       const { orderId, amount, currency, key } = res.data.data;
+
+      if (amount === 0) {
+        // Free order successful via backend
+        toast.success(`Payment successful! ${licensesInCart} licenses added to your account.`);
+        clearCart();
+        setAppliedCoupon(null);
+        setCouponCode("");
+        toggleCart();
+        router.refresh();
+        return;
+      }
 
       // Step 2: Open Razorpay interface
       const options = {
@@ -74,6 +96,8 @@ export const LicenseCartDrawer = () => {
             if (verifyRes.data.success) {
               toast.success(`Payment successful! ${licensesInCart} licenses added to your account.`);
               clearCart();
+              setAppliedCoupon(null);
+              setCouponCode("");
               toggleCart();
               router.refresh(); // Refresh page to reflect new licenses count
             } else {
@@ -114,6 +138,60 @@ export const LicenseCartDrawer = () => {
 
   const calculateSubtotal = () => {
     return licensesInCart * PRICE_PER_LICENSE;
+  };
+
+  const calculateTotal = () => {
+    const subtotal = calculateSubtotal();
+    return Math.max(0, subtotal - (appliedCoupon?.discountAmount || 0));
+  };
+
+  useEffect(() => {
+    // Reset coupon when cart becomes empty
+    if (licensesInCart === 0) {
+      setAppliedCoupon(null);
+      setCouponCode("");
+    }
+  }, [licensesInCart]);
+
+  const handleValidateCoupon = async (code?: string) => {
+    const codeToValidate = code || couponCode;
+    if (!codeToValidate.trim() || licensesInCart === 0) return;
+
+    try {
+      setCouponLoading(true);
+      const { data } = await apiClient.post("/orders/validate-coupon", {
+        couponCode: codeToValidate,
+        subtotal: calculateSubtotal(),
+        items: [{
+          productId: "license",
+          price: PRICE_PER_LICENSE,
+          quantity: licensesInCart
+        }]
+      });
+
+      if (data.success) {
+        setAppliedCoupon({
+          code: data.couponCode,
+          discountAmount: data.discountAmount,
+          discountType: data.discountType,
+          discountValue: data.discountValue,
+        });
+        setCouponCode(data.couponCode);
+        if (!code) toast.success("Coupon applied successfully!");
+      }
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || "Invalid coupon code";
+      toast.error(msg);
+      setAppliedCoupon(null);
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode("");
+    toast.info("Coupon removed.");
   };
 
   return (
@@ -179,14 +257,75 @@ export const LicenseCartDrawer = () => {
         {/* CART FOOTER - Fixed Bottom */}
         <div className="p-6 bg-white border-t border-gray-100 flex-shrink-0 shadow-[0_-4px_20px_-15px_rgba(0,0,0,0.1)]">
            <div className="space-y-4 mb-6">
+            {/* Coupon Input */}
+            {licensesInCart > 0 && (
+              <div className="w-full">
+                {appliedCoupon ? (
+                  <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+                    <div className="flex items-center gap-2">
+                      <Tag className="h-4 w-4 text-green-600" />
+                      <span className="text-sm text-green-700 font-medium">
+                        {appliedCoupon.code}
+                      </span>
+                      <span className="text-xs text-green-600">
+                        (-₹{appliedCoupon.discountAmount})
+                      </span>
+                    </div>
+                    <button
+                      onClick={handleRemoveCoupon}
+                      className="text-red-500 hover:text-red-700 text-lg font-bold leading-none"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                      placeholder="Coupon code"
+                      className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleValidateCoupon();
+                        }
+                      }}
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleValidateCoupon()}
+                      disabled={!couponCode.trim() || couponLoading}
+                      className="px-4"
+                    >
+                      {couponLoading ? (
+                        <Loader2 className="animate-spin h-4 w-4" />
+                      ) : (
+                        "Apply"
+                      )}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+
              <div className="flex justify-between items-center text-sm text-gray-600">
                <span>Subtotal ({licensesInCart} item{licensesInCart !== 1 && 's'})</span>
                <span className="font-medium text-vulcan-primary">₹{calculateSubtotal()}</span>
              </div>
              
+            {appliedCoupon && (
+              <div className="flex justify-between text-sm text-green-600">
+                <span>Discount</span>
+                <span>-₹{appliedCoupon.discountAmount}</span>
+              </div>
+            )}
+
              <div className="flex justify-between items-center text-lg font-bold">
                <span className="text-vulcan-primary">Total to Pay</span>
-               <span className="text-vulcan-accent-blue">₹{calculateSubtotal()}</span>
+              <span className="text-vulcan-accent-blue">₹{calculateTotal()}</span>
              </div>
            </div>
 
@@ -204,7 +343,7 @@ export const LicenseCartDrawer = () => {
                 <span className="flex items-center justify-center gap-2 w-full">
                   Proceed to Pay
                   <span className="bg-white/20 px-2 py-0.5 rounded text-sm min-w-16 whitespace-nowrap">
-                    ₹{calculateSubtotal()}
+                    ₹{calculateTotal()}
                   </span>
                 </span>
              )}
