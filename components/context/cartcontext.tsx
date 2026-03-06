@@ -14,10 +14,14 @@ interface CartItem {
   productId: string;
   model: string;
   quantity: number;
+  price: number;
+  thumbnail: string;
+  title: string;
 }
 
 interface Cart {
   items: CartItem[];
+  totalPrice: number;
 }
 
 interface OrderDetails {
@@ -76,7 +80,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       getCartApi,
       setLoadingCart,
       (res) => setCart(res.cart),
-      () => setCart({ items: [] })
+      () => setCart({ items: [], totalPrice: 0 })
     );
   };
 
