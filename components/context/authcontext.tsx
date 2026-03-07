@@ -194,6 +194,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(false);
   };
 
+  // ----------------- HANDLE GOOGLE OAUTH REDIRECT -----------------
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlAccessToken = urlParams.get("accessToken");
+      const urlRefreshToken = urlParams.get("refreshToken");
+
+      if (urlAccessToken && urlRefreshToken) {
+        setToken(urlAccessToken);
+        localStorage.setItem("token", urlAccessToken);
+        // We do not save refreshToken directly in localStorage on frontend for this flow, 
+        // as the backend set it via HttpOnly cookie (ideally). But if needed, we can set it.
+
+        urlParams.delete("accessToken");
+        urlParams.delete("refreshToken");
+        const newUrl = window.location.pathname + (urlParams.toString() ? `?${urlParams.toString()}` : "");
+        window.history.replaceState({}, document.title, newUrl);
+
+        getUser().then(() => {
+          toast.success("Successfully logged in with Google!");
+        }).catch(() => {
+          logout();
+        });
+      }
+    }
+  }, []);
+
   useEffect(() => {
     fetchUserFromToken();
   }, []);
