@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -325,7 +326,19 @@ export function ProfileSetup() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              <Card className="border border-vulcan-border shadow-lg bg-white/90 backdrop-blur-md rounded-2xl overflow-hidden">
+              <Card className="relative border border-vulcan-border shadow-lg bg-white/90 backdrop-blur-md rounded-2xl overflow-hidden">
+                <div className="absolute top-4 left-4 z-10">
+                  <Button
+                    variant="ghost"
+                    className="bg-white/10 backdrop-blur-md border border-white/20 text-gray-600 hover:text-vulcan-accent-blue hover:bg-white/20 hover:border-white/30 font-medium flex items-center gap-1 px-3 py-1 rounded-full shadow-sm transition-all duration-300"
+                    asChild
+                  >
+                    <Link href="/">
+                      <span className="text-lg">&lt;</span>
+                      <span>Back to Home</span>
+                    </Link>
+                  </Button>
+                </div>
                 <CardHeader className="flex flex-col items-center text-center">
                   <div className="mt-4 text-2xl font-semibold text-vulcan-dark">
                     My Profile
