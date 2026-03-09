@@ -182,6 +182,7 @@ export function ProfileSetup() {
         "schoolOrCollege",
         "qualification",
         "organization",
+        "dob",
       ];
 
       const modifiedFields: Partial<FormDataType> = {};
@@ -199,12 +200,15 @@ export function ProfileSetup() {
 
       // Map keys to snake_case if backend requires
       const apiPayload = {
-        profession: modifiedFields.profession,
-        education_status: modifiedFields.educationStatus,
-        school_or_college: modifiedFields.schoolOrCollege,
-        qualification: modifiedFields.qualification,
-        organization: modifiedFields.organization,
+        profession: formData.profession,
+        education_status: formData.educationStatus,
+        school_or_college: formData.schoolOrCollege,
+        qualification: formData.qualification,
+        organization: formData.organization,
+        dob: formData.dob,
       };
+
+      console.log("Saving Profile - Payload:", apiPayload);
 
       await requestHandler(
         async () => await updateUserById(user.id, apiPayload),
@@ -213,19 +217,13 @@ export function ProfileSetup() {
           getUserProfileStatus();
           getUser();
           setIsEditMode(false);
+          setWasInitiallyIncomplete(false);
           initialFormData.current = { ...formData };
-          handleModal("Profile updated successfully!");
-          toast.success("Profile saved!");
-
-          if (wasInitiallyIncomplete) {
-            setIsProfileRecentlyCompleted(true);
-          } else {
-            router.push("/user-profile");
-          }
+          toast.success("Profile updated successfully!");
         },
-        () => {
-          setApiErrorMsg("Error updating profile!");
-          handleModal("Error updating profile!");
+        (errorMsg) => {
+          setApiErrorMsg(errorMsg || "Error updating profile!");
+          handleModal(errorMsg || "Error updating profile!");
         }
       );
     } catch (error) {
@@ -463,7 +461,8 @@ export function ProfileSetup() {
                       type="date"
                       name="dob"
                       value={formData.dob}
-                      disabled
+                      disabled={!isEditMode}
+                      onChange={handleInputChange}
                       className="bg-white/70 w-full"
                     />
                   </div>

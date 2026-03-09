@@ -1,11 +1,20 @@
 import axios from "axios";
 
-// Create Axios instance
+const defaultBaseURL = process.env.NODE_ENV === "development" 
+  ? "http://localhost:5001/api" 
+  : "https://api.vulcanprep.com/api";
+
+export const API_BASE_URL = process.env.NEXT_PUBLIC_SERVER_URI || defaultBaseURL;
+
 export const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_SERVER_URI || "https://api.vulcanprep.com/api",
+  baseURL: API_BASE_URL,
   withCredentials: true,
   timeout: 120000,
 });
+
+if (process.env.NODE_ENV === "development") {
+  console.log("🛠️ API Base URL Selected:", API_BASE_URL);
+}
 
 // Apply Request interceptor globally
 apiClient.interceptors.request.use(
@@ -63,7 +72,7 @@ const logoutUser = () => apiClient.post("/auth/logout");
 
 // Profile APIs
 const getUserByUserId = (id: string) => apiClient.get(`/users/${id}`);
-const updateUserById = (id: string, data: any) => apiClient.put(`/users/${id}`, data);
+const updateUserById = (id: string, data: any) => apiClient.post("/auth/complete-profile", data);
 const getProfileStatus = () => apiClient.get(`/users/profile-status`);
 
 // Password & Email APIs

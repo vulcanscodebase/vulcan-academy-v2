@@ -13,19 +13,21 @@ export const requestHandler = async (
   onSuccess?: (data: any) => void, 
   onError?: (message: string) => void
 ) => {
-  setLoading && setLoading(true); // Set loading to true if setLoading is provided
+  setLoading && setLoading(true);
   try {
-    const response = await api(); // Execute the API call
-    const { data } = response; // Extract the data from the response
+    console.log("🚀 requestHandler: Initiating API call...");
+    const response = await api();
+    const { data } = response;
 
     if (data && onSuccess) {
-      onSuccess(data); // Call the success callback if data exists
+      onSuccess(data);
     }
   } catch (error: any) {
-    // Extract and pass error message to onError callback, or default message
-    onError && onError(error?.response?.data?.message || "Something went wrong");
+    console.error("❌ requestHandler Error:", error);
+    const backendMessage = error?.response?.data?.message || error?.response?.data?.error;
+    onError && onError(backendMessage || "Something went wrong");
   } finally {
-    setLoading && setLoading(false); // Always set loading to false at the end
+    setLoading && setLoading(false);
   }
 };
 
@@ -74,9 +76,22 @@ export const handleGoogleCallback = async (
 // Returns an empty string if the input is falsy.
 export const formatDate = (isoDateString: string) => {
   if (!isoDateString) return "";
-  const date = new Date(isoDateString); // Parse ISO date string
-  const year = date.getFullYear(); // Extract year
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // Extract month (1-based) and pad with 0
-  const day = String(date.getDate()).padStart(2, "0"); // Extract day and pad with 0
-  return `${day}-${month}-${year}`; // Return formatted string
+  const date = new Date(isoDateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${day}-${month}-${year}`;
+};
+
+/**
+ * Converts an ISO date string to "YYYY-MM-DD" format for HTML date inputs.
+ */
+export const formatDateForInput = (isoDateString: string) => {
+  if (!isoDateString) return "";
+  const date = new Date(isoDateString);
+  if (isNaN(date.getTime())) return "";
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 };
