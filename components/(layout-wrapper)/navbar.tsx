@@ -92,22 +92,21 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex flex-1 justify-center items-center space-x-10 lg:space-x-14">
+        <div className="hidden lg:flex flex-1 justify-center items-center space-x-10 lg:space-x-14">
           {navLinks.map((link) => {
             const isActive =
               link.href === "/"
                 ? pathname === link.href
                 : pathname === link.href ||
-                  pathname.startsWith(link.href + "/");
+                pathname.startsWith(link.href + "/");
             return (
               <Link
                 key={link.name}
                 href={link.href}
-                className={`transition-colors pb-1 border-b-2 ${
-                  isActive
-                    ? "text-vulcan-accent-blue border-vulcan-accent-blue"
-                    : "text-foreground/70 border-transparent hover:text-vulcan-accent-blue"
-                }`}
+                className={`transition-colors pb-1 border-b-2 ${isActive
+                  ? "text-vulcan-accent-blue border-vulcan-accent-blue"
+                  : "text-foreground/70 border-transparent hover:text-vulcan-accent-blue"
+                  }`}
                 prefetch={false}
               >
                 {link.name}
@@ -120,16 +119,15 @@ export function Navbar() {
                 link.href === "/"
                   ? pathname === link.href
                   : pathname === link.href ||
-                    pathname.startsWith(link.href + "/");
+                  pathname.startsWith(link.href + "/");
               return (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`transition-colors pb-1 border-b-2 ${
-                    isActive
-                      ? "text-vulcan-accent-blue border-vulcan-accent-blue"
-                      : "text-foreground/70 border-transparent hover:text-vulcan-accent-blue"
-                  }`}
+                  className={`transition-colors pb-1 border-b-2 ${isActive
+                    ? "text-vulcan-accent-blue border-vulcan-accent-blue"
+                    : "text-foreground/70 border-transparent hover:text-vulcan-accent-blue"
+                    }`}
                   prefetch={false}
                 >
                   {link.name}
@@ -154,7 +152,7 @@ export function Navbar() {
 
           {/* Auth Buttons / User Icons */}
           {!token ? (
-            <div className="hidden md:flex items-center space-x-3">
+            <div className="hidden lg:flex items-center space-x-3">
               <Button
                 variant="ghost"
                 size="icon"
@@ -183,7 +181,7 @@ export function Navbar() {
               </Link> */}
             </div>
           ) : (
-            <div className="hidden md:flex items-center space-x-3">
+            <div className="hidden lg:flex items-center space-x-3">
               {/* Available Interviews Button */}
               <Button
                 variant="outline"
@@ -209,19 +207,19 @@ export function Navbar() {
               >
                 <User className="h-5 w-5" />
               </Button>
-                <Button
+              <Button
                 variant="ghost"
                 size="icon"
-                  onClick={toggleCart}
+                onClick={toggleCart}
                 className="relative"
               >
                 <ShoppingCart className="h-5 w-5" />
-                  {licensesInCart > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-vulcan-accent-blue text-[10px] text-white font-medium">
-                      {licensesInCart}
-                    </span>
-                  )}
-                </Button>
+                {licensesInCart > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-vulcan-accent-blue text-[10px] text-white font-medium">
+                    {licensesInCart}
+                  </span>
+                )}
+              </Button>
               <Button variant="ghost" size="icon" onClick={handleLogoutClick}>
                 <LogOut className="h-5 w-5 text-red-500" />
               </Button>
@@ -232,7 +230,7 @@ export function Navbar() {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden text-foreground/70 hover:bg-accent hover:text-accent-foreground"
+            className="lg:hidden text-foreground/70 hover:bg-accent hover:text-accent-foreground"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? (
@@ -246,24 +244,23 @@ export function Navbar() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 w-full bg-vulcan-white/95 dark:bg-vulcan-deep-navy/95 border-b border-border shadow-md py-6 transition-all duration-300">
+        <div className="lg:hidden absolute top-16 left-0 w-full bg-vulcan-white/95 dark:bg-vulcan-deep-navy/95 border-b border-border shadow-md py-6 transition-all duration-300">
           <div className="container mx-auto flex flex-col items-center space-y-6 px-4">
             {navLinks.map((link) => {
               const isActive =
                 link.href === "/"
                   ? pathname === link.href
                   : pathname === link.href ||
-                    pathname.startsWith(link.href + "/");
+                  pathname.startsWith(link.href + "/");
               return (
                 <Link
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`text-lg transition-colors pb-1 border-b-2 ${
-                    isActive
-                      ? "text-vulcan-accent-blue border-vulcan-accent-blue"
-                      : "text-foreground/80 border-transparent hover:text-vulcan-accent-blue"
-                  }`}
+                  className={`text-lg transition-colors pb-1 border-b-2 ${isActive
+                    ? "text-vulcan-accent-blue border-vulcan-accent-blue"
+                    : "text-foreground/80 border-transparent hover:text-vulcan-accent-blue"
+                    }`}
                   prefetch={false}
                 >
                   {link.name}
@@ -276,17 +273,16 @@ export function Navbar() {
                   link.href === "/"
                     ? pathname === link.href
                     : pathname === link.href ||
-                      pathname.startsWith(link.href + "/");
+                    pathname.startsWith(link.href + "/");
                 return (
                   <Link
                     key={link.name}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`text-lg transition-colors pb-1 border-b-2 ${
-                      isActive
-                        ? "text-vulcan-accent-blue border-vulcan-accent-blue"
-                        : "text-foreground/80 border-transparent hover:text-vulcan-accent-blue"
-                    }`}
+                    className={`text-lg transition-colors pb-1 border-b-2 ${isActive
+                      ? "text-vulcan-accent-blue border-vulcan-accent-blue"
+                      : "text-foreground/80 border-transparent hover:text-vulcan-accent-blue"
+                      }`}
                     prefetch={false}
                   >
                     {link.name}
@@ -348,19 +344,19 @@ export function Navbar() {
                   >
                     <User className="h-5 w-5" />
                   </Button>
-                    <Button
+                  <Button
                     variant="ghost"
                     size="icon"
-                      onClick={toggleCart}
+                    onClick={toggleCart}
                     className="relative"
                   >
                     <ShoppingCart className="h-5 w-5" />
-                      {licensesInCart > 0 && (
-                        <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-vulcan-accent-blue text-[10px] text-white font-medium">
-                          {licensesInCart}
-                        </span>
-                      )}
-                    </Button>
+                    {licensesInCart > 0 && (
+                      <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-vulcan-accent-blue text-[10px] text-white font-medium">
+                        {licensesInCart}
+                      </span>
+                    )}
+                  </Button>
                   <Button
                     variant="ghost"
                     size="icon"
