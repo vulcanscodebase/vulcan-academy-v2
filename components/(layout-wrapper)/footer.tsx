@@ -31,62 +31,62 @@ export function Footer() {
   return (
     <footer className="w-full bg-vulcan-dark-blue text-vulcan-white">
       {/* Top Grid Section */}
-      <div className="px-8 sm:px-6 lg:px-16 py-16 grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-16 py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 text-center sm:text-left font-sans">
         {/* Logo + About */}
-        <div className="flex flex-col items-center md:items-start gap-4">
+        <div className="flex flex-col items-center sm:items-start gap-4 lg:col-span-2">
           <Image
             src="/vulcans-logo.png"
             alt="Vulcan Logo"
             width={100}
             height={100}
           />
-          <p className="text-sm sm:text-base md:text-base text-gray-300 max-w-xs leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-300 max-w-sm leading-relaxed">
             Vulcan Academy empowers students with cutting-edge knowledge and
             skills, transforming ambition into achievement.
           </p>
         </div>
 
-        {/* Pages + Legal */}
-        <div className="grid grid-cols-2 gap-8 justify-center">
-          <div>
-            <h3 className="text-base sm:text-lg md:text-xl font-semibold text-vulcan-bright-cyan mb-4">
-              Pages
-            </h3>
-            <ul className="space-y-2 text-sm sm:text-base text-gray-300">
-              {navItems.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    href={item.path}
-                    className="hover:text-vulcan-bright-cyan transition-colors duration-300"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-base sm:text-lg md:text-xl font-semibold text-vulcan-bright-cyan mb-4">
-              Legal
-            </h3>
-            <ul className="space-y-2 text-sm sm:text-base text-gray-300">
-              {policyLinks.map((policy) => (
-                <li key={policy.name}>
-                  <Link
-                    href={policy.path}
-                    className="hover:text-vulcan-bright-cyan transition-colors duration-300"
-                  >
-                    {policy.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+        {/* Pages */}
+        <div className="flex flex-col items-center sm:items-start">
+          <h3 className="text-base sm:text-lg md:text-xl font-semibold text-vulcan-accent-blue mb-4">
+            Pages
+          </h3>
+          <ul className="space-y-2 text-sm sm:text-base text-gray-300">
+            {navItems.map((item) => (
+              <li key={item.name}>
+                <Link
+                  href={item.path}
+                  className="hover:text-vulcan-accent-blue transition-colors duration-300"
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Legal */}
+        <div className="flex flex-col items-center sm:items-start">
+          <h3 className="text-base sm:text-lg md:text-xl font-semibold text-vulcan-accent-blue mb-4">
+            Legal
+          </h3>
+          <ul className="space-y-2 text-sm sm:text-base text-gray-300">
+            {policyLinks.map((policy) => (
+              <li key={policy.name}>
+                <Link
+                  href={policy.path}
+                  className="hover:text-vulcan-accent-blue transition-colors duration-300"
+                >
+                  {policy.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Customer Care */}
-        <div className="flex flex-col items-center md:items-start gap-3 text-sm sm:text-base text-gray-300">
-          <h3 className="text-base sm:text-lg md:text-xl font-semibold text-vulcan-bright-cyan mb-2">
+        <div className="flex flex-col items-center sm:items-start gap-3 text-sm sm:text-base text-gray-300">
+          <h3 className="text-base sm:text-lg md:text-xl font-semibold text-vulcan-accent-blue mb-2">
             Customer Care
           </h3>
           <p>+91 6362 014 532</p>
